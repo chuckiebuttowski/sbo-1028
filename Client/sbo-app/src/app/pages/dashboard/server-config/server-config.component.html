@@ -36,7 +36,7 @@
                   <div class="col-md-12">
                       <div class="checkbox">
                           <label>
-                              <input type="checkbox" name="optionsCheckboxes">
+                              <input type="checkbox" [(ngModel)]="SetActiveNewlyAddedServer" name="SetActiveNewlyAddedServer">
                               <span>Set as Active Configuration</span>
                           </label>
                       </div>
@@ -90,7 +90,7 @@
             <table *ngIf="RecentServers.length > 0" class="table table-hover">
               <thead class="text-warning">
                 <tr>
-                  <th style="width:15px;"></th>
+                  <th></th>
                   <th>Server</th>
                   <th>Database</th>
                   <th>Username</th>
@@ -101,7 +101,7 @@
               <tbody>
                 <tr *ngFor="let server of RecentServers">
                     <td class="td-actions text-right">
-                        <button *ngIf="!server.IsActive" type="button" rel="tooltip" title="Set as Active" class="btn btn-primary btn-simple btn-xs">
+                        <button *ngIf="!server.IsActive" (click)="onActivateServer(server.ID)" type="button" rel="tooltip" title="Set as Active" class="btn btn-primary btn-simple btn-xs">
                             <i class="material-icons">play_arrow</i>
                         </button>
                         <button *ngIf="server.IsActive" type="button" rel="tooltip" title="Currently Active" class="btn btn-success btn-simple btn-xs">
@@ -114,10 +114,10 @@
                     <td>{{server.Username}}</td>
                     <td>{{server.Password}}</td>
                     <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs">
+                        <!-- <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs">
                             <i class="material-icons">edit</i>
-                        </button>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                        </button> -->
+                        <button (click) = "onDeleteConfig(server.ID)" type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
                             <i class="material-icons">delete</i>
                         </button>
                     </td>

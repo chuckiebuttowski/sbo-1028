@@ -14,44 +14,62 @@ namespace SBOClient.Controllers
     public class ConfigurationController : ApiController
     {
         [HttpGet]
-        [Route("test")]
-        public string Test()
-        {
-            return "Hello world";
-        }
-
-        [HttpGet]
         [Route("get-recent-servers")]
         public IEnumerable<ServerConfig> GetRecentServers()
         {
-            //var servers = new List<ServerConfig>();
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1" });
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1" });
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1", IsActive = true });
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1" });
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1" });
-            //servers.Add(new ServerConfig() { ServerName = "Server 1", DatabaseName = "DB1", Username = "User1", Password = "pass1" });
-            //return servers;
-
             var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
             return repo.GetAll();
         }
 
         [HttpGet]
-        [Route("get-active-server")]
-        public ServerConfig GetActiveServer()
-        {
-            var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
-            return repo.Get(x => x.IsActive).FirstOrDefault();
-        }
-
-        [HttpPost]
-        [Route("add")]
-        public string AddConfiguration(ServerConfig config)
+        [Route("activate-server")]
+        public string ActivateServer(int id)
         {
             try
             {
                 var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
+
+                ServerConfig config = null;
+
+                //deactivate currently activated server
+                config = repo.Get(x => x.IsActive).FirstOrDefault();
+                if (config != null)
+                {
+                    config.IsActive = false;
+                    repo.AddOrUpdate(config);
+                }
+                
+                //activate server
+                config = repo.Get(x => x.ID == id).FirstOrDefault();
+                config.IsActive = true;
+                repo.AddOrUpdate(config);
+
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                return "Unable to update configuration. Please contact administrator.";
+            }
+        }
+
+        [HttpPost]
+        [Route("add")]
+        public string AddConfiguration(ServerConfig config, bool isActive)
+        {
+            try
+            {
+                var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
+                if (isActive)
+                {
+                    config.IsActive = true;
+                    var deactivateConfig = repo.Get(x => x.IsActive).FirstOrDefault();
+                    if (deactivateConfig != null)
+                    {
+                        deactivateConfig.IsActive = false;
+                        repo.AddOrUpdate(deactivateConfig);
+                    }
+                }
+
                 repo.AddOrUpdate(config);
 
                 return "Success";
@@ -60,6 +78,23 @@ namespace SBOClient.Controllers
             {
                 //log error here
                 return "Unable to save configuration. Please contact administrator.";
+            }
+        }
+
+        [HttpGet]
+        [Route("delete")]
+        public string DeleteConfig(int id)
+        {
+            try
+            {
+                var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
+                repo.Delete(repo.Get(x => x.ID == id).FirstOrDefault());
+
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                return "Unable to delete configuration. Please contact administrator";
             }
         }
 

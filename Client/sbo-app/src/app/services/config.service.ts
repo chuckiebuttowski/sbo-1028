@@ -42,11 +42,7 @@ export class ConfigService {
         return servers;
     }
 
-    setActiveServer(server: ServerConfig) : Observable<boolean> {
-        return Observable.of(true);
-    }
-
-    async saveServer(server : ServerConfig) : Promise<string> {
+    async saveServer(server : ServerConfig, isActive: boolean) : Promise<string> {
         server = server || new ServerConfig();
 
         if(server.ServerName == "") {
@@ -66,12 +62,20 @@ export class ConfigService {
         }
 
         let body = { ServerName: server.ServerName, DatabaseName: server.DatabaseName, Username: server.Username, Password: server.Password };
-        const res = await this.http.post("http://localhost:51788/api/configuration/add", body).toPromise();
+        const res = await this.http.post("http://localhost:51788/api/configuration/add?isActive=" + isActive, body).toPromise();
 
         return res as string;
     }
 
-    deleteServer(server: ServerConfig) : Observable<boolean> {
-        return Observable.of(true);
+    async activateServer(id: number) : Promise<string> {
+        const res = await this.http.get("http://localhost:51788/api/configuration/activate-server?id=" + id).toPromise();
+        
+        return res as string;
+    }
+
+    async deleteServer(id: number) : Promise<string> {
+        const res = await this.http.get("http://localhost:51788/api/configuration/delete?id=" + id).toPromise();
+
+        return res as string;
     }
 }

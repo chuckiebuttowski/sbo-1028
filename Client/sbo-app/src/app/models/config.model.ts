@@ -4,6 +4,7 @@ export class SAPProfile {
 }
 
 export class ServerConfig {
+    ID: any;//id from api
     ServerName: string = "";
     DatabaseName: string = "";
     Username: string = "";

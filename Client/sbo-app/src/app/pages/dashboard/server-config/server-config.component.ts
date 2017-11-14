@@ -16,6 +16,7 @@ import { ConfigService } from '../../../services/config.service';
 export class ServerConfigComponent implements OnInit {
 
   Config: ServerConfig = new ServerConfig();
+  SetActiveNewlyAddedServer: boolean = false;
   Profile: SAPProfile = new SAPProfile();
 
   RecentServers: ServerConfig[];
@@ -67,7 +68,7 @@ export class ServerConfigComponent implements OnInit {
   }
 
   async onSaveConfig() {
-    let result = await this.configService.saveServer(this.Config);
+    let result = await this.configService.saveServer(this.Config, this.SetActiveNewlyAddedServer);
     if (result.toLowerCase() != 'success') {
       $.notify({
         icon: "notifications",
@@ -104,12 +105,44 @@ export class ServerConfigComponent implements OnInit {
 
   }
 
-  onActivateServer() {
+  async onActivateServer(id: number) {
+    let result: string = await this.configService.activateServer(id);
+    if(result.toLowerCase() != 'success'){
+      $.notify({
+        icon: "notifications",
+        message: "<b>Server Configuration Error</b> - " + result
 
+      }, {
+          type: 'danger',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+
+    this.loadData();
   }
 
-  onDeleteConfig() {
+  async onDeleteConfig(id: number) {
+    let result: string = await this.configService.deleteServer(id);
+    if(result.toLowerCase() != 'success'){
+      $.notify({
+        icon: "notifications",
+        message: "<b>Server Configuration Error</b> - " + result
 
+      }, {
+          type: 'danger',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+
+    this.loadData();
   }
 
 }
