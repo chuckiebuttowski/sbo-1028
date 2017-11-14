@@ -1,0 +1,13 @@
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll.config
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.pdb
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.dll
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.dll
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.xml
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.xml
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.Initial.resources
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.GenerateResource.Cache

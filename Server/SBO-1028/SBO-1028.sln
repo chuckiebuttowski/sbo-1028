@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{013D85D0-ECF7-432E-83D3-A65FEEB74855}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBOClient", "SBOClient\SBOClient.csproj", "{79E5A00E-AEE6-4858-815E-43EEB65E4A50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{35060BDB-950E-4288-93F8-6CC27A21426B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBOClient.Core", "SBOClient.Core\SBOClient.Core.csproj", "{1D350449-385B-46C0-8116-14D5294283D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79E5A00E-AEE6-4858-815E-43EEB65E4A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E5A00E-AEE6-4858-815E-43EEB65E4A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E5A00E-AEE6-4858-815E-43EEB65E4A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E5A00E-AEE6-4858-815E-43EEB65E4A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D350449-385B-46C0-8116-14D5294283D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D350449-385B-46C0-8116-14D5294283D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D350449-385B-46C0-8116-14D5294283D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D350449-385B-46C0-8116-14D5294283D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79E5A00E-AEE6-4858-815E-43EEB65E4A50} = {013D85D0-ECF7-432E-83D3-A65FEEB74855}
+		{1D350449-385B-46C0-8116-14D5294283D7} = {35060BDB-950E-4288-93F8-6CC27A21426B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE3DF12B-D923-4242-9062-30F4F8CAA41C}
+	EndGlobalSection
+EndGlobal

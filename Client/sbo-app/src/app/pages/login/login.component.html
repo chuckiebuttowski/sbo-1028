@@ -1,0 +1,41 @@
+<div class="sidebar-background" style="background-image: url(../assets/img/cover.jpeg);height: 100%;background-position: center;background-repeat: no-repeat;background-size:cover;">
+  <div class="main-content" style="opacity:.9;">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12" style="text-align:center;margin-bottom:20px;">
+            <h3>SAP Business One Control Center</h3>
+            <p>Powered by 10.28 Innovations Inc.</p>
+          </div>
+          <!-- <div class="col-md-4">
+            
+              </div> -->
+          <div class="col-md-4 col-md-offset-4">
+            <div class="card">
+              <div class="card-header" data-background-color="red">
+                <h4 class="title">Login</h4>
+                <p class="category">Provide a valid credentials to sign in</p>
+              </div>
+              <div class="card-content" style="padding-bottom:60px;padding-top:35px;">
+                  <div class="col-sm-12">
+                      <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                        <label class="control-label">Username</label>
+                        <input type="text" [(ngModel)]="Username" name="Username" class="form-control" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                        <label class="control-label">Password</label>
+                        <input type="password" [(ngModel)]="Password" name="Password" class="form-control">
+                      </div>
+                    </div>
+                
+                <button class="col-md-12 btn btn-danger btn-round" (click)="onLogin()" style="margin-top:45px;">Log in</button>
+                <span class="clearfix"></span>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

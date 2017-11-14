@@ -1,0 +1,132 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" data-background-color="green">
+                  <h4 class="title">New Server</h4>
+                  <p class="category">Server information</p>
+                </div>
+                <div class="card-content">
+                  <div class="col-sm-6">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                      <label class="control-label">Server</label>
+                      <input type="text" [(ngModel)]="Config.ServerName" name="ServerName" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                      <label class="control-label">Database</label>
+                      <input type="text" [(ngModel)]="Config.DatabaseName" name="DatabaseName" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                      <label class="control-label">Username</label>
+                      <input type="text" [(ngModel)]="Config.Username" name="Username" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                      <label class="control-label">Password</label>
+                      <input type="password" [(ngModel)]="Config.Password" name="Password" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                      <div class="checkbox">
+                          <label>
+                              <input type="checkbox" name="optionsCheckboxes">
+                              <span>Set as Active Configuration</span>
+                          </label>
+                      </div>
+                  </div>
+                  <button class="btn btn-success" (click)="onSaveConfig()">Save</button>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" data-background-color="orange">
+                    <h4 class="title">SAP Profile</h4>
+                    <p class="category">An account to use to connect to SAP application</p>
+                </div>
+                <div class="card-content">
+                    <div class="col-md-12">
+                        <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
+                            <label class="control-label">User ID</label>
+                            <input type="text" [(ngModel)]="Profile.UserId" name="UserId" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
+                            <label class="control-label">Password</label>
+                            <input type="password" [(ngModel)]="Profile.Password" name="Password" class="form-control" >
+                        </div>
+                    </div>
+                    <button type="submit" style="margin-top:55px;" class="btn btn-warning" (click)="onUpdateProfile()">Update Profile</button>
+                    <span class="clearfix"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+          <div class="card-header" data-background-color="red">
+            <h4 class="title">Recent Servers</h4>
+            <p class="category">List of recently added servers</p>
+          </div>
+          <div class="card-content table-responsive">
+              <div class="alert alert-warning" *ngIf="RecentServers.length == 0">
+                  <div class="container-fluid">
+                    <div class="alert-icon">
+                    <i class="material-icons">warning</i>
+                    </div>
+                    <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                    </button> -->
+                    <b>Ops!</b> No server configuration is being added yet.
+                  </div>
+                  </div>
+            <table *ngIf="RecentServers.length > 0" class="table table-hover">
+              <thead class="text-warning">
+                <tr>
+                  <th style="width:15px;"></th>
+                  <th>Server</th>
+                  <th>Database</th>
+                  <th>Username</th>
+                  <th>Password</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let server of RecentServers">
+                    <td class="td-actions text-right">
+                        <button *ngIf="!server.IsActive" type="button" rel="tooltip" title="Set as Active" class="btn btn-primary btn-simple btn-xs">
+                            <i class="material-icons">play_arrow</i>
+                        </button>
+                        <button *ngIf="server.IsActive" type="button" rel="tooltip" title="Currently Active" class="btn btn-success btn-simple btn-xs">
+                            <i class="material-icons">star</i>
+                        </button>
+                    </td>
+                    
+                    <td>{{server.ServerName}}</td>
+                    <td>{{server.DatabaseName}}</td>
+                    <td>{{server.Username}}</td>
+                    <td>{{server.Password}}</td>
+                    <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>    
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
