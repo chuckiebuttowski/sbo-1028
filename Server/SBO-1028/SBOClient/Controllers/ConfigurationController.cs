@@ -17,8 +17,8 @@ namespace SBOClient.Controllers
         [Route("get-recent-servers")]
         public IEnumerable<ServerConfig> GetRecentServers()
         {
-            var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
-            return repo.GetAll();
+            var repo = new RepositoryFactory().CreateConfigurationRepository();
+            return repo.GetRecentlyAddedConfiguraions();
         }
 
         [HttpGet]
@@ -27,23 +27,8 @@ namespace SBOClient.Controllers
         {
             try
             {
-                var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
-
-                ServerConfig config = null;
-
-                //deactivate currently activated server
-                config = repo.Get(x => x.IsActive).FirstOrDefault();
-                if (config != null)
-                {
-                    config.IsActive = false;
-                    repo.AddOrUpdate(config);
-                }
-                
-                //activate server
-                config = repo.Get(x => x.ID == id).FirstOrDefault();
-                config.IsActive = true;
-                repo.AddOrUpdate(config);
-
+                var repo = new RepositoryFactory().CreateConfigurationRepository();
+                repo.ActivateConfiguration(id);
                 return "Success";
             }
             catch (Exception ex)
@@ -58,19 +43,8 @@ namespace SBOClient.Controllers
         {
             try
             {
-                var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
-                if (isActive)
-                {
-                    config.IsActive = true;
-                    var deactivateConfig = repo.Get(x => x.IsActive).FirstOrDefault();
-                    if (deactivateConfig != null)
-                    {
-                        deactivateConfig.IsActive = false;
-                        repo.AddOrUpdate(deactivateConfig);
-                    }
-                }
-
-                repo.AddOrUpdate(config);
+                var repo = new RepositoryFactory().CreateConfigurationRepository();
+                repo.AddConfiguration(config, isActive);
 
                 return "Success";
             }
@@ -87,9 +61,8 @@ namespace SBOClient.Controllers
         {
             try
             {
-                var repo = new RepositoryFactory().CreateRepository<ServerConfig>();
-                repo.Delete(repo.Get(x => x.ID == id).FirstOrDefault());
-
+                var repo = new RepositoryFactory().CreateConfigurationRepository();
+                repo.DeleteConfiguration(id);
                 return "Success";
             }
             catch (Exception ex)

@@ -30,6 +30,11 @@ namespace SBOClient.Core.Factories
             return new UserRepository();
         }
 
+        public IServerConfigurationRepository CreateConfigurationRepository()
+        {
+            return new ServerConfigurationRepository();
+        }
+
         public IRepository<T> CreateRepository<T>() where T : BaseEntity
         {
             return new BaseRepository<T>();
