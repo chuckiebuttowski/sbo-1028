@@ -14,22 +14,26 @@ export class ConfigService {
         console.log("response from authorize api: " + res);
     }
 
-    getSAPProfile() : Observable<SAPProfile> {
-        return Observable.of(new SAPProfile());
+    async getSAPProfile() : Promise<SAPProfile> {
+        const res = await this.http.get("http://localhost:51788/api/sap-profile/get-profile").toPromise();
+        return res as SAPProfile;
     }
 
-    saveSAPProfile(profile: SAPProfile) : Observable<string> {
+    async saveSAPProfile(profile: SAPProfile) : Promise<string> {
         profile = profile || new SAPProfile();
 
         if(profile.UserId == ''){
-            return Observable.of("User id is required.");
+            return "User id is required.";
         }
 
         if(profile.Password == ''){
-            return Observable.of("Password is required.");
+            return "Password is required.";
         }
 
-        return Observable.of("Success");
+        let body = {UserId: profile.UserId, Password: profile.Password };
+        const res = await this.http.post("http://localhost:51788/api/sap-profile/update-profile", body).toPromise();
+        
+        return res as string;
     }
 
     async getRecentServers(): Promise<ServerConfig[]> { 

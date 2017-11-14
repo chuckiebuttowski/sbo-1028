@@ -17,54 +17,53 @@ export class ServerConfigComponent implements OnInit {
 
   Config: ServerConfig = new ServerConfig();
   SetActiveNewlyAddedServer: boolean = false;
-  Profile: SAPProfile = new SAPProfile();
+  Profile: SAPProfile;
 
   RecentServers: ServerConfig[];
 
   constructor(private configService: ConfigService) { 
-      this.loadData();
   }
 
   ngOnInit() {
-    
+    this.loadData();
   }
 
   async loadData(){
     this.configService.testAccessAuthorizeAPI(); 
+    this.Profile = await this.configService.getSAPProfile();
     this.RecentServers = await this.configService.getRecentServers();
   }
 
-  onUpdateProfile() {
-    this.configService.saveSAPProfile(this.Profile).subscribe(msg => {
-      if (msg != 'Success') {
-        $.notify({
-          icon: "notifications",
-          message: "<b>SAP Profile Error</b> - " + msg
+  async onUpdateProfile() {
+    var result = await this.configService.saveSAPProfile(this.Profile);
+    if (result.toLowerCase() != 'success') {
+      $.notify({
+        icon: "notifications",
+        message: "<b>SAP Profile Error</b> - " + result
 
-        }, {
-            type: 'danger',
-            timer: 500,
-            placement: {
-              from: 'top',
-              align: 'right'
-            }
-          });
-      }
-      else {
-        $.notify({
-          icon: "notifications",
-          message: "<b>Success</b> - SAP Profile is updated."
+      }, {
+          type: 'danger',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+    else {
+      $.notify({
+        icon: "notifications",
+        message: "<b>Success</b> - SAP Profile is updated."
 
-        }, {
-            type: 'success',
-            timer: 500,
-            placement: {
-              from: 'top',
-              align: 'right'
-            }
-          });
-      }
-    });
+      }, {
+          type: 'success',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
   }
 
   async onSaveConfig() {

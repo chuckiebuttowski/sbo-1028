@@ -16,6 +16,7 @@ declare const $: any;
 export class AppComponent implements OnInit {
 
     ngOnInit(){
+        $.material.options.autofill = true;
         $.material.init();
     }
 
