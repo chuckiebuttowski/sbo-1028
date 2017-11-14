@@ -27,7 +27,7 @@ namespace SBOClient.Core.Migrations
             //    );
             //
 
-            context.Users.AddOrUpdate(x => x.Username, new DAL.Entities.User() { Username = "admin", Password = "admin123", DisplayName = "Administrator", CreatedBy = "System", CreatedOn = DateTime.Now });
+            context.Users.AddOrUpdate(x => x.Username, new DAL.Entities.User() { Username = "admin", Password = "admin123", IsActive = true, DisplayName = "Administrator", CreatedBy = "System", CreatedOn = DateTime.Now });
         }
     }
 }

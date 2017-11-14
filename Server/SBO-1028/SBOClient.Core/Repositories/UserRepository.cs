@@ -17,7 +17,7 @@ namespace SBOClient.Core.Repositories
 
             var repo = new RepositoryFactory().CreateGenericRepository<User>();
             Task.Run(async () => {
-                user = await repo.GetFirstAsync(x => x.Username == username && x.Password == password);    
+                user = await repo.GetFirstAsync(x => x.Username == username && x.Password == password && x.IsActive);    
             }).Wait();
 
             return user;

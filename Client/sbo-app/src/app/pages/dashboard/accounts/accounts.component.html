@@ -11,86 +11,25 @@
               <table class="table table-hover">
                 <thead class="text-warning">
                   <tr>
-                    <th>Server</th>
-                    <th>Database</th>
+                    <th></th>
+                    <th>Display Name</th>
                     <th>Username</th>
-                    <th>Password</th>
+                    <th>Status</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Dakota Rice</td>
-                    <td>$36,738</td>
-                    <td>Niger</td>
+                  <tr *ngFor="let acct of Accounts" (click)="onEdit(acct)">
+                    <td></td>
+                    <td>{{acct.DisplayName}}</td>
+                    <td>{{acct.Username}}</td>
+                    <td>{{acct.IsActive ? 'Active' : 'Inactive'}}</td>
+                    <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" (click)="onDelete(acct)" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Minerva Hooper</td>
-                    <td>$23,789</td>
-                    <td>Curaçao</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Sage Rodriguez</td>
-                    <td>$56,142</td>
-                    <td>Netherlands</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Philip Chaney</td>
-                    <td>$38,735</td>
-                    <td>Korea, South</td>
-                  </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Dakota Rice</td>
-                        <td>$36,738</td>
-                        <td>Niger</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Minerva Hooper</td>
-                        <td>$23,789</td>
-                        <td>Curaçao</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Sage Rodriguez</td>
-                        <td>$56,142</td>
-                        <td>Netherlands</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Philip Chaney</td>
-                        <td>$38,735</td>
-                        <td>Korea, South</td>
-                      </tr>
-                      
                 </tbody>
               </table>
             </div>
@@ -99,36 +38,42 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header" data-background-color="green">
-                  <h4 class="title">New User</h4>
-                  <p class="category">Create user and grant access to the system</p>
+                  <h4 class="title">Create User</h4>
+                  <p class="category">Create user and grant access to use the app</p>
                 </div>
                 <div class="card-content">
                   <div class="col-sm-12">
-                    <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
-                      <label class="control-label">Server</label>
-                      <input type="text" class="form-control">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                      <label class="control-label">Display Name</label>
+                      <input type="text" [(ngModel)]="UserAccount.DisplayName" name="DisplayName" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-12">
-                    <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
-                      <label class="control-label">Database</label>
-                      <input type="text" class="form-control">
-                    </div>
-                  </div>
-                  <div class="col-sm-12">
-                    <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                       <label class="control-label">Username</label>
-                      <input type="text" class="form-control">
+                      <input type="text" [(ngModel)]="UserAccount.Username" name="Username" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-12">
-                    <div class="form-group form-black label-floating is-empty" style="margin:10px 0 0 0;">
+                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                       <label class="control-label">Password</label>
-                      <input type="password" class="form-control">
+                      <input type="password" [(ngModel)]="UserAccount.Password" name="Password" class="form-control">
                     </div>
                   </div>
-      
-                  <button class="btn btn-success">Save</button>
+                  <div class="col-sm-12">
+                      <div class="checkbox">
+                          <label>
+                              <input [(ngModel)]="UserAccount.IsActive" name="IsActive" type="checkbox">
+                              <span>Is Active User</span>
+                          </label>
+                      </div>
+                  </div>
+                  <div class="col-md-6 col-sm-6">
+                      <button class="btn btn-success" (click)="onSaveAccount()">Save</button>
+                  </div>
+                  <div class="col-md-6 col-sm-6">
+                      <button class="btn btn-warning pull-right" (click)="reset()">Clear</button>
+                  </div>
                   <div class="clearfix"></div>
                 </div>
               </div>

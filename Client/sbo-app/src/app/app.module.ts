@@ -27,6 +27,7 @@ import { LoginComponent } from './pages/login/login.component';
 //services
 import { AuthService } from './services/auth.service';
 import { ConfigService } from './services/config.service';
+import { AccountService } from './services/account.service';
 
 //guards
 import { AuthGuard } from './guards/auth.guard';
@@ -56,7 +57,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AuthGuard,{
+  providers: [AuthService, ConfigService, AccountService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,

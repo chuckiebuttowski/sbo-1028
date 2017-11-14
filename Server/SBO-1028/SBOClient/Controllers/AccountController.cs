@@ -31,11 +31,5 @@ namespace SBOClient.Controllers
             
             return new LoginResponse() { Message = "Success", Token = model.Token, User = model.User };
         }
-
-        //[Authorize]
-        //public string Test()
-        //{
-        //    return "Hello word";
-        //}
     }
 }
