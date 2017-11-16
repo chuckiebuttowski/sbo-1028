@@ -24,6 +24,12 @@ export class LoginComponent implements OnInit {
     
   }
   
+  goLogin(event){
+    if(event.keyCode == 13) {
+      this.onLogin();    
+    }
+  }
+
   async onLogin() {
     let msg = await this.authService.login(this.Username, this.Password);
     if(msg == 'success'){

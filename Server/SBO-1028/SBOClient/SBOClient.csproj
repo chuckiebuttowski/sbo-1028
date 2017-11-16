@@ -118,6 +118,7 @@
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
     <Compile Include="Controllers\SboControllers\JournalController.cs" />
     <Compile Include="Controllers\SboControllers\LedgerAccountController.cs" />
+    <Compile Include="Controllers\TransactionLogController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

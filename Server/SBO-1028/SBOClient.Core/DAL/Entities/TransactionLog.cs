@@ -25,7 +25,16 @@ namespace SBOClient.Core.DAL.Entities
 
         public enum SBOType
         {
-
+            JE = 30,
+            APV = 18,
+            OP = 46,
+            IP = 24,
+            GI = 60,
+            GR = 59,
+            GRPO = 20,
+            ITM = 4,
+            BP = 2,
+            GL = 1
         }
     }
 }

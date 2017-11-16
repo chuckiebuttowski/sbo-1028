@@ -7,16 +7,18 @@ export class TransactionLog{
     IsPosted: boolean;
     Remarks: string;
     Data: TransactionData;
-}
-
-export class TransactionData{
-    PostedOn: Date;
-    RawData: string;//expected json
     Error: ErrorLog;
 }
 
+export class TransactionData{
+    ID: number;
+    PostedOn: Date;
+    RawData: string;//expected json
+}
+
 export class ErrorLog {
-    Code: number;
+    ID: number;
+    ErrorCode: number;
     Message: string;
     StackTrace: string;
 }

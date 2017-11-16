@@ -36,6 +36,9 @@ import { AuthGuard } from './guards/auth.guard';
 //interceptors
 import { TokenInterceptor } from './interceptors/token.interceptor';
 
+//pipe
+//import { TransactionLogFilterPipe } from './pipes/transaction-log.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,11 +61,11 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AccountService, AuthGuard,{
+  providers: [AuthService, ConfigService, AccountService, TransactionLogService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

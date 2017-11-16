@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Abstracts\IRepository.cs" />
     <Compile Include="Abstracts\IServerConfigurationRepository.cs" />
+    <Compile Include="Abstracts\ITransactionLogRepository.cs" />
     <Compile Include="Abstracts\IUserRepository.cs" />
     <Compile Include="DAL\Entities\BaseEntity.cs" />
     <Compile Include="DAL\Entities\ErrorLog.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
     <Compile Include="Repositories\ServerConfigurationRepository.cs" />
+    <Compile Include="Repositories\TransactionLogRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
