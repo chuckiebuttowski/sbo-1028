@@ -53,13 +53,20 @@
     <Compile Include="Abstracts\IServerConfigurationRepository.cs" />
     <Compile Include="Abstracts\IUserRepository.cs" />
     <Compile Include="DAL\Entities\BaseEntity.cs" />
+    <Compile Include="DAL\Entities\ErrorLog.cs" />
     <Compile Include="DAL\Entities\ServerConfig.cs" />
+    <Compile Include="DAL\Entities\TransactionData.cs" />
+    <Compile Include="DAL\Entities\TransactionLog.cs" />
     <Compile Include="DAL\Entities\User.cs" />
     <Compile Include="DAL\SBOIntegrationDataContext.cs" />
     <Compile Include="Factories\RepositoryFactory.cs" />
     <Compile Include="Migrations\201711140746502_Initial.cs" />
     <Compile Include="Migrations\201711140746502_Initial.Designer.cs">
       <DependentUpon>201711140746502_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711161113378_AddedTransactionLogginEntities.cs" />
+    <Compile Include="Migrations\201711161113378_AddedTransactionLogginEntities.Designer.cs">
+      <DependentUpon>201711161113378_AddedTransactionLogginEntities.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +82,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201711140746502_Initial.resx">
       <DependentUpon>201711140746502_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711161113378_AddedTransactionLogginEntities.resx">
+      <DependentUpon>201711161113378_AddedTransactionLogginEntities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

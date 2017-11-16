@@ -28,6 +28,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthService } from './services/auth.service';
 import { ConfigService } from './services/config.service';
 import { AccountService } from './services/account.service';
+import { TransactionLogService } from './services/transaction-log.service';
 
 //guards
 import { AuthGuard } from './guards/auth.guard';
