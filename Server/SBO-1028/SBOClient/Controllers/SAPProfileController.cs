@@ -1,6 +1,7 @@
 ﻿using SBOClient.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,7 +18,7 @@ namespace SBOClient.Controllers
         public SAPProfile GetSAPProfile()
         {
             //get it from where chuckie put this one
-            return new SAPProfile() { UserId = "SAP123435435", Password = "admin123" };//sample data
+            return new SAPProfile() { UserId = ConfigurationManager.AppSettings["uid"], Password = ConfigurationManager.AppSettings["pword"] };//sample data
         }
 
         [HttpPost]
@@ -26,6 +27,8 @@ namespace SBOClient.Controllers
         {
             try
             {
+                ConfigurationManager.AppSettings["uid"] = profile.UserId;
+                ConfigurationManager.AppSettings["pword"] = profile.Password;
                 return "Success";
             }
             catch (Exception)
