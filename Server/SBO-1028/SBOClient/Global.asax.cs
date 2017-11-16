@@ -17,7 +17,7 @@ namespace SBOClient
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            InitializeSbo();
+            //InitializeSbo();
         }
 
         private void InitializeSbo()

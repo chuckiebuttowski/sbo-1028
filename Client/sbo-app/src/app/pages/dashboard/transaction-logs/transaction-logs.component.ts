@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 //services
 import { TransactionLogService } from '../../../services/transaction-log.service';
@@ -16,7 +17,7 @@ export class TransactionLogsComponent implements OnInit {
   Logs: TransactionLog[];
   Type: typeof SBOType = SBOType;
 
-  constructor(private service: TransactionLogService) { }
+  constructor(private service: TransactionLogService, private router: Router) { }
 
   ngOnInit() {
     this.loadData();
@@ -36,6 +37,10 @@ export class TransactionLogsComponent implements OnInit {
 
   getTotalUnPostedLogs() : number {
     return this.Logs.filter((item: TransactionLog) => !item.IsPosted).length;
+  }
+
+  viewDetail(log: TransactionLog){
+    this.router.navigate(['/dashboard/transaction-logs/detail/' + log.ID]);
   }
 
 }

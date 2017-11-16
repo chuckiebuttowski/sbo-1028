@@ -96,30 +96,22 @@
                                     <table class="table table-hover">
                                         <thead class="text-warning">
                                             <tr>
-                                                <th></th>
                                                 <th>Origin</th>
                                                 <th>Transaction No</th>
                                                 <th>Type</th>
                                                 <th>Date</th>
                                                 <th>Is Posted</th>
                                                 <th>Remarks</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let log of Logs">
-                                                <td></td>
+                                            <tr *ngFor="let log of Logs" title="Click to view details" (click)="viewDetail(log)">
                                                 <td>{{log.Origin}}</td>
                                                 <td>{{log.TransactionNo}}</td>
                                                 <td>{{Type[log.Type]}}</td>
                                                 <td>{{log.LogDate | date: 'dd/MM/yyyy'}}</td>
                                                 <td>{{log.IsPosted ? "Yes" : "No"}}</td>
                                                 <td>{{log.Remarks}}</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
-                                                        <i class="material-icons">edit</i>
-                                                    </button>
-                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -128,30 +120,22 @@
                                     <table class="table table-hover">
                                             <thead class="text-warning">
                                                     <tr>
-                                                        <th></th>
                                                         <th>Origin</th>
                                                         <th>Transaction No</th>
                                                         <th>Type</th>
                                                         <th>Date</th>
                                                         <th>Is Posted</th>
                                                         <th>Remarks</th>
-                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: true })">
-                                                        <td></td>
+                                                    <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: true })" title="Click to view details" (click)="viewDetail(log)">
                                                         <td>{{log.Origin}}</td>
                                                         <td>{{log.TransactionNo}}</td>
                                                         <td>{{Type[log.Type]}}</td>
                                                         <td>{{log.LogDate | date: 'dd/MM/yyyy'}}</td>
                                                         <td>{{log.IsPosted ? "Yes" : "No"}}</td>
                                                         <td>{{log.Remarks}}</td>
-                                                        <td class="td-actions text-right">
-                                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
-                                                                <i class="material-icons">edit</i>
-                                                            </button>
-                                                        </td>
                                                     </tr>
                                                 </tbody>
                                     </table>
@@ -160,30 +144,22 @@
                                     <table class="table table-hover">
                                             <thead class="text-warning">
                                                     <tr>
-                                                        <th></th>
                                                         <th>Origin</th>
                                                         <th>Transaction No</th>
                                                         <th>Type</th>
                                                         <th>Date</th>
                                                         <th>Is Posted</th>
                                                         <th>Remarks</th>
-                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: false })">
-                                                        <td></td>
+                                                    <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: false })" title="Click to view details" (click)="viewDetail(log)">
                                                         <td>{{log.Origin}}</td>
                                                         <td>{{log.TransactionNo}}</td>
                                                         <td>{{Type[log.Type]}}</td>
                                                         <td>{{log.LogDate | date: 'dd/MM/yyyy'}}</td>
                                                         <td>{{log.IsPosted ? "Yes" : "No"}}</td>
                                                         <td>{{log.Remarks}}</td>
-                                                        <td class="td-actions text-right">
-                                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
-                                                                <i class="material-icons">edit</i>
-                                                            </button>
-                                                        </td>
                                                     </tr>
                                                 </tbody>
                                     </table>

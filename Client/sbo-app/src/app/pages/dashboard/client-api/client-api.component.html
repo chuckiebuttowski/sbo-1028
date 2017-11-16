@@ -19,7 +19,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let acct of Accounts" (click)="onEdit(acct)">
+                  <!-- <tr *ngFor="let acct of Accounts" (click)="onEdit(acct)">
                     <td></td>
                     <td>{{acct.DisplayName}}</td>
                     <td>{{acct.Username}}</td>
@@ -29,7 +29,7 @@
                             <i class="material-icons">delete</i>
                         </button>
                     </td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -45,34 +45,34 @@
                   <div class="col-sm-12">
                     <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                       <label class="control-label">Display Name</label>
-                      <input type="text" [(ngModel)]="UserAccount.DisplayName" name="DisplayName" class="form-control">
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                       <label class="control-label">Username</label>
-                      <input type="text" [(ngModel)]="UserAccount.Username" name="Username" class="form-control">
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                       <label class="control-label">Password</label>
-                      <input type="password" [(ngModel)]="UserAccount.Password" name="Password" class="form-control">
+                      <input type="password" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-12">
                       <div class="checkbox">
                           <label>
-                              <input [(ngModel)]="UserAccount.IsActive" name="IsActive" type="checkbox">
+                              <input type="checkbox">
                               <span>Is Active User</span>
                           </label>
                       </div>
                   </div>
                   <div class="col-md-6 col-sm-6">
-                      <button class="btn btn-success" (click)="onSaveAccount()">Save</button>
+                      <button class="btn btn-success">Save</button>
                   </div>
                   <div class="col-md-6 col-sm-6">
-                      <button class="btn btn-warning pull-right" (click)="reset()">Clear</button>
+                      <button class="btn btn-warning pull-right">Clear</button>
                   </div>
                   <div class="clearfix"></div>
                 </div>

@@ -11,6 +11,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HomeComponent } from './pages/dashboard/home/home.component';
 import { ServerConfigComponent } from './pages/dashboard/server-config/server-config.component';
 import { TransactionLogsComponent } from './pages/dashboard/transaction-logs/transaction-logs.component';
+import { LogDetailComponent } from './pages/dashboard/log-detail/log-detail.component';
 import { ClientApiComponent } from './pages/dashboard/client-api/client-api.component';
 import { SboApiComponent } from './pages/dashboard/sbo-api/sbo-api.component';
 import { AccountsComponent } from './pages/dashboard/accounts/accounts.component';
@@ -30,7 +31,8 @@ const routes: Routes =[
         {path: 'home',              component: HomeComponent },
         {path: 'config',            component: ServerConfigComponent },
         {path: 'transaction-logs',  component: TransactionLogsComponent },
-        {path: 'api',               component: ClientApiComponent },
+        {path: 'transaction-logs/detail/:id',  component: LogDetailComponent },
+        {path: 'client-api',               component: ClientApiComponent },
         {path: 'sbo-api',           component: SboApiComponent },
         {path: 'accounts',          component: AccountsComponent },
         { path: 'user-profile',   component: UserProfileComponent },

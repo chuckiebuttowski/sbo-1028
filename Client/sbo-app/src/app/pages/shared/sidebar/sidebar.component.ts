@@ -6,15 +6,17 @@ declare interface RouteInfo {
     title: string;
     icon: string;
     class: string;
+    isChildPage: boolean;
 }
 export const ROUTES: RouteInfo[] = [
-    { path: 'home', title: 'Dashboard',  icon: 'dashboard', class: '' },
-    { path: 'config', title: 'Server Configuration',  icon: 'dashboard', class: '' },
-    { path: 'transaction-logs', title: 'Transaction Logs',  icon: 'dashboard', class: '' },
-    { path: 'api', title: 'APIs',  icon: 'dashboard', class: '' },
-    { path: 'sbo-api', title: 'SBO API Docs',  icon: 'dashboard', class: '' },
-    { path: 'accounts', title: 'Accounts',  icon:'person', class: '' },
-    // { path: 'user-profile', title: 'User Profile',  icon:'person', class: '' },
+    { path: 'home', title: 'Dashboard',  icon: 'dashboard', class: '', isChildPage: false},
+    { path: 'config', title: 'Server Configuration',  icon: 'dashboard', class: '', isChildPage: false },
+    { path: 'transaction-logs', title: 'Transaction Logs',  icon: 'dashboard', class: '', isChildPage: false },
+    { path: 'client-api', title: 'APIs',  icon: 'dashboard', class: '', isChildPage: false },
+    { path: 'sbo-api', title: 'SBO API Docs',  icon: 'dashboard', class: '', isChildPage: false },
+    { path: 'accounts', title: 'Accounts',  icon:'person', class: '', isChildPage: false },
+    { path: 'user-profile', title: 'User Profile',  icon:'person', class: '', isChildPage: true },
+    { path: 'detail', title: 'Log Detail',  icon:'person', class: '', isChildPage: true },
     // { path: 'table-list', title: 'Table List',  icon:'content_paste', class: '' },
     // { path: 'typography', title: 'Typography',  icon:'library_books', class: '' },
     // { path: 'icons', title: 'Icons',  icon:'bubble_chart', class: '' },
@@ -34,7 +36,7 @@ export class SidebarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.menuItems = ROUTES.filter(menuItem => !menuItem.isChildPage);
   }
   isMobileMenu() {
       if ($(window).width() > 991) {

@@ -1,0 +1,93 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header" data-background-color="green">
+                      <h4 class="title">Raw Data</h4>
+                      <p class="category">Data that is being sent to the sbo api</p>
+                    </div>
+                    <div class="card-content">
+                      
+                    </div>
+                  </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header" data-background-color="red">
+                      <h4 class="title">Error</h4>
+                      <p class="category">Error encounter during posting the data</p>
+                    </div>
+                    <div class="card-content">
+                      
+                    </div>
+                  </div>
+            </div>
+          </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header" data-background-color="green">
+                        <h4 class="title">Transaction Log</h4>
+                        <p class="category">Transaction log information</p>
+                    </div>
+                    <div class="card-content">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-black label-floating is-empty">
+                                        <label class="control-label">Origin</label>
+                                        <input type="text" [(ngModel)]="Model.Origin" name="Origin" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-black label-floating is-empty">
+                                        <label class="control-label">Transaction No</label>
+                                        <input type="email" [(ngModel)]="Model.TransactionNo" name="TransactionNo" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-black label-floating is-empty">
+                                        <label class="control-label">Type</label>
+                                        <input type="text" [(ngModel)]="Type[Model.Type]" name="Type" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-black label-floating is-empty">
+                                        <label class="control-label">Date</label>
+                                        <input type="text" [ngModel]="Model.LogDate | date: 'dd/MM/yyyy'" name="Date" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <div class="form-group form-black label-floating is-empty">
+                                            <label class="control-label">Remarks</label>
+                                            <input type="text" [(ngModel)]="Model.Remarks" name="Remarks" class="form-control" disabled>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="Model.IsPosted" name="IsPosted" disabled>
+                                        <span>Is Posted</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-success pull-right">Retry Posting</button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    </div>
+    

@@ -11,9 +11,13 @@ export class TransactionLogService {
 
     async getAllLogs() : Promise<TransactionLog[]>{
         const res = await this.http.get("http://localhost:51788/api/transaction-log/get-all").toPromise();
-        
-        console.log(res as TransactionLog[]);
 
         return res as TransactionLog[];
+    }
+
+    async getLogDetail(id: number) : Promise<TransactionLog>{
+        const res = await this.http.get("http://localhost:51788/api/transaction-log/get-log-detail?id=" + id).toPromise();
+        
+        return res as TransactionLog;
     }
 }
