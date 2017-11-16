@@ -58,3 +58,5 @@ E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\S
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.CoreCompileInputs.cache
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.dll
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\Interop.SAPbobsCOM.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.ResolveComReference.cache

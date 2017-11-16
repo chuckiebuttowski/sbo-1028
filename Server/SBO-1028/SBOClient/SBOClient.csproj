@@ -118,6 +118,7 @@
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
     <Compile Include="Controllers\SboControllers\JournalController.cs" />
     <Compile Include="Controllers\SboControllers\LedgerAccountController.cs" />
+    <Compile Include="Controllers\SboControllers\SQLDomainBrokerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -143,6 +144,17 @@
       <Project>{1d350449-385b-46c0-8116-14d5294283d7}</Project>
       <Name>SBOClient.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SAPbobsCOM">
+      <Guid>{FC8030BE-F5D2-4B8E-8F92-44228FE30090}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
