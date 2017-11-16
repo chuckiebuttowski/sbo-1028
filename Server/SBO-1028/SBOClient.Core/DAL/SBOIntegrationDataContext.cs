@@ -20,5 +20,8 @@ namespace SBOClient.Core.DAL
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<ServerConfig> SAPServerConfigurations { get; set; }
+        public virtual DbSet<TransactionLog> TransactionLogs { get; set; }
+        public virtual DbSet<TransactionData> TransactionData { get; set; }
+        public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
     }
 }

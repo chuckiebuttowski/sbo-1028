@@ -19,13 +19,13 @@
                   <div class="col-sm-12">
                       <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                         <label class="control-label">Username</label>
-                        <input type="text" [(ngModel)]="Username" name="Username" class="form-control" class="form-control">
+                        <input type="text" (keydown)="goLogin($event)" [(ngModel)]="Username" name="Username" class="form-control" class="form-control">
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
                         <label class="control-label">Password</label>
-                        <input type="password" [(ngModel)]="Password" name="Password" class="form-control">
+                        <input type="password" (keydown)="goLogin($event)" [(ngModel)]="Password" name="Password" class="form-control">
                       </div>
                     </div>
                 

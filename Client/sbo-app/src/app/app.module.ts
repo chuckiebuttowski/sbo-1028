@@ -28,12 +28,16 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthService } from './services/auth.service';
 import { ConfigService } from './services/config.service';
 import { AccountService } from './services/account.service';
+import { TransactionLogService } from './services/transaction-log.service';
 
 //guards
 import { AuthGuard } from './guards/auth.guard';
 
 //interceptors
 import { TokenInterceptor } from './interceptors/token.interceptor';
+
+//pipe
+//import { TransactionLogFilterPipe } from './pipes/transaction-log.pipe';
 
 @NgModule({
   declarations: [
@@ -57,11 +61,11 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AccountService, AuthGuard,{
+  providers: [AuthService, ConfigService, AccountService, TransactionLogService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
