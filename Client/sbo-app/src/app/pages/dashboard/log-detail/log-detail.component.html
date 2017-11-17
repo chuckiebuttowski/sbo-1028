@@ -4,30 +4,45 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header" data-background-color="green">
-                      <h4 class="title">Raw Data</h4>
-                      <p class="category">Data that is being sent to the sbo api</p>
+                        <h4 class="title">Raw Data</h4>
+                        <p class="category">Data that is being sent to the sbo api</p>
                     </div>
-                    <div class="card-content">
-                      
+                    <div class="card-content" style="height: 150px;overflow-y: auto;">
+                        <div>
+                            <span>Posted On:</span>
+                            <p>{{Model.RawData.PostedOn | date: 'dd/MM/yyyy'}}</p>
+                            <span>Payload:</span>
+                            <p>{{Model.RawData.RawData}}</p>
+                        </div>
                     </div>
-                  </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header" data-background-color="red">
-                      <h4 class="title">Error</h4>
-                      <p class="category">Error encounter during posting the data</p>
+                        <h4 class="title">Error</h4>
+                        <p class="category">Error encounter during posting the data</p>
                     </div>
-                    <div class="card-content">
-                      
+                    <div class="card-content" style="height: 150px;overflow-y: auto;">
+                        <div *ngIf="Model.IsPosted">
+                            <p>
+                                No Error
+                            </p>
+                        </div>
+                        <div *ngIf="!Model.IsPosted">
+                            <span>Message:</span>
+                            <p>{{Model.Error.Message}}</p>
+                            <span>Stack Trace:</span>
+                            <p>{{Model.Error.StackTrace}}</p>
+                        </div>
                     </div>
-                  </div>
+                </div>
             </div>
-          </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header" data-background-color="green">
+                    <div class="card-header" [attr.data-background-color]="CardBg">
                         <h4 class="title">Transaction Log</h4>
                         <p class="category">Transaction log information</p>
                     </div>
@@ -47,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-black label-floating is-empty">
@@ -64,10 +79,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                        <div class="form-group form-black label-floating is-empty">
-                                            <label class="control-label">Remarks</label>
-                                            <input type="text" [(ngModel)]="Model.Remarks" name="Remarks" class="form-control" disabled>
-                                        </div>
+                                    <div class="form-group form-black label-floating is-empty">
+                                        <label class="control-label">Remarks</label>
+                                        <input type="text" [(ngModel)]="Model.Remarks" name="Remarks" class="form-control" disabled>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -79,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <button class="btn btn-success pull-right">Retry Posting</button>
+                                <button class="btn btn-success pull-right" *ngIf="!Model.IsPosted" (click)="onRetryPosting()">Retry Posting</button>
                             </div>
                             <div class="clearfix"></div>
                         </form>
@@ -87,7 +102,6 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
-    </div>
-    
+</div>

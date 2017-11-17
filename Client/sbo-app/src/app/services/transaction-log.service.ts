@@ -20,4 +20,10 @@ export class TransactionLogService {
         
         return res as TransactionLog;
     }
+
+    async retryPosting(id: number) : Promise<string> {
+        const res = await this.http.get("http://localhost:51788/api/transaction-log/retry-posting?id=" + id).toPromise();
+        
+        return res as string;
+    }
 }

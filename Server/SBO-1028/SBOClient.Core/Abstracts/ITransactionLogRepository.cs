@@ -9,6 +9,6 @@ namespace SBOClient.Core.Abstracts
 {
     public interface ITransactionLogRepository : IRepository<TransactionLog>
     {
-
+        void RetryPosting(int id);
     }
 }

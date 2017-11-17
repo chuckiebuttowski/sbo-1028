@@ -10,5 +10,9 @@ namespace SBOClient.Core.Repositories
 {
     internal class TransactionLogRepository : BaseRepository<TransactionLog>, ITransactionLogRepository
     {
+        public void RetryPosting(int id)
+        {
+            //get log by id here and try post it again
+        }
     }
 }

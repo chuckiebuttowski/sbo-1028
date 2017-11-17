@@ -1,13 +1,13 @@
 export class TransactionLog{
-    ID: string;
+    ID: number;
     Origin: string;
     TransactionNo: string;
     SBOType : SBOType;
     LogDate: Date;
     IsPosted: boolean;
     Remarks: string;
-    Data: TransactionData;
-    Error: ErrorLog;
+    RawData: TransactionData = new TransactionData();
+    Error: ErrorLog = new ErrorLog();
 }
 
 export class TransactionData{
