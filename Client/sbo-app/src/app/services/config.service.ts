@@ -4,18 +4,20 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 
 import { SAPProfile, ServerConfig } from '../models/config.model';
 
+import { ServiceSetting } from './service.setting';
+
 @Injectable()
 export class ConfigService {
 
     constructor(private http: HttpClient) { }
 
     async testAccessAuthorizeAPI() {
-        var res = await this.http.get("http://localhost:51788/api/configuration/test").toPromise();
+        var res = await this.http.get(ServiceSetting.BaseAPIUrl + "/configuration/test").toPromise();
         console.log("response from authorize api: " + res);
     }
 
     async getSAPProfile() : Promise<SAPProfile> {
-        const res = await this.http.get("http://localhost:51788/api/sap-profile/get-profile").toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/sap-profile/get-profile").toPromise();
         return res as SAPProfile;
     }
 
@@ -31,7 +33,7 @@ export class ConfigService {
         }
 
         let body = {UserId: profile.UserId, Password: profile.Password };
-        const res = await this.http.post("http://localhost:51788/api/sap-profile/update-profile", body).toPromise();
+        const res = await this.http.post(ServiceSetting.BaseAPIUrl + "/sap-profile/update-profile", body).toPromise();
         
         return res as string;
     }
@@ -39,7 +41,7 @@ export class ConfigService {
     async getRecentServers(): Promise<ServerConfig[]> { 
         let servers : ServerConfig[] = new Array<ServerConfig>();
 
-        const res = await this.http.get("http://localhost:51788/api/configuration/get-recent-servers").toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/configuration/get-recent-servers").toPromise();
 
         servers = res as ServerConfig[];
 
@@ -66,19 +68,19 @@ export class ConfigService {
         }
 
         let body = { ServerName: server.ServerName, DatabaseName: server.DatabaseName, Username: server.Username, Password: server.Password };
-        const res = await this.http.post("http://localhost:51788/api/configuration/add?isActive=" + isActive, body).toPromise();
+        const res = await this.http.post(ServiceSetting.BaseAPIUrl + "/configuration/add?isActive=" + isActive, body).toPromise();
 
         return res as string;
     }
 
     async activateServer(id: number) : Promise<string> {
-        const res = await this.http.get("http://localhost:51788/api/configuration/activate-server?id=" + id).toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/configuration/activate-server?id=" + id).toPromise();
         
         return res as string;
     }
 
     async deleteServer(id: number) : Promise<string> {
-        const res = await this.http.get("http://localhost:51788/api/configuration/delete?id=" + id).toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/configuration/delete?id=" + id).toPromise();
 
         return res as string;
     }

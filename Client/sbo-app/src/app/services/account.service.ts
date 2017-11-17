@@ -5,13 +5,15 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 //model
 import { Account } from '../models/account.model';
 
+import { ServiceSetting } from './service.setting';
+
 @Injectable()
 export class AccountService {
     
     constructor(private http: HttpClient) { }
 
     async getAccounts() : Promise<Account[]> {
-        const res = await this.http.get("http://localhost:51788/api/app-user/get-users").toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/app-user/get-users").toPromise();
 
         return res as Account[];
     }
@@ -31,13 +33,13 @@ export class AccountService {
             return "Password is required.";
         }
 
-        const res = await this.http.post("http://localhost:51788/api/app-user/add-or-update", acct).toPromise();
+        const res = await this.http.post(ServiceSetting.BaseAPIUrl + "/app-user/add-or-update", acct).toPromise();
 
         return res as string;
     }
 
     async deleteAccount(id: number) : Promise<string>{
-        const res = await this.http.get("http://localhost:51788/api/app-user/delete?id=" + id).toPromise();
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/app-user/delete?id=" + id).toPromise();
         
         return res as string;
     }

@@ -3,6 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/of';
 
+import { ServiceSetting } from './service.setting';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
       
       let body = { username: username, password: password};
       
-      let res: Response = await this.http.post('http://localhost:51788/api/account/login', body).toPromise();
+      let res: Response = await this.http.post(ServiceSetting.BaseAPIUrl + '/account/login', body).toPromise();
       
       if(res.json().Message.toLowerCase().indexOf('success') < 0) {
         return res.json().Message;
