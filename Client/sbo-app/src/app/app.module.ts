@@ -29,6 +29,7 @@ import { AuthService } from './services/auth.service';
 import { ConfigService } from './services/config.service';
 import { AccountService } from './services/account.service';
 import { TransactionLogService } from './services/transaction-log.service';
+import { ClientAPIService } from './services/client-api.service';
 
 //guards
 import { AuthGuard } from './guards/auth.guard';
@@ -61,7 +62,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AccountService, TransactionLogService, AuthGuard,{
+  providers: [AuthService, ConfigService, AccountService, TransactionLogService, ClientAPIService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,

@@ -1,4 +1,5 @@
-﻿using sbo.fx;
+﻿using Newtonsoft.Json;
+using sbo.fx;
 using SBOClient.Core.DAL.Entities;
 using SBOClient.Core.Factories;
 using System;
@@ -16,6 +17,10 @@ namespace SBOClient
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            GlobalConfiguration.Configuration.Formatters
+                   .JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling
+                   = ReferenceLoopHandling.Ignore;
 
             //InitializeSbo();
         }

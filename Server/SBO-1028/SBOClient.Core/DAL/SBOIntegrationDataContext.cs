@@ -23,5 +23,7 @@ namespace SBOClient.Core.DAL
         public virtual DbSet<TransactionLog> TransactionLogs { get; set; }
         public virtual DbSet<TransactionData> TransactionData { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
+        public virtual DbSet<ClientAPI> ClientAPIs { get; set; }
+        public virtual DbSet<APIParameter> ApiParameters { get; set; }
     }
 }

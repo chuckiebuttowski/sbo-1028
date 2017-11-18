@@ -40,6 +40,11 @@ namespace SBOClient.Core.Factories
             return new TransactionLogRepository();
         }
 
+        public IClientAPIRepository CreateClientAPIRepository()
+        {
+            return new ClientAPIRepository();
+        }
+
         public IRepository<T> CreateRepository<T>() where T : BaseEntity
         {
             return new BaseRepository<T>();
