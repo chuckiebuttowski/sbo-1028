@@ -6,15 +6,24 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SBOClient.Controllers
 {
+    /// <summary>
+    /// Test Documentation
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/client-api")]
     public class ClientAPIController : ApiController
     {
+        /// <summary>
+        /// Get all client APIs stored in the database
+        /// </summary>
+        /// <returns>List of Client APIs</returns>
         [HttpGet]
         [Route("get-all")]
+        [ResponseType(typeof(List<ClientAPI>))]
         public IEnumerable<ClientAPI> GetAllClientAPIs()
         {
             var repo = new RepositoryFactory().CreateClientAPIRepository();

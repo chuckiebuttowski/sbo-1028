@@ -30,6 +30,7 @@ import { ConfigService } from './services/config.service';
 import { AccountService } from './services/account.service';
 import { TransactionLogService } from './services/transaction-log.service';
 import { ClientAPIService } from './services/client-api.service';
+import { SBOApiService } from './services/sbo-api.service';
 
 //guards
 import { AuthGuard } from './guards/auth.guard';
@@ -62,7 +63,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AccountService, TransactionLogService, ClientAPIService, AuthGuard,{
+  providers: [AuthService, ConfigService, AccountService, TransactionLogService, ClientAPIService, SBOApiService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,

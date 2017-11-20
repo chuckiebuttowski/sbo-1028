@@ -20,6 +20,7 @@ import { ClientApiComponent } from './client-api/client-api.component';
 import { SboApiComponent } from './sbo-api/sbo-api.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { LogDetailComponent } from './log-detail/log-detail.component';
+import { SboApiDetailComponent } from './sbo-api-detail/sbo-api-detail.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,6 @@ import { LogDetailComponent } from './log-detail/log-detail.component';
     SharedModule,
     AppRoutingModule,
   ],
-  declarations: [DashboardComponent, HomeComponent, ServerConfigComponent, TransactionLogsComponent, ClientApiComponent, SboApiComponent, AccountsComponent, TransactionLogFilterPipe, LogDetailComponent]
+  declarations: [DashboardComponent, HomeComponent, ServerConfigComponent, TransactionLogsComponent, ClientApiComponent, SboApiComponent, AccountsComponent, TransactionLogFilterPipe, LogDetailComponent, SboApiDetailComponent]
 })
 export class DashboardModule { }

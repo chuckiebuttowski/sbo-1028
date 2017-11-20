@@ -33,6 +33,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\SBOClient.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,6 +121,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\APIActionDocumentation.cs" />
+    <Compile Include="Models\APIControllerDocumentation.cs" />
+    <Compile Include="Models\APIParameterDocumentation.cs" />
+    <Compile Include="Models\APIResponseDocumentation.cs" />
+    <Compile Include="Models\IModelDocumentationProvider.cs" />
+    <Compile Include="Models\XmlDocumentationProvider.cs" />
     <Compile Include="Models\LoginResponse.cs" />
     <Compile Include="Models\SAPProfile.cs" />
     <Compile Include="Models\SignInModel.cs" />
@@ -141,17 +149,6 @@
       <Project>{1d350449-385b-46c0-8116-14d5294283d7}</Project>
       <Name>SBOClient.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="SAPbobsCOM">
-      <Guid>{FC8030BE-F5D2-4B8E-8F92-44228FE30090}</Guid>
-      <VersionMajor>9</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

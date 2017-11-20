@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit {
       }
     
       for(var item = 0; item < this.listTitles.length; item++){
-        if(this.listTitles[item].path === second){
+        if(this.listTitles[item].path === paths[paths.length - 2] + '/' + second){
             return this.listTitles[item].title;
         }
     }

@@ -1,0 +1,94 @@
+<div class="main-content">
+  <div class="container-fluid" *ngIf="Model == null">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Please wait..</h4>
+        </div>
+    </div>
+  </div>
+  <div *ngIf="Model != null" class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header" data-background-color="green">
+              <h4 class="title">{{Model.Name}}</h4>
+              <p class="category">{{Model.BaseURL}}</p>
+          </div>
+          <div class="card-content">
+              {{Model.Description}}
+              <hr/>
+              <a class="pull-right">How to access token base authorize api</a>
+              <p>Is Secured ? {{Model.IsSecured ? 'Yes' : 'No'}}</p>
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+          <div class="card">
+              <div class="card-header" data-background-color="red">
+                <h4 class="title">Endpoints</h4>
+                <p class="category">List of all endpoints in {{Model.Name}}</p>
+              </div>
+              <div class="card-content table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-warning">
+                    <tr>
+                      <th>Method</th>
+                      <th>Name</th>
+                      <th>Full Path</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let action of Model.Actions" [class.active]="CurrentEndpoint == action" (click)="showDetail(action)">
+                        <td>
+                            <span [class.text-success]="action.Method == 'POST'" [class.text-primary]="action.Method == 'GET'" [class.text-warning]="action.Method == 'UPDATE'" [class.text-danger]="action.Method == 'DELETE'">{{action.Method}}</span>
+                          </td>
+                          <td>{{action.Name}}</td>
+                          <td>{{action.Path}}</td>
+                          <td>{{action.Description}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-header" data-background-color="red">
+                <h4 class="title">Endpoint Detail</h4>
+                <p class="category">Detail information of {{CurrentEndpoint.Name}}</p>
+              </div>
+              <div class="card-content">
+                <label>Parameters</label>
+                <br/>
+                <span *ngIf="CurrentEndpoint.Parameters == null">No Parameter</span>
+                <table *ngIf="CurrentEndpoint.Parameters != null" class="table">
+                  <thead class="text-warning">
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Optional</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let param of CurrentEndpoint.Parameters">
+                      <td>{{param.Name}}</td>
+                      <td>{{param.Type}}</td>
+                      <td>{{param.IsOptional ? 'Yes' : 'No'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr/>
+                <label>Response</label>
+                <br/>
+                <span>Type: {{CurrentEndpoint.Response.Type}}</span>
+                <br/>
+                <p>Description: {{CurrentEndpoint.Response.Description}}</p>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
