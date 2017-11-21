@@ -58,7 +58,16 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" *ngIf="!HasLogs">
+                    <div class="col-md-12">
+                        <div class="card">
+                                <div class="card-content">
+                                    <span>No logs yet</span>
+                                </div>
+                            </div>      
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="HasLogs">
                     <div class="card card-nav-tabs">
                         <div class="card-header" data-background-color="red">
                             <div class="nav-tabs-navigation">

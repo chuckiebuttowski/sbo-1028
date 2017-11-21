@@ -25,7 +25,7 @@
                     <label>No Records</label>
                   </td>
                 </tr>
-                <tr *ngFor="let api of APIs" (click)="Model = api">
+                <tr *ngFor="let api of APIs" (click)="changeModel(api)">
                   <td>{{api.Name}}</td>
                   <td>{{api.URL}}</td>
                   <td>{{api.Action}}</td>
@@ -71,7 +71,7 @@
                 <label>SBO Posting</label>
             </div>
             <div class="col-sm-12">
-                <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                <div class="form-group form-black label-floating" [class.is-empty]="Model.Action == ''" style="margin:10px 0 0 0;">
                     <label class="control-label">Action</label>
                     <select class="form-control" [(ngModel)]="Model.Action" name="Action">
                         <option value="" selected disabled hidden>Choose here</option>
@@ -81,19 +81,19 @@
                   </div>
               </div>
               <div class="col-sm-12">
-                  <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
-                      <label class="control-label">Transaction Type</label>
+                  <div class="form-group form-black label-floating" [class.is-empty]="Type[Model.SboTransactionType] == ''" style="margin:10px 0 0 0;">
+                      <label class="control-label">SBO Model</label>
                       <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
                           <option value="" selected disabled hidden>Choose here</option>
-                          <option style="padding:5px;" value="{{Type[val]}}" *ngFor="let val of TransactionType">{{Type[val]}}</option>
+                          <option style="padding:5px;" value="{{val}}" *ngFor="let val of TransactionType">{{val}}</option>
                         </select>
                     </div>
-                  <a [routerLink]="['/dashboard/sbo-api']">Click here to view transaction type properties</a>
+                  <a [routerLink]="['/dashboard/sbo-api']">Click here to view sbo model documentation</a>
                 </div>
-                <div class="col-sm-12">
-                    <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
+                <div class="col-sm-12" style="margin-top:10px;">
+                    <div class="form-group form-black label-floating" [class.is-empty]="ValueType[Model.ValueType] == ''" style="margin:10px 0 0 0;">
                         <label class="control-label">Value Type</label>
-                        <select class="form-control" [(ngModel)]="Model.ValueType" name="ValueType">
+                        <select id="val-type" class="form-control" [(ngModel)]="Model.ValueType" name="ValueType">
                             <option value="" selected disabled hidden>Choose here</option>
                             <option value="0">Single Entity</option>
                             <option value="1">Multiple Entities</option>

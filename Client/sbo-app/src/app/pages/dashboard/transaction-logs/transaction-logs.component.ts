@@ -16,6 +16,7 @@ export class TransactionLogsComponent implements OnInit {
 
   Logs: TransactionLog[];
   Type: typeof SBOType = SBOType;
+  HasLogs: boolean;
 
   constructor(private service: TransactionLogService, private router: Router) { }
 
@@ -25,6 +26,7 @@ export class TransactionLogsComponent implements OnInit {
 
   async loadData() {
     this.Logs = await this.service.getAllLogs();
+    this.HasLogs = this.Logs.length > 0;
   }
 
   getTotalLogs() : number{

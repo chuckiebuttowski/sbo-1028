@@ -20,6 +20,8 @@ export class AccountsComponent implements OnInit {
   constructor(private acctService: AccountService) { }
 
   ngOnInit() {
+    $.material.options.autofill = true;
+    $.material.init();
     this.loadData();
   }
 

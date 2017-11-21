@@ -8,6 +8,7 @@ import { SBOType } from '../../../models/log.model';
 
 //service
 import { ClientAPIService } from '../../../services/client-api.service';
+import { SBOApiService } from '../../../services/sbo-api.service';
 
 @Component({
   selector: 'app-client-api',
@@ -24,14 +25,17 @@ export class ClientApiComponent implements OnInit {
   Model: ClientAPI = new ClientAPI();
   APIs: ClientAPI[] = [];
 
-  constructor(private apiService: ClientAPIService) { }
+  constructor(private apiService: ClientAPIService, private sboApiService: SBOApiService) { }
 
   ngOnInit() {
+    $.material.options.autofill = true;
+    $.material.init();
     this.loadData();
   }
 
   async loadData(){
     this.APIs = await this.apiService.getAll();
+    this.TransactionType = await this.sboApiService.getSBOModels();
   }
 
   onAddNewParam() {
@@ -106,5 +110,9 @@ export class ClientApiComponent implements OnInit {
       this.NewParameter = new APIParameter();
       this.loadData();
     }
+  }
+
+  changeModel(api: ClientAPI){
+    this.Model = api;
   }
 }

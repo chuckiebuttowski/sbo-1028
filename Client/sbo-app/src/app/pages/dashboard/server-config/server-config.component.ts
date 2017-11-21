@@ -25,6 +25,8 @@ export class ServerConfigComponent implements OnInit {
   }
 
   ngOnInit() {
+    $.material.options.autofill = true;
+    $.material.init();
     this.loadData();
   }
 
