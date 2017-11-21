@@ -1,35 +1,3 @@
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.dll.config
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.pdb
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.SqlServer.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\JWT.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Newtonsoft.Json.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\sbo.fx.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Net.Http.Formatting.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Cors.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.Cors.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.WebHost.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.pdb
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.dll.config
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.SqlServer.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\JWT.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Newtonsoft.Json.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.Cors.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Net.Http.Formatting.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.WebHost.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csprojResolveAssemblyReference.cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\Interop.SAPbobsCOM.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.ResolveComReference.cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.CoreCompileInputs.cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.pdb
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\bin\SBOClient.dll.config
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\bin\SBOClient.dll
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\bin\SBOClient.pdb
@@ -61,3 +29,39 @@ E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\S
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.dll
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.pdb
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\bin\SBOClient.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.dll.config
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Dapper.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.SqlServer.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\JWT.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Newtonsoft.Json.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\sbo.fx.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Net.Http.Formatting.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Cors.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.Cors.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.WebHost.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.dll.config
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Dapper.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.SqlServer.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\JWT.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Newtonsoft.Json.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\sbo.fx.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.Cors.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Net.Http.Formatting.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.WebHost.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csprojResolveAssemblyReference.cache
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\Interop.SAPbobsCOM.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.ResolveComReference.cache
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.CoreCompileInputs.cache
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.pdb

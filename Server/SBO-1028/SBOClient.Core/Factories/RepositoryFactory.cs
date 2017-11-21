@@ -25,6 +25,11 @@ namespace SBOClient.Core.Factories
             db = context;
         }
 
+        public IErrorLogRepository CreateErrorLogRepository()
+        {
+            return new ErrorLogRepository();
+        }
+
         public IUserRepository CreateUserRepository()
         {
             return new UserRepository();

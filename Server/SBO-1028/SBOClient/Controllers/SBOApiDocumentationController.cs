@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 namespace SBOClient.Controllers
 {
     //[Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [RoutePrefix("api/sbo-api-docs")]
     public class SBOApiDocumentationController : ApiController
     {

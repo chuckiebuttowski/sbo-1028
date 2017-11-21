@@ -1,17 +1,3 @@
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll.config
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.pdb
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.Initial.resources
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.AddedTransactionLogginEntities.resources
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.GenerateResource.Cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll.config
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.pdb
@@ -26,3 +12,18 @@ E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\De
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll.config
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.xml
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.Initial.resources
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.AddedTransactionLogginEntities.resources
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.AddedClientAPIEntities.resources
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.GenerateResource.Cache
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClietAPIModel.resources

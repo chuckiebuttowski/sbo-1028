@@ -179,6 +179,8 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        [Route("update-item")]
+        [HttpPut]
         public async Task<IHttpActionResult> UpdateItem(oItem item)
         {
             try

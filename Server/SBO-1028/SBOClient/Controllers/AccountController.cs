@@ -5,11 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SBOClient.Controllers
 {
     public class AccountController : ApiController
     {
+        [ApiExplorerSettings(IgnoreApi = true)]
         [AllowAnonymous]
         [HttpPost]
         public LoginResponse SignIn([FromBody]SignInModel model)

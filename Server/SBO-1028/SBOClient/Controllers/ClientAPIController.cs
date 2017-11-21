@@ -13,6 +13,7 @@ namespace SBOClient.Controllers
     /// <summary>
     /// Test Documentation
     /// </summary>
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [RoutePrefix("api/client-api")]
     public class ClientAPIController : ApiController

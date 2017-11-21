@@ -13,6 +13,7 @@ using System.Web.Http;
 namespace SBOClient.Controllers.SboControllers
 {
     [RoutePrefix("api/business-partners")]
+    [AllowAnonymous]
     public class BusinessPartnerController : ApiController
     {
         IBusinessPartnerRepository repo = new RepositoryFactory().BusinessPartnerRepository();
@@ -202,7 +203,7 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         [Route("update-business-partner")]
-        [HttpPost]
+        [HttpPut]
         public async Task<IHttpActionResult> UpdateBusinessPartner(oBusinessPartner businessPartner)
         {
             try

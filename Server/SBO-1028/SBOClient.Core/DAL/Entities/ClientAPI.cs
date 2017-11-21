@@ -12,6 +12,8 @@ namespace SBOClient.Core.DAL.Entities
         public string URL { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
+        public string Action { get; set; }
+        public string SboTransactionType { get; set; }
 
         public virtual List<APIParameter> Params { get; set; }
     }

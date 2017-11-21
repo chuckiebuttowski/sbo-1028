@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstracts\IClientAPIRepository.cs" />
+    <Compile Include="Abstracts\IErrorLogRepository.cs" />
     <Compile Include="Abstracts\IRepository.cs" />
     <Compile Include="Abstracts\IServerConfigurationRepository.cs" />
     <Compile Include="Abstracts\ITransactionLogRepository.cs" />
@@ -76,10 +78,15 @@
     <Compile Include="Migrations\201711181617554_AddedClientAPIEntities.Designer.cs">
       <DependentUpon>201711181617554_AddedClientAPIEntities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711210514228_UpdateClietAPIModel.cs" />
+    <Compile Include="Migrations\201711210514228_UpdateClietAPIModel.Designer.cs">
+      <DependentUpon>201711210514228_UpdateClietAPIModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\ClientAPIRepository.cs" />
+    <Compile Include="Repositories\ErrorLogRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
     <Compile Include="Repositories\ServerConfigurationRepository.cs" />
     <Compile Include="Repositories\TransactionLogRepository.cs" />
@@ -98,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711181617554_AddedClientAPIEntities.resx">
       <DependentUpon>201711181617554_AddedClientAPIEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711210514228_UpdateClietAPIModel.resx">
+      <DependentUpon>201711210514228_UpdateClietAPIModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

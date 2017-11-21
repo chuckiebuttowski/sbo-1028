@@ -33,7 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DocumentationFile>bin\SBOClient.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -63,8 +66,7 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="sbo.fx">
-      <HintPath>Ref_Dlls\sbo.fx.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>C:\Users\CHUCKIE\Documents\Visual Studio 2017\Projects\Libraries\sbo.fx\sbo.fx\bin\Debug\sbo.fx.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
@@ -105,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Ref_Dlls\sbo.fx.dll" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -117,11 +118,20 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\SAPProfileController.cs" />
     <Compile Include="Controllers\SBOApiDocumentationController.cs" />
+    <Compile Include="Controllers\SboControllers\BusinessPartnerController.cs" />
+    <Compile Include="Controllers\SboControllers\InventoryController.cs" />
+    <Compile Include="Controllers\SboControllers\ItemController.cs" />
+    <Compile Include="Controllers\SboControllers\JournalController.cs" />
+    <Compile Include="Controllers\SboControllers\LedgerAccountController.cs" />
+    <Compile Include="Controllers\SboControllers\SQLDomainBrokerController.cs" />
     <Compile Include="Controllers\TransactionLogController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ErrorLogger.cs" />
+    <Compile Include="Helpers\TransactionLogger.cs" />
     <Compile Include="Models\APIActionDocumentation.cs" />
+    <Compile Include="Models\APICallSignature.cs" />
     <Compile Include="Models\APIControllerDocumentation.cs" />
     <Compile Include="Models\APIParameterDocumentation.cs" />
     <Compile Include="Models\APIResponseDocumentation.cs" />
@@ -143,12 +153,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Ref_Dlls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SBOClient.Core\SBOClient.Core.csproj">
       <Project>{1d350449-385b-46c0-8116-14d5294283d7}</Project>
       <Name>SBOClient.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SAPbobsCOM">
+      <Guid>{FC8030BE-F5D2-4B8E-8F92-44228FE30090}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
