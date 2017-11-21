@@ -9,11 +9,11 @@ declare interface RouteInfo {
     isChildPage: boolean;
 }
 export const ROUTES: RouteInfo[] = [
-    { path: 'home', title: 'Dashboard',  icon: 'dashboard', class: '', isChildPage: false},
-    { path: 'config', title: 'Server Configuration',  icon: 'dashboard', class: '', isChildPage: false },
-    { path: 'transaction-logs', title: 'Transaction Logs',  icon: 'dashboard', class: '', isChildPage: false },
-    { path: 'client-api', title: 'APIs',  icon: 'dashboard', class: '', isChildPage: false },
-    { path: 'sbo-api', title: 'SBO API Docs',  icon: 'dashboard', class: '', isChildPage: false },
+    // { path: 'home', title: 'Dashboard',  icon: 'dashboard', class: '', isChildPage: false},
+    { path: 'config', title: 'Server Configuration',  icon: 'svg/config.svg', class: '', isChildPage: false },
+    { path: 'transaction-logs', title: 'Transaction Logs',  icon: 'svg/transaction.svg', class: '', isChildPage: false },
+    { path: 'client-api', title: 'APIs',  icon: 'svg/apis.svg', class: '', isChildPage: false },
+    { path: 'sbo-api', title: 'SBO API Docs',  icon: 'svg/sapdiapi.svg', class: '', isChildPage: false },
     { path: 'sbo-api/detail', title: 'API Documentation',  icon: 'dashboard', class: '', isChildPage: true },
     { path: 'accounts', title: 'Accounts',  icon:'person', class: '', isChildPage: false },
     { path: 'user-profile', title: 'User Profile',  icon:'person', class: '', isChildPage: true },

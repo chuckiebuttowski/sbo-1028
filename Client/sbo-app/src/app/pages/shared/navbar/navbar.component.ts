@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
+    UserDisplayName: string;
+
     constructor(location: Location,  private element: ElementRef, private authService: AuthService, private router: Router) {
       this.location = location;
           this.sidebarVisible = false;
@@ -26,6 +28,7 @@ export class NavbarComponent implements OnInit {
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
+      this.UserDisplayName = this.authService.getUserDisplayName();
     }
 
     sidebarOpen() {

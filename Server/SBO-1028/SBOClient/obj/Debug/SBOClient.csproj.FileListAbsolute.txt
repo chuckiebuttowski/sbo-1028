@@ -65,3 +65,4 @@ E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.Resol
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.CoreCompileInputs.cache
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.dll
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.pdb
+E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient\obj\Debug\SBOClient.csproj.ResolveComReference.cache

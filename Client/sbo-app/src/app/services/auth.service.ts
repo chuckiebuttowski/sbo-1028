@@ -8,7 +8,8 @@ import { ServiceSetting } from './service.setting';
 @Injectable()
 export class AuthService {
   private token: string;
-  
+  private User: any;
+
   constructor(private http: Http) { }
 
   async login (username: string, password: string) : Promise<string> {
@@ -25,6 +26,8 @@ export class AuthService {
       
       let res: Response = await this.http.post(ServiceSetting.BaseAPIUrl + '/account/login', body).toPromise();
       
+      sessionStorage.setItem('User', JSON.stringify(res.json().User));
+
       if(res.json().Message.toLowerCase().indexOf('success') < 0) {
         return res.json().Message;
       }
@@ -37,8 +40,13 @@ export class AuthService {
     }
   }
 
+  getUserDisplayName(): string{
+    return JSON.parse(sessionStorage.getItem('User')).DisplayName;
+  }
+
   logout () {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("User");
   }
 
   isUserLoggedIn(){

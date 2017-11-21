@@ -63,15 +63,37 @@
                 <input type="text" [(ngModel)]="Model.Description" name="Description" class="form-control">
               </div>
             </div>
-
             <div class="col-sm-12">
-              <label>Parameters</label>
-              <table class="table table-hover" style="margin-bottom:50px;">
+                <label>SBO Posting</label>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+              <div class="col-sm-4">
+                <label>Action</label>
+                <select class="form-control" [(ngModel)]="Model.Action" name="Action">
+                    <option>Add</option>
+                    <option>Update</option>
+                  </select>
+              </div>
+              <div class="col-sm-4">
+                  <label>Transaction Type</label>
+                  <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
+                    <option style="padding:5px;" *ngFor="let val of TransactionType">{{Type[val]}}</option>
+                  </select>
+                  
+                </div>
+                <div class="col-sm-4">
+                    <label>Value Type</label>
+                    <select class="form-control" [(ngModel)]="Model.ValueType" name="ValueType">
+                        <option>Single Enity</option>
+                        <option>Multiple Entities</option>
+                      </select>
+                  </div>
+              <!-- <table class="table table-hover" style="margin-bottom:50px;">
                 <thead class="text-warning">
                   <tr>
-                    <th> Name</th>
-                    <th>Type</th>
-                    <th></th>
+                    <th>Action</th>
+                    <th>Transaction</th>
+                    <th>Value Type</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -87,7 +109,6 @@
                   <tr>
                     <td>
                       <div class="form-group form-black label-floating" style="margin:10px 0 0 0;">
-                        <!-- <label class="control-label">Description</label> -->
                         <input type="text" [(ngModel)]="NewParameter.Name" name="Name" class="form-control">
                       </div>
                     </td>
@@ -114,10 +135,10 @@
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-12" style="margin-top:15px;">
               <div class="col-sm-6">
                 <div class="checkbox">
                   <label>

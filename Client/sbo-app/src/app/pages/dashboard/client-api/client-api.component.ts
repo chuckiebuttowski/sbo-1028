@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 declare var $: any;
 
 //models
-import { ClientAPI, APIParameter, ParameterType } from '../../../models/client-api.model';
+import { ClientAPI, APIParameter, ParameterType, PostDataValueType } from '../../../models/client-api.model';
+import { SBOType } from '../../../models/log.model';
 
 //service
 import { ClientAPIService } from '../../../services/client-api.service';
@@ -16,14 +17,18 @@ import { ClientAPIService } from '../../../services/client-api.service';
 export class ClientApiComponent implements OnInit {
 
   NewParameter: APIParameter = new APIParameter();
-  Type: typeof ParameterType = ParameterType;
-
+  Type: typeof SBOType = SBOType;
+  PostDataType: typeof PostDataValueType = PostDataValueType;
+  
+  TransactionType: Array<string> = Object.keys(SBOType).filter(itm => !isNaN(Number.parseInt(itm)));
+  
   Model: ClientAPI = new ClientAPI();
   APIs: ClientAPI[] = [];
 
   constructor(private apiService: ClientAPIService) { }
 
   ngOnInit() {
+    console.log(Object.keys(SBOType));
     this.loadData();
   }
 

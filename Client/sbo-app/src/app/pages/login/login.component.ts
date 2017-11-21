@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   async onLogin() {
     let msg = await this.authService.login(this.Username, this.Password);
     if(msg == 'success'){
-      this.router.navigate(['/dashboard/home']);
+      this.router.navigate(['/dashboard/transaction-logs']);
     }
     else{
       $.notify({
