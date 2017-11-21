@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   Username: string = '';
   Password: string = '';
+  isLogginIn:boolean = false;
   
   constructor(private authService: AuthService, private router: Router) {
   
@@ -31,7 +32,9 @@ export class LoginComponent implements OnInit {
   }
 
   async onLogin() {
+    this.isLogginIn = true;
     let msg = await this.authService.login(this.Username, this.Password);
+    this.isLogginIn = false;
     if(msg == 'success'){
       this.router.navigate(['/dashboard/transaction-logs']);
     }

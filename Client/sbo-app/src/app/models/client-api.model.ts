@@ -4,9 +4,9 @@ export class ClientAPI {
     URL: string = "";
     Description: string = "";
     Params: APIParameter[] = new Array<APIParameter>();
-    Action: string;
-    SboTransactionType: string;
-    ValueType: PostDataValueType;
+    Action: string = null;
+    SboTransactionType: string = null;
+    ValueType: string = null;
     IsActive: boolean;
 }
 
@@ -24,6 +24,6 @@ export enum ParameterType {
 }
 
 export enum PostDataValueType {
-    SingleEntity,
-    MultipleEntities
+    SingleEntity = 0,
+    MultipleEntities = 1
 }

@@ -68,6 +68,7 @@ export class NavbarComponent implements OnInit {
       let paths: string[] =  titlee.split('/');
       let first = paths.pop();
       let second = paths[paths.length - 1];
+      let third = paths[paths.length - 2];
 
       for(var item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === first){
@@ -80,7 +81,11 @@ export class NavbarComponent implements OnInit {
             return this.listTitles[item].title;
         }
     }
-      
+    for(var item = 0; item < this.listTitles.length; item++){
+        if(this.listTitles[item].path === paths[paths.length - 3] + '/' + third + '/' + second){
+            return this.listTitles[item].title;
+        }
+    }
 
     // for(var item = 0; item < this.listTitles.length; item++){
     //     if(this.listTitles[item].path === titlee){

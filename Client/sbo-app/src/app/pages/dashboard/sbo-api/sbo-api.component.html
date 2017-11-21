@@ -32,5 +32,31 @@
           </div>
         </div>
       </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header" data-background-color="red">
+                <h4 class="title">SBO Models</h4>
+                <p class="category">List of models use in sap business one integration</p>
+              </div>
+              <div class="card-content table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-warning">
+                    <tr>
+                      <th>Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let model of SBOModels">
+                      <td>
+                        <a [routerLink]="['model/detail/', model]">{{model}}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>

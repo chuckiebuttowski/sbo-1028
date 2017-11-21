@@ -22,7 +22,7 @@ namespace SBOClient
                    .JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling
                    = ReferenceLoopHandling.Ignore;
 
-            InitializeSbo();
+            //InitializeSbo();
         }
 
         private void InitializeSbo()

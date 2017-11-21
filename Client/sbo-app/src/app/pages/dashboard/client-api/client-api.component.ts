@@ -18,8 +18,7 @@ export class ClientApiComponent implements OnInit {
 
   NewParameter: APIParameter = new APIParameter();
   Type: typeof SBOType = SBOType;
-  PostDataType: typeof PostDataValueType = PostDataValueType;
-  
+  ValueType: typeof PostDataValueType = PostDataValueType;
   TransactionType: Array<string> = Object.keys(SBOType).filter(itm => !isNaN(Number.parseInt(itm)));
   
   Model: ClientAPI = new ClientAPI();
@@ -28,7 +27,6 @@ export class ClientApiComponent implements OnInit {
   constructor(private apiService: ClientAPIService) { }
 
   ngOnInit() {
-    console.log(Object.keys(SBOType));
     this.loadData();
   }
 

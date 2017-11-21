@@ -16,6 +16,7 @@ import { ClientApiComponent } from './pages/dashboard/client-api/client-api.comp
 import { SboApiComponent } from './pages/dashboard/sbo-api/sbo-api.component';
 import { SboApiDetailComponent } from './pages/dashboard/sbo-api-detail/sbo-api-detail.component';
 import { AccountsComponent } from './pages/dashboard/accounts/accounts.component';
+import { SboModelComponent } from './pages/dashboard/sbo-model/sbo-model.component';
 
 // import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -36,6 +37,7 @@ const routes: Routes =[
         {path: 'client-api',               component: ClientApiComponent },
         {path: 'sbo-api',           component: SboApiComponent },
         {path: 'sbo-api/detail/:d',           component: SboApiDetailComponent },
+        {path: 'sbo-api/model/detail/:d',           component: SboModelComponent },
         {path: 'accounts',          component: AccountsComponent },
         { path: 'user-profile',   component: UserProfileComponent },
         { path: 'table-list',     component: TableListComponent },

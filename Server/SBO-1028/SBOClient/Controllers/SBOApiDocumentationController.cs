@@ -1,9 +1,11 @@
-﻿using SBOClient.Models;
+﻿using sbo.fx.Models;
+using SBOClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -79,6 +81,47 @@ namespace SBOClient.Controllers
             
 
             return new APIControllerDocumentation() { Name = api.Key.ControllerName, Description = GetAPIDocumentation(api.Key), BaseURL = GetRoutePrefix(api.Key), IsSecured = IsSecureController(api.Key), Actions = actionList };
+        }
+
+        [HttpGet]
+        [Route("get-sbo-models")]
+        public IEnumerable<string> GetSBOModels()
+        {
+            try
+            {
+                var list = new List<string>();
+                var types = Assembly.Load("sbo.fx").GetTypes().Where(x => x.FullName.ToLower().Contains("sbo.fx.models"));
+
+                foreach (var type in types)
+                {
+                    if (type.Name != "DocumentationModel")
+                    {
+                        list.Add(type.Name);
+                    }
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("get-sbo-model-fields")]
+        public IEnumerable<object> GetModelFields(string name)
+        {
+            var instance = (DocumentationModel)Assembly.Load("sbo.fx").CreateInstance("sbo.fx.Models." + name);
+            var list = new List<object>();
+            var fields = instance.GetObjectDocumentation();
+
+            foreach (var fld in fields)
+            {
+                list.Add(new { FieldName = fld.Key, Type = fld.Value});
+            }
+
+            return list;
         }
 
         private ILookup<HttpControllerDescriptor, ApiDescription> GetAPIControllers()

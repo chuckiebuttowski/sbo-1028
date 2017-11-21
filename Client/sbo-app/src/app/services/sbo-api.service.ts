@@ -25,4 +25,16 @@ export class SBOApiService {
         
         return res as APIControllerDocumentation;
     }
+
+    async getSBOModels() : Promise<string[]>{
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + '/sbo-api-docs/get-sbo-models').toPromise();
+        
+        return res as string[];
+    }
+
+    async getSBOModelFields(name:string) : Promise<any[]>{
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + '/sbo-api-docs/get-sbo-model-fields?name=' + name).toPromise();
+        
+        return res as any[];
+    }
 }

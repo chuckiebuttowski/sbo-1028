@@ -14,6 +14,7 @@ import { SBOApiService } from '../../../services/sbo-api.service';
 export class SboApiComponent implements OnInit {
 
   APIs: APIControllerDocumentation[] = [];
+  SBOModels: string[];
 
   constructor(private service: SBOApiService) { }
 
@@ -23,6 +24,7 @@ export class SboApiComponent implements OnInit {
 
   async loadData() {
     this.APIs = await this.service.exploreAPI();
+    this.SBOModels = await this.service.getSBOModels();
   }
 
 }

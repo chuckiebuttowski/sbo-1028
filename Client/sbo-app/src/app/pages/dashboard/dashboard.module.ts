@@ -21,6 +21,7 @@ import { SboApiComponent } from './sbo-api/sbo-api.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { LogDetailComponent } from './log-detail/log-detail.component';
 import { SboApiDetailComponent } from './sbo-api-detail/sbo-api-detail.component';
+import { SboModelComponent } from './sbo-model/sbo-model.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,6 @@ import { SboApiDetailComponent } from './sbo-api-detail/sbo-api-detail.component
     SharedModule,
     AppRoutingModule,
   ],
-  declarations: [DashboardComponent, HomeComponent, ServerConfigComponent, TransactionLogsComponent, ClientApiComponent, SboApiComponent, AccountsComponent, TransactionLogFilterPipe, LogDetailComponent, SboApiDetailComponent]
+  declarations: [DashboardComponent, HomeComponent, ServerConfigComponent, TransactionLogsComponent, ClientApiComponent, SboApiComponent, AccountsComponent, TransactionLogFilterPipe, LogDetailComponent, SboApiDetailComponent, SboModelComponent]
 })
 export class DashboardModule { }

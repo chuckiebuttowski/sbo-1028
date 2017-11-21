@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Data.Entity;
+using static SBOClient.Core.DAL.Entities.ClientAPI;
+using SBOClient.Helpers;
+using sbo.fx.Models;
 
 namespace SBOClient.Controllers.SboControllers
 {
@@ -18,6 +21,12 @@ namespace SBOClient.Controllers.SboControllers
     [RoutePrefix("api/sql-domain-broker")]
     public class SQLDomainBrokerController : ApiController
     {
+        TransactionLogger logger;
+
+        public SQLDomainBrokerController()
+        {
+            logger = new TransactionLogger();
+        }
 
         [Route("invoke-domain-endpoint")]
         [HttpPost]
@@ -47,11 +56,8 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                //map object to api parameters
-                //map here
 
-                //call client api
-                await InvokeClientAPI(obj, clientApi.URL);//incorrect implementation
+                await InvokeClientAPI(obj, clientApi.URL, clientApi.SboTransactionType);
                 return Ok("Success");
             }
             catch (HttpResponseException ex)
@@ -60,18 +66,50 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-        [Route("invoke-client-api")]
-        [HttpPost]
-        public async Task<IHttpActionResult> InvokeClientAPI(object paramObj, string uri)
+        public async Task<IHttpActionResult> InvokeClientAPI(object paramObj, string uri, string transactionType)
         {
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
                 var client = new HttpClient();
+
+                switch (transactionType)
+                {
+                    case "JE":
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true);
+                        break;
+                    case "APV":
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true);
+                        break;
+                }
+                
                 response = await client.PostAsJsonAsync(uri, paramObj);
             }
             catch (HttpResponseException ex)
             {
+                ErrorLog err = null;
+                switch (transactionType)
+                {
+                    case "JE":
+                        err = new ErrorLog {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogJournalTransaction((oJournal)paramObj, false, ErrorLogger.Log(err));
+                        break;
+                    case "APV":
+                        err = new ErrorLog
+                        {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, ErrorLogger.Log(err));
+                        break;
+                }
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
             return Ok();
@@ -122,22 +160,22 @@ namespace SBOClient.Controllers.SboControllers
             switch (callSig.CallObjCode)
             {
                 case "30"://Journal Entry
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "60").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "30" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S"?0:1)).Include("Params").FirstOrDefault();
                     break;
                 case "60"://Goods Issue
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "60").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "60" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "59"://Goods Receipt
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "59").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "59" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "4"://item
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "4").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "4" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "2"://Business Partner
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "2").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "2" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "1"://Gl Account
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "1").Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "1" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
             }
 

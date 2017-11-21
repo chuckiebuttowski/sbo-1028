@@ -107,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Ref_Dlls\Dapper.dll" />
+    <Content Include="Ref_Dlls\Interop.SAPbobsCOM.dll" />
+    <Content Include="Ref_Dlls\sbo.fx.dll" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Ref_Dlls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SBOClient.Core\SBOClient.Core.csproj">
