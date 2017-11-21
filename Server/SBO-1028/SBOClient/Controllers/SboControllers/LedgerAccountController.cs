@@ -12,6 +12,9 @@ using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
 {
+    /// <summary>
+    /// All about shit
+    /// </summary>
     [RoutePrefix("api/ledger-accounts")]
     public class LedgerAccountController : ApiController
     {
@@ -23,6 +26,10 @@ namespace SBOClient.Controllers.SboControllers
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
         }
 
+        /// <summary>
+        /// Get all ledger accounts
+        /// </summary>
+        /// <returns>List of all ledger accounts</returns>
         [Route("get-ledger-accounts")]
         [HttpGet]
         public async Task<IList<oGlAccount>> GetLedgerAccounts()

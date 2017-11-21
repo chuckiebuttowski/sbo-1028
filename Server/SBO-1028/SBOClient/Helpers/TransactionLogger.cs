@@ -40,5 +40,25 @@ namespace SBOClient.Helpers
                 throw new Exception(ex.Message);
             }
         }
+
+        public void LogInvoiceTransaction(oInvoice obj, bool isPosted, ErrorLog errLog = null)
+        {
+            try
+            {
+                log.TransactionNo = obj.TransId.ToString();
+                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Type = TransactionLog.SBOType.JE;
+                log.LogDate = DateTime.Now;
+                log.IsPosted = isPosted;
+                log.TransactionDataID = obj.TransId;
+                log.RawData.PostedOn = obj.DocDate;
+                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                repo.AddOrUpdate(log);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

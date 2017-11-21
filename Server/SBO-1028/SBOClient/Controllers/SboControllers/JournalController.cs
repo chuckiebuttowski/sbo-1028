@@ -144,7 +144,7 @@ namespace SBOClient.Controllers.SboControllers
                     resp.ReasonPhrase = "Object already exist.";
                     var err = ErrorLogger.Log(new ErrorLog
                     {
-                        ErrorCode = GlobalInstance.Instance.SBOErrorCode,
+                        ErrorCode = (int)HttpStatusCode.Conflict,
                         Message = errMsg,
                         StackTrace = Environment.StackTrace
 
@@ -220,6 +220,16 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.NotFound);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object not found.";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogJournalTransaction(jrnal, false, err);
+
                     throw new HttpResponseException(resp);
                 }
 
@@ -229,6 +239,16 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = GlobalInstance.Instance.SBOErrorCode,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogJournalTransaction(jrnal, false, err);
+
                     throw new HttpResponseException(resp);
                 }
 
@@ -239,28 +259,6 @@ namespace SBOClient.Controllers.SboControllers
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
-
-        private void LogTransaction(oJournal jrnal)
-        {
-            try
-            {
-                var tLogRepo = new SBOClient.Core.Factories.RepositoryFactory().CreateTransactionLogRepository();
-                TransactionLog tLog = new TransactionLog();
-
-                tLog.TransactionNo = jrnal.TransId.ToString(); ;
-                tLog.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
-                tLog.Type = TransactionLog.SBOType.JE;
-                tLog.LogDate = DateTime.Now;
-                tLog.IsPosted = true;
-                tLog.TransactionDataID = jrnal.TransId;
-                tLog.RawData.PostedOn = jrnal.DocDate;
-                tLog.RawData.RawData = JsonConvert.SerializeObject(jrnal);
-                tLogRepo.AddOrUpdate(tLog);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        
     }
 }

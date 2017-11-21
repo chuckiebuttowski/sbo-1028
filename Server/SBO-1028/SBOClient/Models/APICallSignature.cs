@@ -11,6 +11,7 @@ namespace SBOClient.Models
         public string CallKey { get; set; }
         public string CallObjCode { get; set; }
         public string Action { get; set; }
+        public string ValueType { get; set; }
 
     }
 }

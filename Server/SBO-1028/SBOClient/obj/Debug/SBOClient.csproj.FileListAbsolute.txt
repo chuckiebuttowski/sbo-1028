@@ -48,13 +48,11 @@ E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.dll
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.WebHost.dll
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.pdb
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\SBOClient.Core.dll.config
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Dapper.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\EntityFramework.SqlServer.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\JWT.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\Newtonsoft.Json.xml
-E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\sbo.fx.pdb
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.Cors.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Net.Http.Formatting.xml
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient\bin\System.Web.Http.xml
