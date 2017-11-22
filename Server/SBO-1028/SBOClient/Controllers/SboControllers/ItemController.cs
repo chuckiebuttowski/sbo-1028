@@ -95,7 +95,7 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-        [Route("get-items-by-series")]
+        [Route("get-items-by-itemcode")]
         [HttpGet]
         public async Task<oItem> GetItemsByItemCode(string itemCode)
         {

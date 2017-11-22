@@ -13,7 +13,7 @@ using System.Web.Http;
 namespace SBOClient.Controllers.SboControllers
 {
     /// <summary>
-    /// All about shit
+    /// This end point is used for accessing and adding general ledger accounts.
     /// </summary>
     [RoutePrefix("api/ledger-accounts")]
     public class LedgerAccountController : ApiController
@@ -27,7 +27,7 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Get all ledger accounts
+        /// Get all general ledger accounts
         /// </summary>
         /// <returns>List of all ledger accounts</returns>
         [Route("get-ledger-accounts")]
@@ -54,6 +54,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get general ledger account per account code.
+        /// </summary>
+        /// <param name="acctCode"></param>
+        /// <returns>General Legder Account object.</returns>
         [Route("get-ledger-account")]
         [HttpGet]
         public async Task<oGlAccount> GetLedgerAccount(string acctCode)
@@ -78,6 +83,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Adds new general ledger account to SAP Database.
+        /// </summary>
+        /// <param name="glAccount"></param>
+        /// <returns></returns>
         [Route("add-ledger-account")]
         [HttpPost]
         public async Task<IHttpActionResult> AddLedgerAccount(oGlAccount glAccount)
