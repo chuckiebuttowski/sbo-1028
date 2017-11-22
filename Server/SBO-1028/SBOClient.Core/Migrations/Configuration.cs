@@ -9,7 +9,8 @@ namespace SBOClient.Core.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = true;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(SBOClient.Core.DAL.SBOIntegrationDataContext context)
