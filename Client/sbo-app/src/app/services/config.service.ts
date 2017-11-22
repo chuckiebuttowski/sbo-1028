@@ -84,4 +84,16 @@ export class ConfigService {
 
         return res as string;
     }
+
+    async testServerConnection(server : ServerConfig) : Promise<string>{
+        const res = await this.http.post(ServiceSetting.BaseAPIUrl + "/configuration/test-server-connection", server).toPromise();
+        
+        return res as string;
+    }
+
+    async testSAPProfile(profile: SAPProfile): Promise<string>{
+        const res = await this.http.post(ServiceSetting.BaseAPIUrl + "/sap-profile/test-sap-connection", profile).toPromise();
+        
+        return res as string;
+    }
 }

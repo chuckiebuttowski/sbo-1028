@@ -1,4 +1,5 @@
-﻿using SBOClient.Models;
+﻿using sbo.fx;
+using SBOClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -36,6 +37,34 @@ namespace SBOClient.Controllers
             catch (Exception)
             {
                 return "Unable to update profile. Please contact administrator.";
+            }
+        }
+
+        [HttpPost]
+        [Route("test-sap-connection")]
+        public string TestSapConnection(SAPProfile profile)
+        {
+            try
+            {
+                string returnStr = "Success";
+
+                //var repo = new RepositoryFactory().CreateConfigurationRepository();
+                //ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
+
+                GlobalInstance.Instance.UName = profile.UserId;
+                GlobalInstance.Instance.Pword = profile.Password;
+
+                GlobalInstance.Instance.DisposeSboComObject();
+                GlobalInstance.Instance.InitializeSboComObject();
+
+                if (!GlobalInstance.Instance.IsConnected) returnStr = GlobalInstance.Instance.SBOErrorMessage;
+
+                return returnStr;
+            }
+            catch (Exception ex)
+            {
+                //log error here
+                return $"Unable to test profile. {ex.Message} Please contact administrator.";
             }
         }
     }

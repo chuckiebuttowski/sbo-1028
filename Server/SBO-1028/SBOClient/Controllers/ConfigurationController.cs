@@ -60,20 +60,20 @@ namespace SBOClient.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("test-server-connection")]
-        public string TestServerConnection()
+        public string TestServerConnection(ServerConfig config)
         {
             try
             {
-                var repo = new RepositoryFactory().CreateConfigurationRepository();
-                ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
+                //var repo = new RepositoryFactory().CreateConfigurationRepository();
+                //ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
 
                 GlobalInstance.Instance.DatabaseServerType = DBType.MSSQL2012;
-                GlobalInstance.Instance.Server = serverConfig.ServerName;
-                GlobalInstance.Instance.DBName = serverConfig.DatabaseName;
-                GlobalInstance.Instance.DBUName = serverConfig.Username;
-                GlobalInstance.Instance.DBPword = serverConfig.Password;
+                GlobalInstance.Instance.Server = config.ServerName;
+                GlobalInstance.Instance.DBName = config.DatabaseName;
+                GlobalInstance.Instance.DBUName = config.Username;
+                GlobalInstance.Instance.DBPword = config.Password;
 
                 GlobalInstance.Instance.DisposeSqlObject();
                 
@@ -81,41 +81,13 @@ namespace SBOClient.Controllers
 
                 return "Success";
             }
-            catch (SqlException ex)
-            {
-                //log error here
-                return ex.Message;
-            }
-        }
-
-        [HttpGet]
-        [Route("test-sap-connection")]
-        public string TestSapConnection()
-        {
-            try
-            {
-                string returnStr = "Success";
-
-                var repo = new RepositoryFactory().CreateConfigurationRepository();
-                ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
-
-                GlobalInstance.Instance.UName = ConfigurationManager.AppSettings["uid"];
-                GlobalInstance.Instance.Pword = ConfigurationManager.AppSettings["pword"];
-
-                GlobalInstance.Instance.DisposeSboComObject();
-                GlobalInstance.Instance.InitializeSboComObject();
-
-                if (!GlobalInstance.Instance.IsConnected) returnStr = GlobalInstance.Instance.SBOErrorMessage;
-
-                return returnStr;
-            }
             catch (Exception ex)
             {
                 //log error here
-                return "Unable to test configuration. Please contact administrator.";
+                return $"Unable to connect to the server. {ex.Message} Please contact administrator.";
             }
         }
-
+        
         [HttpGet]
         [Route("delete")]
         public string DeleteConfig(int id)

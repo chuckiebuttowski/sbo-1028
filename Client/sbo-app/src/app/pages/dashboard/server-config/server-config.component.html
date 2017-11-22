@@ -40,7 +40,12 @@
                           </label>
                       </div>
                   </div>
-                  <button class="btn btn-success" (click)="onSaveConfig()">Save</button>
+                  <span class="clearfix"></span>
+                  <hr style="margin-left:15px;margin-right:15px;"/>
+                  <div class="col-md-12">
+                    <button class="btn btn-success" (click)="onSaveConfig()">Save</button>
+                    <button type="submit" [class.disabled] ="Config.ServerName == '' || Config.DatabaseName =='' || Config.Username == '' || Config.Password ==''" class="btn btn-danger pull-right" (click)="onTestServerConnection(Config)">Test Connection</button>
+                  </div>
                   <div class="clearfix"></div>
                 </div>
               </div>
@@ -64,7 +69,12 @@
                             <input type="password" [(ngModel)]="Profile.Password" name="Password" class="form-control" >
                         </div>
                     </div>
-                    <button type="submit" style="margin-top:55px;" class="btn btn-warning" (click)="onUpdateProfile()">Update Profile</button>
+                    <span class="clearfix"></span>
+                    <hr style="margin-left:15px;margin-right:15px;margin-top:65px;"/>
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-warning" (click)="onUpdateProfile()">Update Profile</button>
+                      <button type="submit" class="btn btn-danger pull-right" (click)="onTestProfile()">Test Profile</button>
+                    </div>
                     <span class="clearfix"></span>
                 </div>
             </div>
@@ -92,7 +102,8 @@
             <table *ngIf="RecentServers.length > 0" class="table table-hover">
               <thead class="text-warning">
                 <tr>
-                  <th></th>
+                  <th style="width:20px;"></th>
+                  <th style="width:20px;"></th>
                   <th>Server</th>
                   <th>Database</th>
                   <th>Username</th>
@@ -102,15 +113,19 @@
               </thead>
               <tbody>
                 <tr *ngFor="let server of RecentServers">
-                    <td class="td-actions text-right">
+                    <td>
                         <button *ngIf="!server.IsActive" (click)="onActivateServer(server.ID)" type="button" rel="tooltip" title="Set as Active" class="btn btn-primary btn-simple btn-xs">
-                            <i class="material-icons">play_arrow</i>
+                            <i class="material-icons">star_border</i>
                         </button>
                         <button *ngIf="server.IsActive" type="button" rel="tooltip" title="Currently Active" class="btn btn-success btn-simple btn-xs">
                             <i class="material-icons">star</i>
                         </button>
                     </td>
-                    
+                    <td>
+                      <button (click)="onTestServerConnection(server)" type="button" rel="tooltip" title="Test Connection" class="btn btn-primary btn-simple btn-xs">
+                          <i class="material-icons">play_arrow</i>
+                      </button>
+                  </td>
                     <td>{{server.ServerName}}</td>
                     <td>{{server.DatabaseName}}</td>
                     <td>{{server.Username}}</td>

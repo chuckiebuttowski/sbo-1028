@@ -32,9 +32,9 @@
                   <td>{{api.SboTransactionType}}</td>
                   <td>{{api.IsActive ? 'Yes' : 'No'}}</td>
                   <td class="td-actions text-right">
-                      <button type="button" rel="tooltip" (click)="deleteApi(api.ID)" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                          <i class="material-icons">delete</i>
-                      </button>
+                    <button type="button" rel="tooltip" (click)="deleteApi(api.ID)" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                      <i class="material-icons">delete</i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -68,51 +68,51 @@
               </div>
             </div>
             <div class="col-sm-12" style="margin-top:15px;">
-                <label>SBO Posting</label>
+              <label>SBO Posting</label>
             </div>
             <div class="col-sm-12">
-                <div class="form-group form-black label-floating" [class.is-empty]="Model.Action == ''" style="margin:10px 0 0 0;">
-                    <label class="control-label">Action</label>
-                    <select class="form-control" [(ngModel)]="Model.Action" name="Action">
-                        <option value="" selected disabled hidden>Choose here</option>
-                        <option>Add</option>
-                        <option>Update</option>
-                      </select>
-                  </div>
+              <div class="form-group form-black label-floating" [class.is-empty]="Model.Action == ''" style="margin:10px 0 0 0;">
+                <label class="control-label">Action</label>
+                <select class="form-control" [(ngModel)]="Model.Action" name="Action">
+                  <option value="" selected disabled hidden>Choose here</option>
+                  <option>Add</option>
+                  <option>Update</option>
+                </select>
               </div>
-              <div class="col-sm-12">
-                  <div class="form-group form-black label-floating" [class.is-empty]="Type[Model.SboTransactionType] == ''" style="margin:10px 0 0 0;">
-                      <label class="control-label">SBO Model</label>
-                      <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
-                          <option value="" selected disabled hidden>Choose here</option>
-                          <option style="padding:5px;" value="{{val}}" *ngFor="let val of TransactionType">{{val}}</option>
-                        </select>
-                    </div>
-                  <a [routerLink]="['/dashboard/sbo-api']">Click here to view sbo model documentation</a>
-                </div>
-                <div class="col-sm-12" style="margin-top:10px;">
-                    <div class="form-group form-black label-floating" [class.is-empty]="ValueType[Model.ValueType] == ''" style="margin:10px 0 0 0;">
-                        <label class="control-label">Value Type</label>
-                        <select id="val-type" class="form-control" [(ngModel)]="Model.ValueType" name="ValueType">
-                            <option value="" selected disabled hidden>Choose here</option>
-                            <option value="0">Single Entity</option>
-                            <option value="1">Multiple Entities</option>
-                          </select>
-                      </div>                        
-                  </div>
-                  <div class="col-sm-12">
-                      <div class="checkbox">
-                        <label>
-                          <input [(ngModel)]="Model.IsActive" name="IsActive" type="checkbox">
-                          <span>Is Active</span>
-                        </label>
-                      </div>
-                    </div>
-            <div class="col-sm-12" style="margin-top:15px;">
-              <div class="col-sm-12">
-                <button class="btn btn-success pull-right" (click)="onSave()">Save</button>
-                <button class="btn btn-warning pull-right" (click)="onClear()">Clear</button>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group form-black label-floating" [class.is-empty]="Type[Model.SboTransactionType] == ''" style="margin:10px 0 0 0;">
+                <label class="control-label">SBO Model</label>
+                <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
+                  <option value="" selected disabled hidden>Choose here</option>
+                  <option style="padding:5px;" value="{{val}}" *ngFor="let val of TransactionType">{{val}}</option>
+                </select>
               </div>
+              <a [routerLink]="['/dashboard/sbo-api']">Click here to view sbo model documentation</a>
+            </div>
+            <div class="col-sm-12" style="margin-top:10px;">
+              <div class="form-group form-black label-floating" [class.is-empty]="ValueType[Model.ValueType] == ''" style="margin:10px 0 0 0;">
+                <label class="control-label">Value Type</label>
+                <select id="val-type" class="form-control" [(ngModel)]="Model.ValueType" name="ValueType">
+                  <option value="" selected disabled hidden>Choose here</option>
+                  <option value="0">Single Entity</option>
+                  <option value="1">Multiple Entities</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="checkbox">
+                <label>
+                  <input [(ngModel)]="Model.IsActive" name="IsActive" type="checkbox">
+                  <span>Is Active</span>
+                </label>
+              </div>
+            </div>
+            <span class="clearfix"></span>
+            <hr style="margin-left:15px;margin-right:15px;" />
+            <div class="col-sm-12">
+              <button class="btn btn-success" (click)="onSave()">Save</button>
+              <button class="btn btn-danger pull-right" (click)="onClear()">Reset</button>
             </div>
             <div class="clearfix"></div>
           </div>

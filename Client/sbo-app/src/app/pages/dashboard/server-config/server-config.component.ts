@@ -146,4 +146,68 @@ export class ServerConfigComponent implements OnInit {
     this.loadData();
   }
 
+  async onTestProfile(){
+    let result = await this.configService.testSAPProfile(this.Profile);
+    if (result.toLowerCase() != 'success') {
+      $.notify({
+        icon: "notifications",
+        message: "<b>Testing SAP Profile Failed</b> - " + result
+
+      }, {
+          type: 'danger',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+    else {
+      $.notify({
+        icon: "notifications",
+        message: "<b>Success</b> - SAP Profile is valid."
+
+      }, {
+          type: 'success',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+  }
+
+  async onTestServerConnection(server: ServerConfig) {
+    let result = await this.configService.testServerConnection(server);
+    if (result.toLowerCase() != 'success') {
+      $.notify({
+        icon: "notifications",
+        message: "<b>Testing Server Connection Failed</b> - " + result
+
+      }, {
+          type: 'danger',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+    else {
+      $.notify({
+        icon: "notifications",
+        message: "<b>Success</b> - Test connection successful."
+
+      }, {
+          type: 'success',
+          timer: 500,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+    }
+  }
+
 }
