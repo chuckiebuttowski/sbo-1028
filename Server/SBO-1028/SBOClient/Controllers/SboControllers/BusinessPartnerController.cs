@@ -122,7 +122,7 @@ namespace SBOClient.Controllers.SboControllers
 
         [Route("get-bps-by-status")]
         [HttpGet]
-        public async Task<IList<oBusinessPartner>> GetBusinessPartnersByStatus(char status)
+        public async Task<IList<oBusinessPartner>> GetBusinessPartnersByStatus(string status)
         {
             try
             {

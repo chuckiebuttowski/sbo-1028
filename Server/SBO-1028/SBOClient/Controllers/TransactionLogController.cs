@@ -21,7 +21,6 @@ namespace SBOClient.Controllers
         {
             try
             {
-                var logs = new List<TransactionLog>();
                 var repo = new RepositoryFactory().CreateTransactionLogRepository();
 
                 return repo.GetAll();

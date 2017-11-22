@@ -30,3 +30,4 @@ E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\De
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClientAPIEntity.resources
+E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClientAPIEntity.resources
