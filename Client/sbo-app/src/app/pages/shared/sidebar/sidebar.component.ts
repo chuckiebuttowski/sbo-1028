@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+//services
+import { AuthService } from '../../../services/auth.service';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -34,16 +38,24 @@ export const ROUTES: RouteInfo[] = [
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[];
+  UserDisplayName: string;
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => !menuItem.isChildPage);
+    this.UserDisplayName = this.authService.getUserDisplayName();
   }
+
   isMobileMenu() {
       if ($(window).width() > 991) {
           return false;
       }
       return true;
   };
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+}
 }
