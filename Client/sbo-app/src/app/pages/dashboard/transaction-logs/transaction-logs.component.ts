@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 //services
 import { TransactionLogService } from '../../../services/transaction-log.service';
+import { DataTable } from '../../../extensions/array.toDataTable';
 
 //models
 import { TransactionLog, TransactionData, ErrorLog, SBOType } from '../../../models/log.model';
@@ -17,16 +18,19 @@ export class TransactionLogsComponent implements OnInit {
   Logs: TransactionLog[];
   Type: typeof SBOType = SBOType;
   HasLogs: boolean;
+  DataTable: DataTable;
 
   constructor(private service: TransactionLogService, private router: Router) { }
 
   ngOnInit() {
+    this.Logs = new Array<TransactionLog>();
     this.loadData();
   }
 
   async loadData() {
-    this.Logs = await this.service.getAllLogs();
-    this.HasLogs = this.Logs.length > 0;
+    let logs = await this.service.getAllLogs();
+    this.DataTable = logs.toDataTable(5);
+    this.HasLogs = logs.length > 0;
   }
 
   getTotalLogs() : number{

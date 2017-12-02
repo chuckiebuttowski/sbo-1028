@@ -24,6 +24,9 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
 //components
 import { LoginComponent } from './pages/login/login.component';
 
+//extension
+import { DataTable } from './extensions/array.toDataTable';
+
 //services
 import { AuthService } from './services/auth.service';
 import { ConfigService } from './services/config.service';
@@ -63,7 +66,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     DashboardModule
   ],
-  providers: [AuthService, ConfigService, AccountService, TransactionLogService, ClientAPIService, SBOApiService, AuthGuard,{
+  providers: [DataTable, AuthService, ConfigService, AccountService, TransactionLogService, ClientAPIService, SBOApiService, AuthGuard,{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,

@@ -21,9 +21,20 @@ namespace SBOClient.Controllers
         {
             try
             {
-                var repo = new RepositoryFactory().CreateTransactionLogRepository();
+                var list = new List<TransactionLog>();
 
-                return repo.GetAll();
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
+                list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
+
+                return list;
+                //var repo = new RepositoryFactory().CreateTransactionLogRepository();
+
+                //return repo.GetAll();
             }
             catch (Exception ex)
             {

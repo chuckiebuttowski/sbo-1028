@@ -70,34 +70,9 @@
                 <div class="col-md-12" *ngIf="HasLogs">
                     <div class="card card-nav-tabs">
                         <div class="card-header" data-background-color="red">
-                            <div class="nav-tabs-navigation">
-                                <div class="nav-tabs-wrapper">
-                                    <ul class="nav nav-tabs" data-tabs="tabs">
-                                        <li class="active">
-                                            <a href="#profile" data-toggle="tab">
-                                                <!-- <i class="material-icons">bug_report</i> -->
-                                                All
-                                                <div class="ripple-container"></div>
-                                            </a>
-                                        </li>
-                                        <li class="">
-                                            <a href="#messages" data-toggle="tab">
-                                                <!-- <i class="material-icons">code</i> -->
-                                                Posted
-                                                <div class="ripple-container"></div>
-                                            </a>
-                                        </li>
-                                        <li class="">
-                                            <a href="#settings" data-toggle="tab">
-                                                <!-- <i class="material-icons">cloud</i> -->
-                                                Unposted
-                                                <div class="ripple-container"></div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                            <h4 class="title">Logs</h4>
+                            <p class="category">List of all transaction logs</p>
+                          </div>
 
                         <div class="card-content">
                             <div class="tab-content">
@@ -114,7 +89,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let log of Logs" title="Click to view details" (click)="viewDetail(log)">
+                                            <tr class="filter-row">
+                                                <td><input (input)="DataTable.filterColumn('Origin', $event.target.value)" placeholder="Origin"/></td>
+                                                <td><input (input)="DataTable.filterColumn('TransactionNo', $event.target.value)" placeholder="Transaction No"/></td>
+                                                <td><input (input)="DataTable.filterColumn('Type', $event.target.value)" placeholder="Type"/></td>
+                                                <td><input (input)="DataTable.filterColumn('LogDate', $event.target.value)" placeholder="Date" type="date"/></td>
+                                                <td>
+                                                    <select (input)="DataTable.filterColumn('IsPosted', $event.target.value == 'Yes' ? true : false)">
+                                                        <option>Yes</option>
+                                                        <option>No</option>
+                                                    </select>
+                                                </td>
+                                                <td><input (input)="DataTable.filterColumn('Remarks', $event.target.value)" placeholder="Remarks"/></td>
+                                            </tr>
+                                            <tr *ngFor="let log of DataTable.DataSource" title="Click to view details" (click)="viewDetail(log)">
                                                 <td>{{log.Origin}}</td>
                                                 <td>{{log.TransactionNo}}</td>
                                                 <td>{{Type[log.Type]}}</td>
@@ -124,6 +112,12 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <hr/>
+                                    <ul *ngIf="DataTable.DataSource.length > 0" class="nav nav-pills nav-pills-danger custom-pagination">
+                                            <li (click)="DataTable.movePrevious()"><a><i class="material-icons">keyboard_arrow_left</i></a></li>
+                                            <li *ngFor="let page of DataTable.Pages" [class.active]="DataTable.CurrentPage == page" (click)="DataTable.setCurrentPage(page)"><a>{{page}}</a></li>
+                                            <li (click)="DataTable.moveNext()"><a><i class="material-icons">keyboard_arrow_right</i></a></li>
+                                          </ul>
                                 </div>
                                 <div class="tab-pane" id="messages">
                                     <table class="table table-hover">
@@ -138,6 +132,19 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                        <tr class="filter-row">
+                                                                <td><input placeholder="Origin"/></td>
+                                                                <td><input placeholder="Transaction No"/></td>
+                                                                <td><input placeholder="Type"/></td>
+                                                                <td><input placeholder="Date" type="date"/></td>
+                                                                <td>
+                                                                    <select>
+                                                                        <option>Yes</option>
+                                                                        <option>No</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td><input placeholder="Remarks"/></td>
+                                                            </tr>
                                                     <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: true })" title="Click to view details" (click)="viewDetail(log)">
                                                         <td>{{log.Origin}}</td>
                                                         <td>{{log.TransactionNo}}</td>
@@ -148,6 +155,16 @@
                                                     </tr>
                                                 </tbody>
                                     </table>
+                                    <hr/>
+                                    <ul class="nav nav-pills nav-pills-danger custom-pagination">
+                                            <li class="active"><a><i class="material-icons">keyboard_arrow_left</i></a></li>
+                                            <li><a>1</a></li>
+                                            <li><a>2</a></li>
+                                            <li><a>3</a></li>
+                                            <li><a>4</a></li>
+                                            <li><a>5</a></li>
+                                            <li><a><i class="material-icons">keyboard_arrow_right</i></a></li>
+                                          </ul>
                                 </div>
                                 <div class="tab-pane" id="settings">
                                     <table class="table table-hover">
@@ -162,6 +179,19 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                        <tr class="filter-row">
+                                                                <td><input placeholder="Origin"/></td>
+                                                                <td><input placeholder="Transaction No"/></td>
+                                                                <td><input placeholder="Type"/></td>
+                                                                <td><input placeholder="Date" type="date"/></td>
+                                                                <td>
+                                                                    <select>
+                                                                        <option>Yes</option>
+                                                                        <option>No</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td><input placeholder="Remarks"/></td>
+                                                            </tr>
                                                     <tr *ngFor="let log of (Logs | transactionLogFilter:{ IsPosted: false })" title="Click to view details" (click)="viewDetail(log)">
                                                         <td>{{log.Origin}}</td>
                                                         <td>{{log.TransactionNo}}</td>
@@ -172,6 +202,16 @@
                                                     </tr>
                                                 </tbody>
                                     </table>
+                                    <hr/>
+                                    <ul class="nav nav-pills nav-pills-danger custom-pagination">
+                                        <li class="active"><a><i class="material-icons">keyboard_arrow_left</i></a></li>
+                                        <li><a>1</a></li>
+                                        <li><a>2</a></li>
+                                        <li><a>3</a></li>
+                                        <li><a>4</a></li>
+                                        <li><a>5</a></li>
+                                        <li><a><i class="material-icons">keyboard_arrow_right</i></a></li>
+                                      </ul>
                                 </div>
                             </div>
                         </div>
