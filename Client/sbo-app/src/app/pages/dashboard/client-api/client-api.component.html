@@ -20,12 +20,25 @@
                 </tr>
               </thead>
               <tbody>
+                  <tr class="filter-row">
+                      <td><input (input)="APIs.filterColumn('Name', $event.target.value)" placeholder="Name"/></td>
+                      <td><input (input)="APIs.filterColumn('URL', $event.target.value)" placeholder="URL"/></td>
+                      <td><input (input)="APIs.filterColumn('Action', $event.target.value)" placeholder="Action"/></td>
+                      <td><input (input)="APIs.filterColumn('SboTransactionType', $event.target.value)" placeholder="Type"/></td>
+                      <td>
+                          <select (input)="APIs.filterColumn('IsActive', $event.target.value == 'Active' ? true : false)">
+                              <option>Active</option>
+                              <option>Inactive</option>
+                          </select>
+                      </td>
+                      <td></td>
+                  </tr>
                 <tr *ngIf="APIs.length == 0">
                   <td colspan="4">
                     <label>No Records</label>
                   </td>
                 </tr>
-                <tr *ngFor="let api of APIs" (click)="changeModel(api)">
+                <tr *ngFor="let api of APIs.DataSource" (click)="changeModel(api)">
                   <td>{{api.Name}}</td>
                   <td>{{api.URL}}</td>
                   <td>{{api.Action}}</td>
@@ -39,6 +52,12 @@
                 </tr>
               </tbody>
             </table>
+            <hr/>
+            <ul *ngIf="APIs.DataSource.length > 0" class="nav nav-pills nav-pills-danger custom-pagination">
+                    <li (click)="APIs.movePrevious()"><a><i class="material-icons">keyboard_arrow_left</i></a></li>
+                    <li *ngFor="let page of APIs.Pages" [class.active]="APIs.CurrentPage == page" (click)="APIs.setCurrentPage(page)"><a>{{page}}</a></li>
+                    <li (click)="APIs.moveNext()"><a><i class="material-icons">keyboard_arrow_right</i></a></li>
+                  </ul>
           </div>
         </div>
       </div>

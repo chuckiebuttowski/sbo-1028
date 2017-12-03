@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 declare var $: any;
 
+//extension
+import { DataTable } from '../../../extensions/array.toDataTable';
+
 //models
 import { ClientAPI, APIParameter, ParameterType, PostDataValueType } from '../../../models/client-api.model';
 import { SBOType } from '../../../models/log.model';
@@ -23,7 +26,7 @@ export class ClientApiComponent implements OnInit {
   TransactionType: Array<string> = Object.keys(SBOType).filter(itm => !isNaN(Number.parseInt(itm)));
   
   Model: ClientAPI = new ClientAPI();
-  APIs: ClientAPI[] = [];
+  APIs:DataTable ;
 
   constructor(private apiService: ClientAPIService, private sboApiService: SBOApiService) { }
 
@@ -34,7 +37,7 @@ export class ClientApiComponent implements OnInit {
   }
 
   async loadData(){
-    this.APIs = await this.apiService.getAll();
+    this.APIs = (await this.apiService.getAll()).toDataTable(10);
     this.TransactionType = await this.sboApiService.getSBOModels();
   }
 

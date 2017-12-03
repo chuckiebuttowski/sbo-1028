@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 declare var $: any;
 
+//extensions
+import { DataTable } from '../../../extensions/array.toDataTable';
+
 //service
 import { AccountService } from '../../../services/account.service';
 
@@ -15,7 +18,7 @@ import { Account } from '../../../models/account.model';
 })
 export class AccountsComponent implements OnInit {
   UserAccount: Account = new Account();
-  Accounts: Account[];
+  Accounts: DataTable;
 
   constructor(private acctService: AccountService) { }
 
@@ -26,7 +29,7 @@ export class AccountsComponent implements OnInit {
   }
 
   async loadData(){
-    this.Accounts = await this.acctService.getAccounts();
+    this.Accounts = (await this.acctService.getAccounts()).toDataTable(10);
   }
 
   async onSaveAccount(){

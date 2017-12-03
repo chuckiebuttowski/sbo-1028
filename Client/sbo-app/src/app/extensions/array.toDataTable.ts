@@ -50,15 +50,17 @@ export class DataTable {
     public filterColumn(colName: string, value:any){
         let filteredDS = new Array<any>();
 
-        for(let data of this.mainDataSource){
-            for(let fld in data){
-                if(fld == colName){
-                    if(data[fld].toString().toLowerCase().indexOf(value.toString()) > -1){
-                        filteredDS.push(data);
-                    }
-                }
-            }
-        }
+        filteredDS = this.mainDataSource.filter(x => x[colName].toString().toLowerCase().indexOf(value.toString()) > -1);
+
+        // for(let data of this.mainDataSource){
+        //     for(let fld in data){
+        //         if(fld == colName){
+        //             if(data[fld].toString().toLowerCase().indexOf(value.toString()) > -1){
+        //                 filteredDS.push(data);
+        //             }
+        //         }
+        //     }
+        // }
 
         this.CurrentPage = 1;
         this.paginate(filteredDS);
