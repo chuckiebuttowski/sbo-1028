@@ -10,6 +10,11 @@ Array.prototype.toDataTable = function(pageSize: number){
     return dt;
 }
 
+class Filter{
+    Name:string;
+    Value:string;
+}
+
 export class DataTable {
     private mainDataSource: any[];
 
@@ -18,6 +23,7 @@ export class DataTable {
     public Pages: number[];
     public PageSize: number;
     private totalPages: number;
+    private filters: Filter[] = new Array<Filter>();
 
     assemblePager(dataSource: any[], pageSize: number){
         this.mainDataSource = dataSource;
@@ -48,9 +54,23 @@ export class DataTable {
     }
 
     public filterColumn(colName: string, value:any){
-        let filteredDS = new Array<any>();
 
-        filteredDS = this.mainDataSource.filter(x => x[colName].toString().toLowerCase().indexOf(value.toString()) > -1);
+        let filterIdx = this.filters.findIndex(x => x.Name == colName);
+        if(filterIdx < 0){
+            this.filters.push({Name: colName, Value: value});
+        }
+        else{
+            this.filters[filterIdx].Value = value;
+        }
+
+        let filteredDS = this.mainDataSource;
+
+        //update support multi filter
+        for(let filter of this.filters){
+            filteredDS = filteredDS.filter(x => x[filter.Name].toString().toLowerCase().indexOf(filter.Value.toString()) > -1);
+        }
+
+        //filteredDS = this.mainDataSource.filter(x => x[colName].toString().toLowerCase().indexOf(value.toString()) > -1);
 
         // for(let data of this.mainDataSource){
         //     for(let fld in data){
@@ -64,6 +84,12 @@ export class DataTable {
 
         this.CurrentPage = 1;
         this.paginate(filteredDS);
+    }
+
+    public clearFilters(){
+        this.filters = new Array<Filter>();
+        this.CurrentPage =1;
+        this.paginate(this.mainDataSource);
     }
 
     public generalSearch(keyword: string){
