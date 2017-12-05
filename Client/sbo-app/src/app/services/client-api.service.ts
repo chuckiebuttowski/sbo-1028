@@ -14,7 +14,6 @@ export class ClientAPIService {
     }
 
     async getAll() : Promise<ClientAPI[]> {
-        console.log('asking server')
         const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/client-api/get-all").toPromise();
 
         return res as ClientAPI[];

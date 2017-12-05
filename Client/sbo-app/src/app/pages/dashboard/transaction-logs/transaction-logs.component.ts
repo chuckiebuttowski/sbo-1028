@@ -19,6 +19,9 @@ export class TransactionLogsComponent implements OnInit {
   Type: typeof SBOType = SBOType;
   HasLogs: boolean;
   DataTable: DataTable;
+  Total:number;
+  TotalPosted: number;
+  TotalNotPosted: number;
 
   constructor(private service: TransactionLogService, private router: Router) { }
 
@@ -31,6 +34,11 @@ export class TransactionLogsComponent implements OnInit {
     let logs = await this.service.getAllLogs();
     this.DataTable = logs.toDataTable(5);
     this.HasLogs = logs.length > 0;
+    let counts = await this.service.getCounts();
+
+    this.Total = counts.filter(x => x["Name"] == "Total")[0]["Count"];
+    this.TotalPosted = counts.filter(x => x["Name"] == "Posted")[0]["Count"];
+    this.TotalNotPosted = counts.filter(x => x["Name"] == "NotPosted")[0]["Count"];
   }
 
   getTotalLogs() : number{

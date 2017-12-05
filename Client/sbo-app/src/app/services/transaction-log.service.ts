@@ -11,6 +11,12 @@ export class TransactionLogService {
 
     constructor(private http: HttpClient) { }
 
+    async getCounts() : Promise<any[]>{
+        const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/transaction-log/get-counts").toPromise();
+
+        return res as any[];
+    }
+
     async getAllLogs() : Promise<TransactionLog[]>{
         const res = await this.http.get(ServiceSetting.BaseAPIUrl + "/transaction-log/get-all").toPromise();
 

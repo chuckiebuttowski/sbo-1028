@@ -44,13 +44,17 @@
                   <thead class="text-warning">
                     <tr>
                       <th>Name</th>
+                      <th>SBO Type</th>
+                      <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let model of SBOModels">
                       <td>
-                        <a [routerLink]="['model/detail/', model]">{{model}}</a>
+                        <a [routerLink]="['model/detail/', model.Name]">{{model.Name}}</a>
                       </td>
+                      <td>{{model.SBOType}}</td>
+                      <td>{{model.Description}}</td>
                     </tr>
                   </tbody>
                 </table>

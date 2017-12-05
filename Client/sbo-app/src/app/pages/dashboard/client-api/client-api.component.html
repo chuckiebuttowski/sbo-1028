@@ -33,19 +33,19 @@
                       </td>
                       <td></td>
                   </tr>
-                <tr *ngIf="APIs.length == 0">
+                <tr *ngIf="APIs?.DataSource.length == 0">
                   <td colspan="4">
                     <label>No Records</label>
                   </td>
                 </tr>
-                <tr *ngFor="let api of APIs.DataSource" (click)="changeModel(api)">
-                  <td>{{api.Name}}</td>
-                  <td>{{api.URL}}</td>
-                  <td>{{api.Action}}</td>
-                  <td>{{api.SboTransactionType}}</td>
-                  <td>{{api.IsActive ? 'Yes' : 'No'}}</td>
+                <tr *ngFor="let api of APIs?.DataSource" (click)="changeModel(api)">
+                  <td>{{api?.Name}}</td>
+                  <td>{{api?.URL}}</td>
+                  <td>{{api?.Action}}</td>
+                  <td>{{getAbbrType(api?.SboTransactionType)}}</td>
+                  <td>{{api?.IsActive ? 'Yes' : 'No'}}</td>
                   <td class="td-actions text-right">
-                    <button type="button" rel="tooltip" (click)="deleteApi(api.ID)" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                    <button type="button" rel="tooltip" (click)="deleteApi(api?.ID)" title="Remove" class="btn btn-danger btn-simple btn-xs">
                       <i class="material-icons">delete</i>
                     </button>
                   </td>
@@ -53,7 +53,7 @@
               </tbody>
             </table>
             <hr/>
-            <ul *ngIf="APIs.DataSource.length > 0" class="nav nav-pills nav-pills-danger custom-pagination">
+            <ul *ngIf="APIs?.DataSource.length > 0" class="nav nav-pills nav-pills-danger custom-pagination">
                     <li (click)="APIs.movePrevious()"><a><i class="material-icons">keyboard_arrow_left</i></a></li>
                     <li *ngFor="let page of APIs.Pages" [class.active]="APIs.CurrentPage == page" (click)="APIs.setCurrentPage(page)"><a>{{page}}</a></li>
                     <li (click)="APIs.moveNext()"><a><i class="material-icons">keyboard_arrow_right</i></a></li>
@@ -104,10 +104,12 @@
                 <label class="control-label">SBO Model</label>
                 <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
                   <option value="" selected disabled hidden>Choose here</option>
-                  <option style="padding:5px;" value="{{val}}" *ngFor="let val of TransactionType">{{val}}</option>
+                  <option style="padding:5px;" value="{{val.Name}}" *ngFor="let val of TransactionType">{{val.SBOType}}</option>
                 </select>
               </div>
-              <a [routerLink]="['/dashboard/sbo-api']">Click here to view sbo model documentation</a>
+              <a [routerLink]="['/dashboard/sbo-api']"><small>Click here to view sbo model documentation</small></a>
+              <br/>
+              <a routerLink="/dashboard/sbo-api/model/detail/{{Model.SboTransactionType}}" *ngIf="Model.SboTransactionType != undefined"><small>Click here to view {{getAbbrType(Model?.SboTransactionType)}} type documentation</small></a>
             </div>
             <div class="col-sm-12" style="margin-top:10px;">
               <div class="form-group form-black label-floating" [class.is-empty]="ValueType[Model.ValueType] == ''" style="margin:10px 0 0 0;">

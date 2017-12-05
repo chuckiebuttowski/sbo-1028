@@ -1,4 +1,6 @@
-﻿using sbo.fx.Models;
+﻿using sbo.fx;
+using sbo.fx.Attributes;
+using sbo.fx.Models;
 using SBOClient.Models;
 using System;
 using System.Collections.Generic;
@@ -85,18 +87,22 @@ namespace SBOClient.Controllers
 
         [HttpGet]
         [Route("get-sbo-models")]
-        public IEnumerable<string> GetSBOModels()
+        public IEnumerable<object> GetSBOModels()
         {
             try
             {
-                var list = new List<string>();
+                var list = new List<object>();
                 var types = Assembly.Load("sbo.fx").GetTypes().Where(x => x.FullName.ToLower().Contains("sbo.fx.models"));
 
                 foreach (var type in types)
                 {
+                    var sboType = type.GetCustomAttributes(typeof(SBOTransactionTypeAttribute), false).FirstOrDefault() as SBOTransactionTypeAttribute;
                     if (type.Name != "DocumentationModel")
                     {
-                        list.Add(type.Name);
+                        if (!string.IsNullOrEmpty(sboType?.SBOType))
+                        {
+                            list.Add(new { Name = type.Name, SBOType = sboType?.SBOType, Description = sboType?.Description, IsDetail = sboType?.IsDetail });
+                        }
                     }
                 }
 
@@ -118,7 +124,7 @@ namespace SBOClient.Controllers
 
             foreach (var fld in fields)
             {
-                list.Add(new { FieldName = fld.Key, Type = fld.Value});
+                list.Add(new { FieldName = fld.GetType().GetProperty("FieldName")?.GetValue(fld, null), Type = fld.GetType().GetProperty("Type")?.GetValue(fld, null), IsRequired = fld.GetType().GetProperty("IsRequired")?.GetValue(fld, null), FieldLength = fld.GetType().GetProperty("FieldLength")?.GetValue(fld, null) });
             }
 
             return list;

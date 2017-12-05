@@ -23,7 +23,7 @@ export class ClientApiComponent implements OnInit {
   NewParameter: APIParameter = new APIParameter();
   Type: typeof SBOType = SBOType;
   ValueType: typeof PostDataValueType = PostDataValueType;
-  TransactionType: Array<string> = Object.keys(SBOType).filter(itm => !isNaN(Number.parseInt(itm)));
+  TransactionType: Array<any>; //= Object.keys(SBOType).filter(itm => !isNaN(Number.parseInt(itm)));
   
   Model: ClientAPI = new ClientAPI();
   APIs:DataTable ;
@@ -38,7 +38,18 @@ export class ClientApiComponent implements OnInit {
 
   async loadData(){
     this.APIs = (await this.apiService.getAll()).toDataTable(10);
-    this.TransactionType = await this.sboApiService.getSBOModels();
+    this.TransactionType = (await this.sboApiService.getSBOModels()).filter(x => !x["IsDetail"]);
+  }
+
+  getAbbrType(type:string) :string {
+    if(type == '' || type == undefined){
+      return '';
+    }
+    
+    if(this.TransactionType== undefined){
+      return '';
+    }
+    return this.TransactionType.filter(x => x["Name"] == type)[0]["SBOType"];
   }
 
   onAddNewParam() {
