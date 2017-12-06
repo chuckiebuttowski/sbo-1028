@@ -2,6 +2,8 @@
 using sbo.fx.Factories;
 using sbo.fx.Interfaces;
 using sbo.fx.Models;
+using SBOClient.Core.DAL.Entities;
+using SBOClient.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +14,27 @@ using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
 {
+    /// <summary>
+    /// This end point is for accessing and adding business partners
+    /// </summary>
     [RoutePrefix("api/business-partners")]
     [AllowAnonymous]
     public class BusinessPartnerController : ApiController
     {
         IBusinessPartnerRepository repo = new RepositoryFactory().BusinessPartnerRepository();
+        TransactionLogger transactionLogger;
         string errMsg = "";
 
         public BusinessPartnerController()
         {
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+            transactionLogger = new TransactionLogger();
         }
 
+        /// <summary>
+        /// Get all business partners
+        /// </summary>
+        /// <returns>List of business partner</returns>
         [Route("get-all-bps")]
         [HttpGet]
         public async Task<IList<oBusinessPartner>> GetBusinessPartners()
@@ -48,6 +59,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get all business partner filtered by business partner type (i.e. customer or supplier)
+        /// </summary>
+        /// <param name="cardType"></param>
+        /// <returns>List of business partner</returns>
         [Route("get-bps-by-type")]
         [HttpGet]
         public async Task<IList<oBusinessPartner>> GetBusinessPartnersByType(string cardType)
@@ -72,6 +88,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get all business partner filtered by group code
+        /// </summary>
+        /// <param name="groupCode"></param>
+        /// <returns>List of business partner</returns>
         [Route("get-bps-by-group-code")]
         [HttpGet]
         public async Task<IList<oBusinessPartner>> GetBusinessPartnersByGroupCode(int groupCode)
@@ -96,6 +117,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        ///  Get all business partner filtered by series
+        /// </summary>
+        /// <param name="series">Refer to documentation</param>
+        /// <returns>List of business partner</returns>
         [Route("get-bps-by-series")]
         [HttpGet]
         public async Task<IList<oBusinessPartner>> GetBusinessPartnersBySeries(int series)
@@ -120,7 +146,13 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-        [Route("get-bps-by-status")]
+        /// <summary>
+        /// Get all business partner filtered by status
+        /// </summary>
+        /// <param name="status">Values: "Y" or "N"</param>
+        /// <example>Values: "Y" or "N"</example>
+        /// <returns>List of business partner</returns>
+        [Route("get-bps-by-active-status")]
         [HttpGet]
         public async Task<IList<oBusinessPartner>> GetBusinessPartnersByStatus(string status)
         {
@@ -144,6 +176,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get business partner filtered by business partner code
+        /// </summary>
+        /// <param name="cardCode"></param>
+        /// <returns>Business partner</returns>
         [Route("get-bps-by-card-code")]
         [HttpGet]
         public async Task<oBusinessPartner> GetBusinessPartnersByCardCode(string cardCode)
@@ -168,6 +205,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Adds new business partner to SAP database
+        /// </summary>
+        /// <param name="businessPartner"></param>
+        /// <returns>If successful, returns status code 200 and business partner entry return message</returns>
         [Route("add-business-partner")]
         [HttpPost]
         public async Task<IHttpActionResult> AddBusinessPartner(oBusinessPartner businessPartner)
@@ -176,12 +218,42 @@ namespace SBOClient.Controllers.SboControllers
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
                 var bp = await repo.GetByCardCode(businessPartner.CardCode);
+
+                string validationStr = ModelValidator.ValidateModel(businessPartner);
+
+                if (!string.IsNullOrEmpty(validationStr))
+                {
+                    errMsg = string.Format(validationStr);
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "Object property validation error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, false, "A", err);
+                    throw new HttpResponseException(resp);
+                }
+
                 if (businessPartner != null)
                 {
                     errMsg = string.Format("Business partner {0} already exist.", businessPartner.CardCode);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, false, "A", err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -191,9 +263,19 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, true, "A", err);
                     throw new HttpResponseException(resp);
                 }
 
+                transactionLogger.LogBPTransaction(businessPartner, true, "A");
                 return Ok(string.Format("Business partner {0} succesfully added.", businessPartner.CardCode));
             }
             catch (HttpResponseException ex)
@@ -202,6 +284,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Updates business partner from SAP database
+        /// </summary>
+        /// <param name="businessPartner"></param>
+        /// <returns>If successful, returns status code 200 and business partner update return message</returns>
         [Route("update-business-partner")]
         [HttpPut]
         public async Task<IHttpActionResult> UpdateBusinessPartner(oBusinessPartner businessPartner)
@@ -210,12 +297,42 @@ namespace SBOClient.Controllers.SboControllers
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
                 var bp = await repo.GetByCardCode(businessPartner.CardCode);
+
+                string validationStr = ModelValidator.ValidateModel(businessPartner);
+
+                if (!string.IsNullOrEmpty(validationStr))
+                {
+                    errMsg = string.Format(validationStr);
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "Object property validation error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
+                    throw new HttpResponseException(resp);
+                }
+
                 if (businessPartner == null)
                 {
                     errMsg = string.Format("Business partner {0} does not exist.", businessPartner.CardCode);
                     var resp = new HttpResponseMessage(HttpStatusCode.NotFound);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object not found.";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -225,9 +342,19 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
                     throw new HttpResponseException(resp);
                 }
 
+                transactionLogger.LogBPTransaction(businessPartner, true, "U");
                 return Ok(string.Format("Business partner {0} succesfully added.", businessPartner.CardCode));
             }
             catch (HttpResponseException ex)

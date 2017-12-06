@@ -22,7 +22,7 @@ namespace SBOClient.Helpers
             log = new TransactionLog();
         }
         
-        public void LogJournalTransaction(oJournal obj, bool isPosted, ErrorLog errLog = null)
+        public void LogJournalTransaction(oJournal obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {
@@ -32,8 +32,13 @@ namespace SBOClient.Helpers
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
                 log.TransactionDataID = obj.TransId;
-                log.RawData.PostedOn = obj.DocDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.DocDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
+                log.Action = action;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -42,7 +47,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogInvoiceTransaction(oInvoice obj, bool isPosted, ErrorLog errLog = null)
+        public void LogInvoiceTransaction(oInvoice obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {
@@ -54,6 +59,7 @@ namespace SBOClient.Helpers
                 log.TransactionDataID = obj.TransId;
                 log.RawData.PostedOn = obj.DocDate;
                 log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                log.Action = action;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -62,7 +68,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogInventoryTransaction(oInventoryTransaction obj, bool isPosted, ErrorLog errLog = null)
+        public void LogInventoryTransaction(oInventoryTransaction obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {
@@ -74,6 +80,7 @@ namespace SBOClient.Helpers
                 log.TransactionDataID = log.RawData.ID;
                 log.RawData.PostedOn = obj.DocDate;
                 log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                log.Action = action;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -82,7 +89,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogItemTransaction(oItem obj, bool isPosted, ErrorLog errLog = null)
+        public void LogItemTransaction(oItem obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {
@@ -94,6 +101,7 @@ namespace SBOClient.Helpers
                 log.TransactionDataID = log.RawData.ID;
                 log.RawData.PostedOn = obj.CreateDate;
                 log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                log.Action = action;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -102,7 +110,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogBPTransaction(oBusinessPartner obj, bool isPosted, ErrorLog errLog = null)
+        public void LogBPTransaction(oBusinessPartner obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {
@@ -114,6 +122,7 @@ namespace SBOClient.Helpers
                 log.TransactionDataID = log.RawData.ID;
                 log.RawData.PostedOn = obj.CreateDate;
                 log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                log.Action = action;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -122,7 +131,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogglTransaction(oGlAccount obj, bool isPosted, ErrorLog errLog = null)
+        public void LogGlTransaction(oGlAccount obj, bool isPosted, string action, ErrorLog errLog = null)
         {
             try
             {

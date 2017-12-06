@@ -75,13 +75,31 @@ namespace SBOClient.Controllers.SboControllers
 
                 switch (transactionType)
                 {
-                    case "JE":
+                    case "30"://JE
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true);
+                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true, "A");
                         break;
-                    case "APV":
+                    case "18"://AP
+                    case "13"://AR
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true);
+                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true, "A");
+                        break;
+                    case "60"://GI
+                    case "59"://GR
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogInventoryTransaction((oInventoryTransaction)paramObj, true, "A");
+                        break;
+                    case "4"://ITM
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogItemTransaction((oItem)paramObj, true, "A");
+                        break;
+                    case "2"://BP
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogBPTransaction((oBusinessPartner)paramObj, true, "A");
+                        break;
+                    case "1"://GL
+                        response = await client.PostAsJsonAsync(uri, paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogGlTransaction((oGlAccount)paramObj, true, "A");
                         break;
                 }
                 
@@ -92,22 +110,60 @@ namespace SBOClient.Controllers.SboControllers
                 ErrorLog err = null;
                 switch (transactionType)
                 {
-                    case "JE":
+                    case "30":
                         err = new ErrorLog {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogJournalTransaction((oJournal)paramObj, false, ErrorLogger.Log(err));
+                        logger.LogJournalTransaction((oJournal)paramObj, false, "A", ErrorLogger.Log(err));
                         break;
-                    case "APV":
+                    case "18":
+                    case "13":
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, ErrorLogger.Log(err));
+                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, "A", ErrorLogger.Log(err));
+                        break;
+                    case "60"://GI
+                    case "59"://GR
+                        err = new ErrorLog
+                        {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogInventoryTransaction((oInventoryTransaction)paramObj, false, "A", ErrorLogger.Log(err));
+                        break;
+                    case "4"://ITM
+                        err = new ErrorLog
+                        {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogItemTransaction((oItem)paramObj, false, "A", ErrorLogger.Log(err));
+                        break;
+                    case "2"://BP
+                        err = new ErrorLog
+                        {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogBPTransaction((oBusinessPartner)paramObj, false, "A", ErrorLogger.Log(err));
+                        break;
+                    case "1"://GL
+                        err = new ErrorLog
+                        {
+                            ErrorCode = (int)HttpStatusCode.BadRequest,
+                            Message = ex.Message,
+                            StackTrace = ex.StackTrace
+                        };
+                        logger.LogGlTransaction((oGlAccount)paramObj, false, "A", ErrorLogger.Log(err));
                         break;
                 }
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -160,7 +216,7 @@ namespace SBOClient.Controllers.SboControllers
             switch (callSig.CallObjCode)
             {
                 case "30"://Journal Entry
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "30" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S"?0:1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "30" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "60"://Goods Issue
                     clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "60" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();

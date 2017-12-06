@@ -16,6 +16,9 @@ using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
 {
+    /// <summary>
+    /// This end point is for accessing and adding journal entries.
+    /// </summary>
     [RoutePrefix("api/journals")]
     public class JournalController : ApiController
     {
@@ -31,6 +34,10 @@ namespace SBOClient.Controllers.SboControllers
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
         }
 
+        /// <summary>
+        /// Get all journal entries.
+        /// </summary>
+        /// <returns>List of journal entries.</returns>
         [Route("get-journals")]
         [HttpGet]
         public async Task<IList<oJournal>> GetJournals()
@@ -55,6 +62,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get all journal entries filtered by project code.
+        /// </summary>
+        /// <param name="projectCode"></param>
+        /// <returns>List of journal entries</returns>
         [Route("get-journals-by-projectcode")]
         [HttpGet]
         public async Task<IList<oJournal>> GetJournasByProjectCode(string projectCode)
@@ -79,6 +91,13 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+       
+        /// <summary>
+        /// Get all journal entries filtered by date range.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns>List of journal entries</returns>
         [Route("get-journals-by-date-range")]
         [HttpGet]
         public async Task<IList<oJournal>> GetJournasByProjectCode(DateTime from, DateTime to)
@@ -103,6 +122,11 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get journal entry filtered by id
+        /// </summary>
+        /// <param name="transId"></param>
+        /// <returns>Journal entry</returns>
         [Route("get-journal-by-id")]
         [HttpGet]
         public async Task<oJournal> GetJournalById(int transId)
@@ -127,30 +151,60 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Adds new journal entry to SAP database.
+        /// </summary>
+        /// <param name="jrnal"></param>
+        /// <returns>Status code 200, and journal entry return message</returns>
         [Route("add-journal")]
         [HttpPost]
         public async Task<IHttpActionResult> AddJournal(oJournal jrnal)
         {
+
+            HttpResponseMessage _resp = new HttpResponseMessage();
+
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-
                 var j = await repo.GetByTransId(jrnal.TransId);
+
+                string validationStr = ModelValidator.ValidateModel(jrnal);
+
+                if (!string.IsNullOrEmpty(validationStr))
+                {
+                    errMsg = string.Format(validationStr);
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "Object property validation error";
+
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
+
+                    var err = ErrorLogger.Log(_err);
+
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", _err);
+                    _resp = resp;
+                    throw new HttpResponseException(resp);
+                }
+
                 if (j != null)
                 {
                     errMsg = string.Format("Journal {0} already exist.", jrnal.TransId);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
 
-                    });
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, err);
+                    var err = ErrorLogger.Log(_err);
+
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", _err);
+                    _resp = resp;
                     throw new HttpResponseException(resp);
                 }
 
@@ -160,105 +214,25 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
-                    var err = ErrorLogger.Log(new ErrorLog {
-                        ErrorCode = GlobalInstance.Instance.SBOErrorCode,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, err);
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", _err);
+                    _resp = resp;
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogJournalTransaction(jrnal, true);
+                transactionLogger.LogJournalTransaction(jrnal, true, "A");
                 return Ok(string.Format("Journal {0} succesfully added.", jrnal.TransId));
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(_resp);
             }
         }
-
-        //[Route("add-multiple-journal")]
-        //[HttpPost]
-        //public async Task<IHttpActionResult> AddMultipleJournal(List<oJournal> jrnals)
-        //{
-        //    try
-        //    {
-        //        if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                
-        //        if (repo.AddMultiple(jrnals) != 0)
-        //        {
-        //            errMsg = GlobalInstance.Instance.SBOErrorMessage;
-        //            var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-        //            resp.Content = new StringContent(errMsg);
-        //            resp.ReasonPhrase = "SBO Error";
-        //            throw new HttpResponseException(resp);
-        //        }
-
-        //        return Ok("Successfully added journal entries.");
-        //    }
-        //    catch (HttpResponseException ex)
-        //    {
-        //        throw new HttpResponseException(HttpStatusCode.BadRequest);
-        //    }
-        //}
-
-        [Route("update-journal")]
-        [HttpPut]
-        public async Task<IHttpActionResult> UpdateJournal(oJournal jrnal)
-        {
-            try
-            {
-                if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-
-                var j = await repo.GetByTransId(jrnal.TransId);
-                if (j == null)
-                {
-                    errMsg = string.Format("Journal {0} does exist.", jrnal.TransId);
-                    var resp = new HttpResponseMessage(HttpStatusCode.NotFound);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "Object not found.";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
-
-                    });
-
-                    transactionLogger.LogJournalTransaction(jrnal, false, err);
-
-                    throw new HttpResponseException(resp);
-                }
-
-                if (repo.Update(jrnal) != 0)
-                {
-                    errMsg = GlobalInstance.Instance.SBOErrorMessage;
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "SBO Error";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = GlobalInstance.Instance.SBOErrorCode,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
-
-                    });
-
-                    transactionLogger.LogJournalTransaction(jrnal, false, err);
-
-                    throw new HttpResponseException(resp);
-                }
-
-                return Ok(string.Format("Journal {0} succesfully updated.", jrnal.TransId));
-            }
-            catch (HttpResponseException ex)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-            }
-        }
-        
     }
 }

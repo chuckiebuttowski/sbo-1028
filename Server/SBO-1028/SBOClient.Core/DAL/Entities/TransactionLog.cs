@@ -16,6 +16,7 @@ namespace SBOClient.Core.DAL.Entities
         public bool IsPosted { get; set; }
         public int TransactionDataID { get; set; }
         public int? ErrorID { get; set; }
+        public string Action { get; set; }
 
         [ForeignKey("TransactionDataID")]
         public virtual TransactionData RawData { get; set; }

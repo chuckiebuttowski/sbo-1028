@@ -2,6 +2,8 @@
 using sbo.fx.Factories;
 using sbo.fx.Interfaces;
 using sbo.fx.Models;
+using SBOClient.Core.DAL.Entities;
+using SBOClient.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +15,19 @@ using System.Web.Http;
 namespace SBOClient.Controllers.SboControllers
 {
     /// <summary>
-    /// This end point is used for accessing and adding general ledger accounts.
+    /// This end point is for accessing and adding general ledger accounts.
     /// </summary>
     [RoutePrefix("api/ledger-accounts")]
     public class LedgerAccountController : ApiController
     {
         IGlAccountRepository repo = new RepositoryFactory().GlAccountRepository();
+        TransactionLogger transactionLogger;
         string errMsg = "";
 
         public LedgerAccountController()
         {
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+            transactionLogger = new TransactionLogger();
         }
 
         /// <summary>
@@ -96,12 +100,42 @@ namespace SBOClient.Controllers.SboControllers
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
                 var gl = await repo.GetByAccountCode(glAccount.AccntCode);
+
+
+                string validationStr = ModelValidator.ValidateModel(glAccount);
+                if (!string.IsNullOrEmpty(validationStr))
+                {
+                    errMsg = string.Format(validationStr);
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "Object property validation error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
+                    throw new HttpResponseException(resp);
+                }
+
                 if (gl != null)
                 {
                     errMsg = string.Format("Ledger account {0}-{1} already exist.", glAccount.AccntCode, glAccount.AccntName);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -111,10 +145,19 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
+                    var err = ErrorLogger.Log(new ErrorLog
+                    {
+                        ErrorCode = (int)HttpStatusCode.Conflict,
+                        Message = errMsg,
+                        StackTrace = Environment.StackTrace
+
+                    });
+
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
                     throw new HttpResponseException(resp);
                 }
 
-
+                transactionLogger.LogGlTransaction(glAccount, true, "A");
                 return Ok(string.Format("Ledger account {0}-{1} already exist.", glAccount.AccntCode, glAccount.AccntName));
             }
             catch (HttpResponseException ex)

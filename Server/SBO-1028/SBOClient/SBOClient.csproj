@@ -121,17 +121,25 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\SAPProfileController.cs" />
     <Compile Include="Controllers\SBOApiDocumentationController.cs" />
+    <Compile Include="Controllers\SboControllers\BranchController.cs" />
     <Compile Include="Controllers\SboControllers\BusinessPartnerController.cs" />
+    <Compile Include="Controllers\SboControllers\BusinessPartnerGroupController.cs" />
     <Compile Include="Controllers\SboControllers\InventoryController.cs" />
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
+    <Compile Include="Controllers\SboControllers\ItemGroupController.cs" />
     <Compile Include="Controllers\SboControllers\JournalController.cs" />
     <Compile Include="Controllers\SboControllers\LedgerAccountController.cs" />
+    <Compile Include="Controllers\SboControllers\ProjectController.cs" />
+    <Compile Include="Controllers\SboControllers\SeriesController.cs" />
     <Compile Include="Controllers\SboControllers\SQLDomainBrokerController.cs" />
+    <Compile Include="Controllers\SboControllers\TaxController.cs" />
+    <Compile Include="Controllers\SboControllers\WarehouseController.cs" />
     <Compile Include="Controllers\TransactionLogController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ErrorLogger.cs" />
+    <Compile Include="Helpers\ModelValidator.cs" />
     <Compile Include="Helpers\TransactionLogger.cs" />
     <Compile Include="Models\APIActionDocumentation.cs" />
     <Compile Include="Models\APICallSignature.cs" />
