@@ -31,7 +31,6 @@ namespace SBOClient.Helpers
                 log.Type = TransactionLog.SBOType.JE;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = obj.TransId;
 
                 TransactionData rawData = new TransactionData();
                 rawData.PostedOn = obj.DocDate;
@@ -39,6 +38,8 @@ namespace SBOClient.Helpers
 
                 log.RawData = rawData;
                 log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -51,15 +52,20 @@ namespace SBOClient.Helpers
         {
             try
             {
-                log.TransactionNo = obj.TransId.ToString();
+                log.TransactionNo = obj.DocNo.ToString();
                 log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
                 log.Type = obj.InvoiceTransactionType == InvoiceType.AccountsReceivable? TransactionLog.SBOType.ARINV: TransactionLog.SBOType.APINV;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = obj.TransId;
-                log.RawData.PostedOn = obj.DocDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.DocDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
                 log.Action = action;
+                //log.CreatedBy = obj.CreatedBy;
+                //log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -77,10 +83,15 @@ namespace SBOClient.Helpers
                 log.Type = obj.InventoryTransactionType == InventoryType.In? TransactionLog.SBOType.GR: TransactionLog.SBOType.GI;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = log.RawData.ID;
-                log.RawData.PostedOn = obj.DocDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.DocDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
                 log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -98,10 +109,14 @@ namespace SBOClient.Helpers
                 log.Type = TransactionLog.SBOType.ITM;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = log.RawData.ID;
-                log.RawData.PostedOn = obj.CreateDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.CreateDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
                 log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -119,10 +134,14 @@ namespace SBOClient.Helpers
                 log.Type = TransactionLog.SBOType.BP;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = log.RawData.ID;
-                log.RawData.PostedOn = obj.CreateDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.CreateDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
                 log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)
@@ -140,9 +159,14 @@ namespace SBOClient.Helpers
                 log.Type = TransactionLog.SBOType.GL;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
-                log.TransactionDataID = log.RawData.ID;
-                log.RawData.PostedOn = obj.CreateDate;
-                log.RawData.RawData = JsonConvert.SerializeObject(obj);
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.CreateDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
+                log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)

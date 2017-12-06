@@ -22,7 +22,7 @@ namespace SBOClient
                    .JsonFormatter.SerializerSettings.Re‌​ferenceLoopHandling
                    = ReferenceLoopHandling.Ignore;
 
-            //InitializeSbo();
+            InitializeSbo();
         }
 
         private void InitializeSbo()
@@ -30,16 +30,19 @@ namespace SBOClient
             var repo = new RepositoryFactory().CreateConfigurationRepository();
             ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
 
-            GlobalInstance.Instance.DatabaseServerType = DBType.MSSQL2012;
-            GlobalInstance.Instance.Server = serverConfig.ServerName;
-            GlobalInstance.Instance.DBName = serverConfig.DatabaseName;
-            GlobalInstance.Instance.DBUName = serverConfig.Username;
-            GlobalInstance.Instance.DBPword = serverConfig.Password;
-            GlobalInstance.Instance.UName = ConfigurationManager.AppSettings["uid"];
-            GlobalInstance.Instance.Pword = ConfigurationManager.AppSettings["pword"];
+            if (serverConfig != null)
+            {
+                GlobalInstance.Instance.DatabaseServerType = DBType.MSSQL2012;
+                GlobalInstance.Instance.Server = serverConfig.ServerName;
+                GlobalInstance.Instance.DBName = serverConfig.DatabaseName;
+                GlobalInstance.Instance.DBUName = serverConfig.Username;
+                GlobalInstance.Instance.DBPword = serverConfig.Password;
+                GlobalInstance.Instance.UName = ConfigurationManager.AppSettings["uid"];
+                GlobalInstance.Instance.Pword = ConfigurationManager.AppSettings["pword"];
 
-            GlobalInstance.Instance.InitializeSboComObject();
-            GlobalInstance.Instance.InitializeSqlObject();
+                GlobalInstance.Instance.InitializeSboComObject();
+                GlobalInstance.Instance.InitializeSqlObject();
+            }
         }
     }
 }

@@ -26,9 +26,13 @@ namespace SBOClient.Controllers
 
             DateTime last24Start = DateTime.Now.AddHours(-24);
 
-            list.Add(new { Name = "Total",  Count = GenerateTestData().Where(x => x.LogDate >= last24Start).Count() });
-            list.Add(new { Name = "Posted", Count = GenerateTestData().Where(x => x.IsPosted && x.LogDate >= last24Start).Count() });
-            list.Add(new { Name = "NotPosted", Count = GenerateTestData().Where(x => !x.IsPosted && x.LogDate >= last24Start).Count() });
+            //list.Add(new { Name = "Total",  Count = GenerateTestData().Where(x => x.LogDate >= last24Start).Count() });
+            //list.Add(new { Name = "Posted", Count = GenerateTestData().Where(x => x.IsPosted && x.LogDate >= last24Start).Count() });
+            //list.Add(new { Name = "NotPosted", Count = GenerateTestData().Where(x => !x.IsPosted && x.LogDate >= last24Start).Count() });
+
+            list.Add(new { Name = "Total", Count = GetData().Where(x => x.LogDate >= last24Start).Count() });
+            list.Add(new { Name = "Posted", Count = GetData().Where(x => x.IsPosted && x.LogDate >= last24Start).Count() });
+            list.Add(new { Name = "NotPosted", Count = GetData().Where(x => !x.IsPosted && x.LogDate >= last24Start).Count() });
             return list;
         }
 
@@ -38,7 +42,8 @@ namespace SBOClient.Controllers
         {
             try
             {
-                return GenerateTestData();
+                return GetData();
+                //return GenerateTestData();
                 //var repo = new RepositoryFactory().CreateTransactionLogRepository();
 
                 //return repo.GetAll();
@@ -53,9 +58,9 @@ namespace SBOClient.Controllers
         [Route("get-log-detail")]
         public TransactionLog GetLogDetailByLogID(int id)
         {
-            return GenerateTestData().FirstOrDefault(x => x.ID == id);
-            //var repo = new RepositoryFactory().CreateTransactionLogRepository();
-            //return repo.Get(x => x.ID == id).FirstOrDefault();
+            //return GenerateTestData().FirstOrDefault(x => x.ID == id);
+            var repo = new RepositoryFactory().CreateTransactionLogRepository();
+            return repo.Get(x => x.ID == id).FirstOrDefault();
         }
 
         [HttpGet]
@@ -79,15 +84,22 @@ namespace SBOClient.Controllers
         {
             var list = new List<TransactionLog>();
 
-            list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
-            list.Add(new TransactionLog() { ID = 2, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
-            list.Add(new TransactionLog() { ID = 3, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
-            list.Add(new TransactionLog() { ID = 4, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = true, LogDate = DateTime.Now });
-            list.Add(new TransactionLog() { ID = 5, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 1, Origin = "SAP", TransactionNo = "2", IsPosted = true, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 2, Origin = "RD", TransactionNo = "1", IsPosted = true, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 3, Origin = "SAP", TransactionNo = "4", IsPosted = true, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 4, Origin = "RD", TransactionNo = "234", IsPosted = true, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 5, Origin = "SAP", TransactionNo = "sd", IsPosted = false, LogDate = DateTime.Now });
             list.Add(new TransactionLog() { ID = 6, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
-            list.Add(new TransactionLog() { ID = 7, Origin = "SAP", TransactionNo = "12312313123123", IsPosted = false, LogDate = DateTime.Now });
+            list.Add(new TransactionLog() { ID = 7, Origin = "SAP", TransactionNo = "ada", IsPosted = false, LogDate = DateTime.Now });
 
             return list;
+        }
+
+        public IEnumerable<TransactionLog> GetData()
+        {
+            var repo = new RepositoryFactory().CreateTransactionLogRepository();
+
+            return repo.GetAll();
         }
     }
 }
