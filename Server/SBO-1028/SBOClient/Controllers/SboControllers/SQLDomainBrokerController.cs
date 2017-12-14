@@ -14,6 +14,7 @@ using System.Data.Entity;
 using static SBOClient.Core.DAL.Entities.ClientAPI;
 using SBOClient.Helpers;
 using sbo.fx.Models;
+using Newtonsoft.Json;
 
 namespace SBOClient.Controllers.SboControllers
 {
@@ -37,7 +38,7 @@ namespace SBOClient.Controllers.SboControllers
                 ClientAPI clientApi = ResolveUri(callSig);
                 object obj = ResolveObject(callSig);
                 string errorMsg = "";
-
+                
                 if (obj == null)
                 {
                     errorMsg = "Object is null";
@@ -72,98 +73,113 @@ namespace SBOClient.Controllers.SboControllers
             try
             {
                 var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
                 switch (transactionType)
                 {
-                    case "30"://JE
-                        response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true, "A");
+                    case "JE"://JE
+                        response = await client.PostAsJsonAsync(uri, (oJournal)paramObj);
+                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true, "A", this.Request.Headers.Host);
+                        else throw new HttpResponseException(response);
                         break;
-                    case "18"://AP
-                    case "13"://AR
+                    case "AP INV"://AP
+                    case "AR INV"://AR
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true, "A");
+                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true, "A", this.Request.Headers.Host);
                         break;
-                    case "60"://GI
-                    case "59"://GR
+                    case "GI"://GI
+                    case "GR"://GR
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogInventoryTransaction((oInventoryTransaction)paramObj, true, "A");
+                        if (response.IsSuccessStatusCode) logger.LogInventoryTransaction((oInventoryTransaction)paramObj, true, "A", this.Request.Headers.Host);
                         break;
-                    case "4"://ITM
+                    case "ITM"://ITM
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogItemTransaction((oItem)paramObj, true, "A");
+                        if (response.IsSuccessStatusCode) logger.LogItemTransaction((oItem)paramObj, true, "A", this.Request.Headers.Host);
                         break;
-                    case "2"://BP
+                    case "BP"://BP
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogBPTransaction((oBusinessPartner)paramObj, true, "A");
+                        if (response.IsSuccessStatusCode) logger.LogBPTransaction((oBusinessPartner)paramObj, true, "A", this.Request.Headers.Host);
                         break;
-                    case "1"://GL
+                    case "GL"://GL
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogGlTransaction((oGlAccount)paramObj, true, "A");
+                        if (response.IsSuccessStatusCode) logger.LogGlTransaction((oGlAccount)paramObj, true, "A", this.Request.Headers.Host);
                         break;
                 }
-                
-                response = await client.PostAsJsonAsync(uri, paramObj);
             }
             catch (HttpResponseException ex)
             {
                 ErrorLog err = null;
+                ErrorLog errLog = new ErrorLog();
                 switch (transactionType)
                 {
-                    case "30":
+                    case "JE":
                         err = new ErrorLog {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogJournalTransaction((oJournal)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+
+                        logger.LogJournalTransaction((oJournal)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
-                    case "18":
-                    case "13":
+                    case "AR INV":
+                    case "AP INV":
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+
+                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
-                    case "60"://GI
-                    case "59"://GR
+                    case "GI"://GI
+                    case "GR"://GR
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogInventoryTransaction((oInventoryTransaction)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+                        logger.LogInventoryTransaction((oInventoryTransaction)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
-                    case "4"://ITM
+                    case "ITM"://ITM
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogItemTransaction((oItem)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+                        logger.LogItemTransaction((oItem)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
-                    case "2"://BP
+                    case "BP"://BP
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogBPTransaction((oBusinessPartner)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+                        logger.LogBPTransaction((oBusinessPartner)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
-                    case "1"://GL
+                    case "GL"://GL
                         err = new ErrorLog
                         {
                             ErrorCode = (int)HttpStatusCode.BadRequest,
                             Message = ex.Message,
                             StackTrace = ex.StackTrace
                         };
-                        logger.LogGlTransaction((oGlAccount)paramObj, false, "A", ErrorLogger.Log(err));
+
+                        errLog = ErrorLogger.Log(err);
+                        logger.LogGlTransaction((oGlAccount)paramObj, false, "A", this.Request.Headers.Host, errLog);
                         break;
                 }
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -173,38 +189,76 @@ namespace SBOClient.Controllers.SboControllers
 
         private object ResolveObject(APICallSignature callSig)
         {
-            object obj = null;
-            Task.Run(async () => {
-                switch (callSig.CallObjCode)
-                {
-                    case "30":
-                        var journalRepo = new sbo.fx.Factories.RepositoryFactory().JournalRepository();
-                        obj = await journalRepo.GetByTransId(int.Parse(callSig.CallKey));
-                        break;
-                    case "60":
-                        var inventoryOutRepo = new sbo.fx.Factories.RepositoryFactory().InventoryTransactionRepository();
-                        obj = await inventoryOutRepo.GetTransactionByDocNo(int.Parse(callSig.CallKey), InventoryType.Out);
-                        break;
-                    case "59":
-                        var inventoryInRepo = new sbo.fx.Factories.RepositoryFactory().InventoryTransactionRepository();
-                        obj = await inventoryInRepo.GetTransactionByDocNo(int.Parse(callSig.CallKey), InventoryType.In);
-                        break;
-                    case "4":
-                        var itemRepo = new sbo.fx.Factories.RepositoryFactory().ItemRepository();
-                        obj = await itemRepo.GetItemByItemCode(callSig.CallKey);
-                        break;
-                    case "2":
-                        var bpRepo = new sbo.fx.Factories.RepositoryFactory().BusinessPartnerRepository();
-                        obj = await bpRepo.GetByCardCode(callSig.CallKey);
-                        break;
-                    case "1":
-                        var glRepo = new sbo.fx.Factories.RepositoryFactory().GlAccountRepository();
-                        obj = await glRepo.GetByAccountCode(callSig.CallKey);
-                        break;
-                }
-            });
+            try
+            {
+                object obj = null;
+                Task.Run(async () => { 
+                    switch (callSig.CallObjCode)
+                    {
+                        case "JE":
+                            var journalRepo = new sbo.fx.Factories.RepositoryFactory().JournalRepository();
+                            journalRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await journalRepo.GetByTransId(int.Parse(callSig.CallKey));
+                            }
+                            break;
+                        case "GI":
+                            var inventoryOutRepo = new sbo.fx.Factories.RepositoryFactory().InventoryTransactionRepository();
+                            inventoryOutRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await inventoryOutRepo.GetTransactionByDocNo(int.Parse(callSig.CallKey), InventoryType.Out);
+                            }
+                            break;
+                        case "GR":
+                            var inventoryInRepo = new sbo.fx.Factories.RepositoryFactory().InventoryTransactionRepository();
+                            inventoryInRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await inventoryInRepo.GetTransactionByDocNo(int.Parse(callSig.CallKey), InventoryType.In);
+                            }
+                            break;
+                        case "ITM":
+                            var itemRepo = new sbo.fx.Factories.RepositoryFactory().ItemRepository();
+                            itemRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await itemRepo.GetItemByItemCode(callSig.CallKey);
+                            }
+                            break;
+                        case "BP":
+                            var bpRepo = new sbo.fx.Factories.RepositoryFactory().BusinessPartnerRepository();
+                            bpRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await bpRepo.GetByCardCode(callSig.CallKey);
+                            }
+                            break;
+                        case "GL":
+                            var glRepo = new sbo.fx.Factories.RepositoryFactory().GlAccountRepository();
+                            glRepo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+                            if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                            if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
+                            {
+                                obj = await glRepo.GetByAccountCode(callSig.CallKey);
+                            }
+                            break;
+                    }
+                }).Wait();
 
-            return obj;
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+           
         }
 
         private ClientAPI ResolveUri(APICallSignature callSig)
@@ -215,23 +269,23 @@ namespace SBOClient.Controllers.SboControllers
 
             switch (callSig.CallObjCode)
             {
-                case "30"://Journal Entry
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "30" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "JE"://Journal Entry
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "JE" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
-                case "60"://Goods Issue
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "60" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "GI"://Goods Issue
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GI" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
-                case "59"://Goods Receipt
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "59" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "GR"://Goods Receipt
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GR" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
-                case "4"://item
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "4" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "ITM"://item
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "ITM" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
-                case "2"://Business Partner
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "2" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "BP"://Business Partner
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "BP" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
-                case "1"://Gl Account
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "1" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                case "GL"://Gl Account
+                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GL" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
             }
 

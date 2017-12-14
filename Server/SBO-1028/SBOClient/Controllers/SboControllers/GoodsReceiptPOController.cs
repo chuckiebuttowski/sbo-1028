@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using sbo.fx;
+﻿using sbo.fx;
 using sbo.fx.Factories;
 using sbo.fx.Interfaces;
 using sbo.fx.Models;
@@ -11,36 +10,33 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
 {
     /// <summary>
-    /// This end point is for accessing and adding journal entries.
+    /// This end point is for accessing and adding GRPOs
     /// </summary>
-    [RoutePrefix("api/journals")]
-    public class JournalController : ApiController
+    [RoutePrefix("api/goodsreceiptpos")]
+    public class GoodsReceiptPOController : ApiController
     {
-        IJournalRepository repo;
+        IGoodsReceiptPORepository repo = new RepositoryFactory().GooodsReceiptPORepository();
         TransactionLogger transactionLogger;
-        string errMsg = "";
+        string errMsg;
 
-        public JournalController()
+        public GoodsReceiptPOController()
         {
-            repo = new RepositoryFactory().JournalRepository();
-            transactionLogger = new TransactionLogger();
-
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
+            transactionLogger = new TransactionLogger();
         }
 
         /// <summary>
-        /// Gets all journal entries.
+        /// Gets all GRPOs with serial numbers
         /// </summary>
-        /// <returns>List of journal entries.</returns>
-        [Route("get-journals")]
+        /// <returns>List of GRPOs</returns>
+        [Route("get-grpos")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournals()
+        public async Task<IList<oGoodsReceiptPO>> GetGRPOS()
         {
             try
             {
@@ -63,13 +59,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets all journal entries filtered by project code.
+        /// Gets all GRPOs filtered by card code
         /// </summary>
-        /// <param name="projectCode"></param>
-        /// <returns>List of journal entries</returns>
-        [Route("get-journals-by-projectcode")]
+        /// <param name="cardCode"></param>
+        /// <returns>List of GRPOs</returns>
+        [Route("get-by-cardcode")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournasByProjectCode(string projectCode)
+        public async Task<IList<oGoodsReceiptPO>> GetByCardCode(string cardCode)
         {
             try
             {
@@ -83,7 +79,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByProject(projectCode);
+                return await repo.GetByCardCode(cardCode);
             }
             catch (HttpResponseException ex)
             {
@@ -91,16 +87,15 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-       
         /// <summary>
-        /// Get all journal entries filtered by date range.
+        /// Gets all GRPOs filtered by date range
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns>List of journal entries</returns>
-        [Route("get-journals-by-date-range")]
+        /// <returns>List of GRPOs</returns>
+        [Route("get-by-date-range")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournasByProjectCode(DateTime from, DateTime to)
+        public async Task<IList<oGoodsReceiptPO>> GetByDateRange(DateTime from, DateTime to)
         {
             try
             {
@@ -123,13 +118,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Get journal entry filtered by id
+        /// Gets GRPO filtered by document number
         /// </summary>
-        /// <param name="transId"></param>
-        /// <returns>Journal entry</returns>
-        [Route("get-journal-by-id")]
+        /// <param name="docNo"></param>
+        /// <returns>GRPO document</returns>
+        [Route("get-by-doc-num")]
         [HttpGet]
-        public async Task<oJournal> GetJournalById(int transId)
+        public async Task<oGoodsReceiptPO> GetByDocumentNumber(int docNo)
         {
             try
             {
@@ -143,7 +138,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByTransId(transId);
+                return await repo.GetByDocumentNumber(docNo);
             }
             catch (HttpResponseException ex)
             {
@@ -152,23 +147,49 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Adds new journal entry to SAP database.
+        /// Gets GRPO filtered by reference no
         /// </summary>
-        /// <param name="jrnal"></param>
-        /// <returns>Status code 200, and journal entry return message</returns>
-        [Route("add-journal")]
-        [HttpPost]
-        public async Task<IHttpActionResult> AddJournal(oJournal jrnal)
+        /// <param name="refNo"></param>
+        /// <returns>GRPO document</returns>
+        [Route("get-by-ref-num")]
+        [HttpGet]
+        public async Task<oGoodsReceiptPO> GetByReferenceNumber(string refNo)
         {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
 
-            HttpResponseMessage _resp = new HttpResponseMessage();
+                return await repo.GetByReferenceNumber(refNo);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
 
+        /// <summary>
+        /// Adds new GRPO to SAP database
+        /// </summary>
+        /// <param name="grpo"></param>
+        /// <returns>Status code 200, and GRPO entry return message</returns>
+        [Route("add-grpo")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddGRPO(oGoodsReceiptPO grpo)
+        {
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var j = await repo.GetByTransId(jrnal.TransId);
+                var _grpo = await repo.GetByReferenceNumber(grpo.ReferenceNo);
 
-                string validationStr = ModelValidator.ValidateModel(jrnal);
+                string validationStr = ModelValidator.ValidateModel(grpo);
 
                 if (!string.IsNullOrEmpty(validationStr))
                 {
@@ -176,7 +197,6 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object property validation error";
-
                     ErrorLog _err = new ErrorLog();
                     _err.ErrorCode = (int)HttpStatusCode.Conflict;
                     _err.Message = errMsg;
@@ -184,18 +204,16 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
-                    _resp = resp;
+                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                if (j != null)
+                if (_grpo != null)
                 {
-                    errMsg = string.Format("Journal {0} already exist.", jrnal.TransId);
+                    errMsg = string.Format("Goods Receipt PO {0} already exist.", grpo.ReferenceNo);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
-
                     ErrorLog _err = new ErrorLog();
                     _err.ErrorCode = (int)HttpStatusCode.Conflict;
                     _err.Message = errMsg;
@@ -203,12 +221,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
-                    _resp = resp;
+                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                if (repo.Add(jrnal) != 0)
+                if (repo.Add(grpo) != 0)
                 {
                     errMsg = GlobalInstance.Instance.SBOErrorMessage;
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
@@ -221,17 +238,16 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
-                    _resp = resp;
+                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogJournalTransaction(jrnal, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Journal {0} succesfully added.", jrnal.TransId));
+                transactionLogger.LogGoodsReceiptPOTransaction(grpo, true, "A", this.Request.Headers.Host);
+                return Ok(string.Format("Goods Receipt PO {0} succesfully added.", grpo.ReferenceNo));
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(_resp);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
     }

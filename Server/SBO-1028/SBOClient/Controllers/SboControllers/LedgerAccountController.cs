@@ -117,7 +117,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -135,7 +135,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -153,11 +153,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogGlTransaction(glAccount, false, "A", err);
+                    transactionLogger.LogGlTransaction(glAccount, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogGlTransaction(glAccount, true, "A");
+                transactionLogger.LogGlTransaction(glAccount, true, "A", this.Request.Headers.Host);
                 return Ok(string.Format("Ledger account {0}-{1} already exist.", glAccount.AccntCode, glAccount.AccntName));
             }
             catch (HttpResponseException ex)

@@ -145,6 +145,35 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get item filtered by warehouse
+        /// </summary>
+        /// <param name="warehouse"></param>
+        /// <returns>List of items with inventory columns</returns>
+        [Route("get-items-by-warehouse")]
+        [HttpGet]
+        public async Task<List<oItemInventory>> GetItemsByWarehouse(string warehouse)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetByWarehouse(warehouse);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
 
         /// <summary>
         /// Adds new item to SAP database
@@ -176,7 +205,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "A", err);
+                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -194,7 +223,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "A", err);
+                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -212,11 +241,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "A", err);
+                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogItemTransaction(item, true, "A");
+                transactionLogger.LogItemTransaction(item, true, "A", this.Request.Headers.Host);
                 return Ok(string.Format("Item {0} - {2} successfully added.", item.ItemCode, item.Description));
             }
             catch (HttpResponseException ex)
@@ -255,7 +284,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "U", err);
+                    transactionLogger.LogItemTransaction(item, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -273,7 +302,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "U", err);
+                    transactionLogger.LogItemTransaction(item, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -291,11 +320,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogItemTransaction(item, false, "U", err);
+                    transactionLogger.LogItemTransaction(item, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogItemTransaction(item, true, "U");
+                transactionLogger.LogItemTransaction(item, true, "U", this.Request.Headers.Host);
                 return Ok(string.Format("Item {0} - {2} successfully updated.", item.ItemCode, item.Description));
             }
             catch (HttpResponseException ex)

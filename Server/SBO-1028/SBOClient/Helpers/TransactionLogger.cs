@@ -22,12 +22,12 @@ namespace SBOClient.Helpers
             log = new TransactionLog();
         }
         
-        public void LogJournalTransaction(oJournal obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogJournalTransaction(oJournal obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.TransId.ToString();
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = TransactionLog.SBOType.JE;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
@@ -48,12 +48,12 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogInvoiceTransaction(oInvoice obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogInvoiceTransaction(oInvoice obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.DocNo.ToString();
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = obj.InvoiceTransactionType == InvoiceType.AccountsReceivable? TransactionLog.SBOType.ARINV: TransactionLog.SBOType.APINV;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
@@ -74,12 +74,12 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogInventoryTransaction(oInventoryTransaction obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogInventoryTransaction(oInventoryTransaction obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.DocNum.ToString();
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = obj.InventoryTransactionType == InventoryType.In? TransactionLog.SBOType.GR: TransactionLog.SBOType.GI;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
@@ -100,12 +100,12 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogItemTransaction(oItem obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogItemTransaction(oItem obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.ItemCode;
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = TransactionLog.SBOType.ITM;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
@@ -125,12 +125,12 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogBPTransaction(oBusinessPartner obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogBPTransaction(oBusinessPartner obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.CardCode;
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = TransactionLog.SBOType.BP;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
@@ -150,17 +150,69 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogGlTransaction(oGlAccount obj, bool isPosted, string action, ErrorLog errLog = null)
+        public void LogGlTransaction(oGlAccount obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.AccntCode;
-                log.Origin = string.Format("{0}-{1}", HttpContext.Current.Request.UserHostAddress, HttpContext.Current.Request.UserHostName);
+                log.Origin = origin;
                 log.Type = TransactionLog.SBOType.GL;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
                 TransactionData rawData = new TransactionData();
                 rawData.PostedOn = obj.CreateDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
+                log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
+                repo.AddOrUpdate(log);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void LogGoodsReceiptPOTransaction(oGoodsReceiptPO obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
+        {
+            try
+            {
+                log.TransactionNo = obj.DocNo.ToString();
+                log.Origin = origin;
+                log.Type = TransactionLog.SBOType.GRPO;
+                log.LogDate = DateTime.Now;
+                log.IsPosted = isPosted;
+
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.DocDate;
+                rawData.RawData = JsonConvert.SerializeObject(obj);
+
+                log.RawData = rawData;
+                log.Action = action;
+                log.CreatedBy = obj.CreatedBy;
+                log.CreatedOn = obj.CreateDate;
+                repo.AddOrUpdate(log);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void LogDisbursementTransaction(oPayment obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
+        {
+            try
+            {
+                log.TransactionNo = obj.DocNo.ToString();
+                log.Origin = origin;
+                log.Type = TransactionLog.SBOType.OP;
+                log.LogDate = DateTime.Now;
+                log.IsPosted = isPosted;
+
+                TransactionData rawData = new TransactionData();
+                rawData.PostedOn = obj.DocDate;
                 rawData.RawData = JsonConvert.SerializeObject(obj);
 
                 log.RawData = rawData;

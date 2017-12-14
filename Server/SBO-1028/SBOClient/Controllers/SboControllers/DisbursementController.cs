@@ -15,30 +15,28 @@ using System.Web.Http;
 namespace SBOClient.Controllers.SboControllers
 {
     /// <summary>
-    /// This end point is for accessing and adding inventory in and out transactions
+    /// This end point is for accessing and adding Disbursements
     /// </summary>
-    [RoutePrefix("api/inventory")]
-    public class InventoryController : ApiController
+    [RoutePrefix("api/disbursements")]
+    public class DisbursementController : ApiController
     {
-        IInventoryTransactionRepository repo;
+        IDisbursementRepository repo = new RepositoryFactory().DisbursementRepository();
         TransactionLogger transactionLogger;
-        string errMsg = "";
+        string errMsg;
 
-        public InventoryController()
+        public DisbursementController()
         {
-            repo = new RepositoryFactory().InventoryTransactionRepository();
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
             transactionLogger = new TransactionLogger();
         }
 
         /// <summary>
-        /// Get all inventory transaction filtered by inventory type(i.e. inventory in or inventory out)
+        /// Gets all disbursement documents
         /// </summary>
-        /// <param name="invType"></param>
-        /// <returns>List of inventory transactions</returns>
-        [Route("get-inventory-transactions")]
+        /// <returns>List of disbursement document</returns>
+        [Route("get-disbursements")]
         [HttpGet]
-        public async Task<IList<oInventoryTransaction>> GetInventoryTransactions(InventoryType invType)
+        public async Task<List<oPayment>> GetDisbursements()
         {
             try
             {
@@ -52,7 +50,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetTransactionList(null, invType);
+                return await repo.GetList(null);
             }
             catch (HttpResponseException ex)
             {
@@ -60,17 +58,14 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-
         /// <summary>
-        /// Get all inventory transaction filtered by date range and inventory type(i.e. inventory in or inventory out)
+        /// Gets disbursement document filtered by document number
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="invType"></param>
-        /// <returns>List of inventory transactions</returns>
-        [Route("get-inventory-transactions-by-date-range")]
+        /// <param name="documentNumber"></param>
+        /// <returns>Disbursement document</returns>
+        [Route("get-by-document-number")]
         [HttpGet]
-        public async Task<IList<oInventoryTransaction>> GetInventoryTransactionsByDateRange(DateTime from, DateTime to, InventoryType invType)
+        public async Task<oPayment> GetByDocumentNumber(int documentNumber)
         {
             try
             {
@@ -84,7 +79,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetTransactionByDateRange(from, to, invType);
+                return await repo.GetByDocumentNumber(documentNumber);
             }
             catch (HttpResponseException ex)
             {
@@ -93,14 +88,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Get inventory transaction filtered by document no and inventory type(i.e. inventory in or inventory out)
+        /// Gets disbursement documents filtered by card code
         /// </summary>
-        /// <param name="docNo"></param>
-        /// <param name="invType"></param>
-        /// <returns>Inventory transaction</returns>
-        [Route("get-inventory-transaction-by-docno")]
+        /// <param name="cardCode"></param>
+        /// <returns>List of disbursement document</returns>
+        [Route("get-by-cardcode")]
         [HttpGet]
-        public async Task<oInventoryTransaction> GetInventoryTransactionByDocNo(int docNo, InventoryType invType)
+        public async Task<List<oPayment>> GetByCardCode(string cardCode)
         {
             try
             {
@@ -114,7 +108,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetTransactionByDocNo(docNo, invType);
+                return await repo.GetByCardCode(cardCode);
             }
             catch (HttpResponseException ex)
             {
@@ -123,20 +117,49 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Adds new inventory transaction to SAP database.
+        /// Gets disbursement document by reference number
         /// </summary>
-        /// <param name="transaction"></param>
-        /// <returns>If successful, returns status code 200 and inventory entry return message</returns>
-        [Route("add-inventory")]
+        /// <param name="refNo"></param>
+        /// <returns>Disbursement document</returns>
+        [Route("get-by-reference-number")]
+        [HttpGet]
+        public async Task<oPayment> GetByReferenceNumber(string refNo)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetByReferenceNumber(refNo);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        /// <summary>
+        /// Adds new disbursement document to SAP database
+        /// </summary>
+        /// <param name="disbursement"></param>
+        /// <returns>Status code 200, and disbursement entry return message</returns>
+        [Route("add-disbursement")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddInventory(oInventoryTransaction transaction)
+        public async Task<IHttpActionResult> AddDisbursement(oPayment disbursement)
         {
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var t = await repo.GetTransactionByDocNo(transaction.DocNum, transaction.InventoryTransactionType);
+                var _grpo = await repo.GetByReferenceNumber(disbursement.ReferenceNo);
 
-                string validationStr = ModelValidator.ValidateModel(transaction);
+                string validationStr = ModelValidator.ValidateModel(disbursement);
 
                 if (!string.IsNullOrEmpty(validationStr))
                 {
@@ -144,56 +167,53 @@ namespace SBOClient.Controllers.SboControllers
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object property validation error";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogInventoryTransaction(transaction, false, "A", this.Request.Headers.Host, err);
+                    transactionLogger.LogDisbursementTransaction(disbursement, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                if (t != null)
+                if (_grpo != null)
                 {
-                    errMsg = string.Format("Inventory transaction document {0} already exist.", transaction.DocNum);
+                    errMsg = string.Format("Goods Receipt PO {0} already exist.", disbursement.ReferenceNo);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogInventoryTransaction(transaction, false, "A", this.Request.Headers.Host, err);
+                    transactionLogger.LogDisbursementTransaction(disbursement, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                if (repo.Add(transaction) < 0)
+                if (repo.Add(disbursement) != 0)
                 {
                     errMsg = GlobalInstance.Instance.SBOErrorMessage;
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "SBO Error";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogInventoryTransaction(transaction, false, "A", this.Request.Headers.Host, err);
+                    transactionLogger.LogDisbursementTransaction(disbursement, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogInventoryTransaction(transaction, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Inventory {0} succesful: document no.: {1}", transaction.InventoryTransactionType.ToString(), transaction.DocNum));
+                transactionLogger.LogDisbursementTransaction(disbursement, true, "A", this.Request.Headers.Host);
+                return Ok(string.Format("Disbursement {0} succesfully added.", disbursement.ReferenceNo));
             }
             catch (HttpResponseException ex)
             {

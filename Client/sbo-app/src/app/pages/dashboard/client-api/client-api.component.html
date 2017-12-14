@@ -41,8 +41,8 @@
                 <tr *ngFor="let api of APIs?.DataSource" (click)="changeModel(api)">
                   <td>{{api?.Name}}</td>
                   <td>{{api?.URL}}</td>
-                  <td>{{api?.Action}}</td>
-                  <td>{{getAbbrType(api?.SboTransactionType)}}</td>
+                  <td>{{getActionFullName(api?.Action)}}</td>
+                  <td>{{api?.SboTransactionType}}</td>
                   <td>{{api?.IsActive ? 'Yes' : 'No'}}</td>
                   <td class="td-actions text-right">
                     <button type="button" rel="tooltip" (click)="deleteApi(api?.ID)" title="Remove" class="btn btn-danger btn-simple btn-xs">
@@ -94,8 +94,8 @@
                 <label class="control-label">Action</label>
                 <select class="form-control" [(ngModel)]="Model.Action" name="Action">
                   <option value="" selected disabled hidden>Choose here</option>
-                  <option>Add</option>
-                  <option>Update</option>
+                  <option value="A">Add</option>
+                  <option value="U">Update</option>
                 </select>
               </div>
             </div>
@@ -104,7 +104,7 @@
                 <label class="control-label">SBO Model</label>
                 <select class="form-control" [(ngModel)]="Model.SboTransactionType" name="SboTransactionType">
                   <option value="" selected disabled hidden>Choose here</option>
-                  <option style="padding:5px;" value="{{val.Name}}" *ngFor="let val of TransactionType">{{val.SBOType}}</option>
+                  <option style="padding:5px;" value="{{val.SBOType}}" *ngFor="let val of TransactionType">{{val.SBOType}}</option>
                 </select>
               </div>
               <a [routerLink]="['/dashboard/sbo-api']"><small>Click here to view sbo model documentation</small></a>

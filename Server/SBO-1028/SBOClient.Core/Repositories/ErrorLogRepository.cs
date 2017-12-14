@@ -16,7 +16,7 @@ namespace SBOClient.Core.Repositories
             try
             {
                 var repo = new RepositoryFactory().CreateRepository<ErrorLog>();
-                ErrorLog _err = null;
+                ErrorLog _err = new ErrorLog();
                 _err.Message = err.Message;
                 _err.ErrorCode = err.ErrorCode;
                 _err.StackTrace = err.StackTrace;

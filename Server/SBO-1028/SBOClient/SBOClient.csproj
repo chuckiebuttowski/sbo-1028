@@ -124,6 +124,8 @@
     <Compile Include="Controllers\SboControllers\BranchController.cs" />
     <Compile Include="Controllers\SboControllers\BusinessPartnerController.cs" />
     <Compile Include="Controllers\SboControllers\BusinessPartnerGroupController.cs" />
+    <Compile Include="Controllers\SboControllers\DisbursementController.cs" />
+    <Compile Include="Controllers\SboControllers\GoodsReceiptPOController.cs" />
     <Compile Include="Controllers\SboControllers\InventoryController.cs" />
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
     <Compile Include="Controllers\SboControllers\ItemGroupController.cs" />

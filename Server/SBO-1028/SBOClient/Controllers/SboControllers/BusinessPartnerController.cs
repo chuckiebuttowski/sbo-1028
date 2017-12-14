@@ -235,7 +235,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, false, "A", err);
+                    transactionLogger.LogBPTransaction(businessPartner, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -253,7 +253,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, false, "A", err);
+                    transactionLogger.LogBPTransaction(businessPartner, false, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -271,11 +271,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, true, "A", err);
+                    transactionLogger.LogBPTransaction(businessPartner, true, "A", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogBPTransaction(businessPartner, true, "A");
+                transactionLogger.LogBPTransaction(businessPartner, true, "A", this.Request.Headers.Host);
                 return Ok(string.Format("Business partner {0} succesfully added.", businessPartner.CardCode));
             }
             catch (HttpResponseException ex)
@@ -314,7 +314,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -332,7 +332,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -350,11 +350,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     });
 
-                    transactionLogger.LogBPTransaction(businessPartner, false, "U", err);
+                    transactionLogger.LogBPTransaction(businessPartner, false, "U", this.Request.Headers.Host, err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogBPTransaction(businessPartner, true, "U");
+                transactionLogger.LogBPTransaction(businessPartner, true, "U", this.Request.Headers.Host);
                 return Ok(string.Format("Business partner {0} succesfully added.", businessPartner.CardCode));
             }
             catch (HttpResponseException ex)

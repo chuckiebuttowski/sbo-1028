@@ -52,6 +52,18 @@ export class ClientApiComponent implements OnInit {
     return this.TransactionType.filter(x => x["Name"] == type)[0]["SBOType"];
   }
 
+  getActionFullName(action:string) :string{
+    var actionFullName;
+    if(action == '' || action == undefined){
+      return '';
+    }
+
+    if(action == 'A') actionFullName = 'Add';
+    else if(action == 'U') actionFullName = 'Update';
+
+    return actionFullName;
+  }
+
   onAddNewParam() {
     this.Model.Params.push(this.NewParameter);
     this.NewParameter = new APIParameter();

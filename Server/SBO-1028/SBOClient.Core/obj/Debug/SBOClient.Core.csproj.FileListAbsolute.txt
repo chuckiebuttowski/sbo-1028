@@ -31,3 +31,20 @@ E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\De
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
 E:\programming-files\GIT Projects\SBO-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClientAPIEntity.resources
 E:\CLIENTS\RD\sbo.api\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClientAPIEntity.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll.config
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.dll
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\SBOClient.Core.pdb
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.dll
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.dll
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.xml
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\bin\Debug\EntityFramework.SqlServer.xml
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.Initial.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.AddedTransactionLogginEntities.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.AddedClientAPIEntities.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClietAPIModel.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.Migrations.UpdateClientAPIEntity.resources
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.GenerateResource.Cache
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
+G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
