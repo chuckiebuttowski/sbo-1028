@@ -124,7 +124,7 @@ namespace SBOClient.Controllers
 
             foreach (var fld in fields)
             {
-                list.Add(new { FieldName = fld.GetType().GetProperty("FieldName")?.GetValue(fld, null), Type = fld.GetType().GetProperty("Type")?.GetValue(fld, null), IsRequired = fld.GetType().GetProperty("IsRequired")?.GetValue(fld, null), FieldLength = fld.GetType().GetProperty("FieldLength")?.GetValue(fld, null) });
+                list.Add(new { FieldName = fld.GetType().GetProperty("FieldName")?.GetValue(fld, null), Type = fld.GetType().GetProperty("Type")?.GetValue(fld, null), IsRequired = fld.GetType().GetProperty("IsRequired")?.GetValue(fld, null), IsReadOnly = fld.GetType().GetProperty("IsReadOnly")?.GetValue(fld, null), FieldLength = fld.GetType().GetProperty("FieldLength")?.GetValue(fld, null) });
             }
 
             return list;

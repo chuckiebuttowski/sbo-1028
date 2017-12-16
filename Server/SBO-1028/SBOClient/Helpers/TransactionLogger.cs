@@ -175,13 +175,13 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogGoodsReceiptPOTransaction(oGoodsReceiptPO obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
+        public void LogGoodsReceiptTransaction(oGoodsReceipt obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {
                 log.TransactionNo = obj.DocNo.ToString();
                 log.Origin = origin;
-                log.Type = TransactionLog.SBOType.GRPO;
+                log.Type = TransactionLog.SBOType.GR;
                 log.LogDate = DateTime.Now;
                 log.IsPosted = isPosted;
 
@@ -217,8 +217,8 @@ namespace SBOClient.Helpers
 
                 log.RawData = rawData;
                 log.Action = action;
-                log.CreatedBy = obj.CreatedBy;
-                log.CreatedOn = obj.CreateDate;
+                //log.CreatedBy = obj.CreatedBy;
+                //log.CreatedOn = obj.CreateDate;
                 repo.AddOrUpdate(log);
             }
             catch (Exception ex)

@@ -65,8 +65,9 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="sbo.fx">
-      <HintPath>C:\Users\CHUCKIE\Documents\Visual Studio 2017\Projects\Libraries\sbo.fx\sbo.fx\bin\Debug\sbo.fx.dll</HintPath>
+    <Reference Include="sbo.fx, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Ref_Dlls\sbo.fx.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
@@ -110,7 +111,9 @@
     <Content Include="Ref_Dlls\Dapper.dll" />
     <Content Include="Ref_Dlls\Interop.SAPbobsCOM.dll" />
     <Content Include="Ref_Dlls\sbo.fx.dll" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthHandler.cs" />
@@ -124,9 +127,7 @@
     <Compile Include="Controllers\SboControllers\BranchController.cs" />
     <Compile Include="Controllers\SboControllers\BusinessPartnerController.cs" />
     <Compile Include="Controllers\SboControllers\BusinessPartnerGroupController.cs" />
-    <Compile Include="Controllers\SboControllers\DisbursementController.cs" />
-    <Compile Include="Controllers\SboControllers\GoodsReceiptPOController.cs" />
-    <Compile Include="Controllers\SboControllers\InventoryController.cs" />
+    <Compile Include="Controllers\SboControllers\GoodsReceiptController.cs" />
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
     <Compile Include="Controllers\SboControllers\ItemGroupController.cs" />
     <Compile Include="Controllers\SboControllers\JournalController.cs" />

@@ -15,28 +15,28 @@ using System.Web.Http;
 namespace SBOClient.Controllers.SboControllers
 {
     /// <summary>
-    /// This end point is for accessing and adding GRPOs
+    /// This end point is for accessing and adding Goods Receipts
     /// </summary>
-    [RoutePrefix("api/goodsreceiptpos")]
-    public class GoodsReceiptPOController : ApiController
+    [RoutePrefix("api/goodsreceipt")]
+    public class GoodsReceiptController : ApiController
     {
-        IGoodsReceiptPORepository repo = new RepositoryFactory().GooodsReceiptPORepository();
+        IGoodsReceiptRepository repo = new RepositoryFactory().GoodsReceiptRepository();
         TransactionLogger transactionLogger;
         string errMsg;
 
-        public GoodsReceiptPOController()
+        public GoodsReceiptController()
         {
             repo.InitRepository(GlobalInstance.Instance.SboComObject, GlobalInstance.Instance.SqlObject);
             transactionLogger = new TransactionLogger();
         }
 
         /// <summary>
-        /// Gets all GRPOs with serial numbers
+        /// Gets all Goods Receipts with serial numbers
         /// </summary>
-        /// <returns>List of GRPOs</returns>
-        [Route("get-grpos")]
+        /// <returns>List of Goods Receipts</returns>
+        [Route("get-goods-receipts")]
         [HttpGet]
-        public async Task<IList<oGoodsReceiptPO>> GetGRPOS()
+        public async Task<IList<oGoodsReceipt>> GetGRPOS()
         {
             try
             {
@@ -59,43 +59,14 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets all GRPOs filtered by card code
-        /// </summary>
-        /// <param name="cardCode"></param>
-        /// <returns>List of GRPOs</returns>
-        [Route("get-by-cardcode")]
-        [HttpGet]
-        public async Task<IList<oGoodsReceiptPO>> GetByCardCode(string cardCode)
-        {
-            try
-            {
-                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
-                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
-                {
-                    errMsg = "Unable to connect to server.";
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "No Server Connection";
-                    throw new HttpResponseException(resp);
-                }
-
-                return await repo.GetByCardCode(cardCode);
-            }
-            catch (HttpResponseException ex)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-            }
-        }
-
-        /// <summary>
-        /// Gets all GRPOs filtered by date range
+        /// Gets all Goods Receipts filtered by date range
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns>List of GRPOs</returns>
+        /// <returns>List of Goods Receipts</returns>
         [Route("get-by-date-range")]
         [HttpGet]
-        public async Task<IList<oGoodsReceiptPO>> GetByDateRange(DateTime from, DateTime to)
+        public async Task<IList<oGoodsReceipt>> GetByDateRange(DateTime from, DateTime to)
         {
             try
             {
@@ -118,13 +89,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets GRPO filtered by document number
+        /// Gets Goods Receipt filtered by document number
         /// </summary>
         /// <param name="docNo"></param>
-        /// <returns>GRPO document</returns>
+        /// <returns>Goods Receipt document</returns>
         [Route("get-by-doc-num")]
         [HttpGet]
-        public async Task<oGoodsReceiptPO> GetByDocumentNumber(int docNo)
+        public async Task<oGoodsReceipt> GetByDocumentNumber(int docNo)
         {
             try
             {
@@ -147,13 +118,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets GRPO filtered by reference no
+        /// Gets Goods Receipt filtered by reference no
         /// </summary>
         /// <param name="refNo"></param>
-        /// <returns>GRPO document</returns>
+        /// <returns>Goods Receipt document</returns>
         [Route("get-by-ref-num")]
         [HttpGet]
-        public async Task<oGoodsReceiptPO> GetByReferenceNumber(string refNo)
+        public async Task<oGoodsReceipt> GetByReferenceNumber(string refNo)
         {
             try
             {
@@ -167,7 +138,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByReferenceNumber(refNo);
+                return await repo.GetByReferenceNo(refNo);
             }
             catch (HttpResponseException ex)
             {
@@ -176,20 +147,20 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Adds new GRPO to SAP database
+        /// Adds new Goods Receipt to SAP database
         /// </summary>
-        /// <param name="grpo"></param>
-        /// <returns>Status code 200, and GRPO entry return message</returns>
+        /// <param name="goodsReceipt"></param>
+        /// <returns>Status code 200, and Goods Receipt entry return message</returns>
         [Route("add-grpo")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddGRPO(oGoodsReceiptPO grpo)
+        public async Task<IHttpActionResult> AddGRPO(oGoodsReceipt goodsReceipt)
         {
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var _grpo = await repo.GetByReferenceNumber(grpo.ReferenceNo);
+                var _grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
 
-                string validationStr = ModelValidator.ValidateModel(grpo);
+                string validationStr = ModelValidator.ValidateModel(goodsReceipt);
 
                 if (!string.IsNullOrEmpty(validationStr))
                 {
@@ -204,13 +175,13 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
                 if (_grpo != null)
                 {
-                    errMsg = string.Format("Goods Receipt PO {0} already exist.", grpo.ReferenceNo);
+                    errMsg = string.Format("Goods Receipt PO {0} already exist.", goodsReceipt.ReferenceNo);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
@@ -221,11 +192,11 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                if (repo.Add(grpo) != 0)
+                if (repo.Add(goodsReceipt) != 0)
                 {
                     errMsg = GlobalInstance.Instance.SBOErrorMessage;
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
@@ -238,12 +209,12 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptPOTransaction(grpo, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogGoodsReceiptPOTransaction(grpo, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Goods Receipt PO {0} succesfully added.", grpo.ReferenceNo));
+                transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, true, "A", this.Request.Headers.Host);
+                return Ok(string.Format("Goods Receipt PO {0} succesfully added.", goodsReceipt.ReferenceNo));
             }
             catch (HttpResponseException ex)
             {

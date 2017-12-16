@@ -270,22 +270,22 @@ namespace SBOClient.Controllers.SboControllers
             switch (callSig.CallObjCode)
             {
                 case "JE"://Journal Entry
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "JE" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "JE" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "GI"://Goods Issue
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GI" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "GI" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "GR"://Goods Receipt
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GR" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "GR" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "ITM"://item
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "ITM" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "ITM" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "BP"://Business Partner
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "BP" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "BP" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
                 case "GL"://Gl Account
-                    clientApi = repo.Get(x => x.Action == callSig.Action && x.SboTransactionType == "GL" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
+                    clientApi = repo.Get(x => x.Action.ToUpper() == callSig.Action.ToUpper() && x.SboTransactionType.ToUpper() == "GL" && x.ValueType == (PostDataValueType)(callSig.ValueType == "S" ? 0 : 1)).Include("Params").FirstOrDefault();
                     break;
             }
 
