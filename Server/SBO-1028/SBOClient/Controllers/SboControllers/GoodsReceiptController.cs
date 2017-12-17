@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
@@ -151,14 +152,15 @@ namespace SBOClient.Controllers.SboControllers
         /// </summary>
         /// <param name="goodsReceipt"></param>
         /// <returns>Status code 200, and Goods Receipt entry return message</returns>
-        [Route("add-grpo")]
+        [Route("add-goods-receipt")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddGRPO(oGoodsReceipt goodsReceipt)
+        public async Task<object> AddGR(oGoodsReceipt goodsReceipt)
         {
             try
             {
+                oGoodsReceipt _grpo = null;
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var _grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
+                if (goodsReceipt.ReferenceNo != null) _grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
 
                 string validationStr = ModelValidator.ValidateModel(goodsReceipt);
 
@@ -175,13 +177,13 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     throw new HttpResponseException(resp);
                 }
 
                 if (_grpo != null)
                 {
-                    errMsg = string.Format("Goods Receipt PO {0} already exist.", goodsReceipt.ReferenceNo);
+                    errMsg = string.Format("Goods Receipt {0} already exist.", goodsReceipt.ReferenceNo);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
@@ -192,7 +194,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     throw new HttpResponseException(resp);
                 }
 
@@ -209,16 +211,17 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Goods Receipt PO {0} succesfully added.", goodsReceipt.ReferenceNo));
+                transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, true, "A", HttpContext.Current.Request.UserHostAddress);
+                var grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
+                return new { SAPGRDocumentNumber = grpo.DocNo, ReturnMessage = $"Goods receipt {goodsReceipt.ReferenceNo} successfully added." };
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
             }
         }
     }

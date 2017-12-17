@@ -131,7 +131,6 @@
     <Compile Include="Controllers\SboControllers\ItemController.cs" />
     <Compile Include="Controllers\SboControllers\ItemGroupController.cs" />
     <Compile Include="Controllers\SboControllers\JournalController.cs" />
-    <Compile Include="Controllers\SboControllers\LedgerAccountController.cs" />
     <Compile Include="Controllers\SboControllers\ProjectController.cs" />
     <Compile Include="Controllers\SboControllers\SeriesController.cs" />
     <Compile Include="Controllers\SboControllers\SQLDomainBrokerController.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Models\APICallSignature.cs" />
     <Compile Include="Models\APIControllerDocumentation.cs" />
     <Compile Include="Models\APIParameterDocumentation.cs" />
+    <Compile Include="Models\APIRequestResponse.cs" />
     <Compile Include="Models\APIResponseDocumentation.cs" />
     <Compile Include="Models\IModelDocumentationProvider.cs" />
     <Compile Include="Models\XmlDocumentationProvider.cs" />

@@ -11,12 +11,15 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SBOClient.Controllers.SboControllers
 {
+
     /// <summary>
     /// This end point is for accessing and adding business partners
     /// </summary>
+    [ApiExplorerSettings(IgnoreApi = true)]
     [RoutePrefix("api/business-partners")]
     [AllowAnonymous]
     public class BusinessPartnerController : ApiController

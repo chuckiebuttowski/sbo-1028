@@ -10,10 +10,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace SBOClient.Controllers.SboControllers
 {
+
     /// <summary>
     /// This end point is for accessing and adding items.
     /// </summary>
@@ -88,13 +90,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets all items filtered by series
+        /// Gets all item filtered by RD item code
         /// </summary>
-        /// <param name="series"></param>
+        /// <param name="rdItemCode"></param>
         /// <returns>List of items</returns>
-        [Route("get-items-by-series")]
+        [Route("get-items-by-rd-itemcode")]
         [HttpGet]
-        public async Task<IList<oItem>> GetItemsBySeries(int series)
+        public async Task<oItem> GetItemsByRDItemCode(string rdItemCode)
         {
             try
             {
@@ -108,7 +110,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByItemSeries(series);
+                return await repo.GetByRDItemCode(rdItemCode);
             }
             catch (HttpResponseException ex)
             {
@@ -182,75 +184,67 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>If successful, returns status code 200 and item entry return message</returns>
         [Route("add-item")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddItem(oItem item)
+        public async Task<object> AddItem(oItem item)
         {
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var itm = await repo.GetItemByItemCode(item.ItemCode);
+                var list = await repo.GetList(null);
+                var itm = list.FirstOrDefault(x => x.RDItemCode == item.RDItemCode);
 
                 string validationStr = ModelValidator.ValidateModel(item);
 
                 if (!string.IsNullOrEmpty(validationStr))
                 {
                     errMsg = string.Format(validationStr);
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "Object property validation error";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
-                    throw new HttpResponseException(resp);
+                    transactionLogger.LogItemTransaction(item, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                    throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.Conflict, Content = new StringContent(errMsg) });
                 }
 
                 if (itm != null)
                 {
-                    errMsg = string.Format("Item {0} - {2} already exist.", item.ItemCode, item.Description);
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "Object already exist.";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    errMsg = string.Format("Item {0} - {1} already exist.", itm.RDItemCode, itm.Description);
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
-                    throw new HttpResponseException(resp);
+                    transactionLogger.LogItemTransaction(item, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                    throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.Conflict, Content = new StringContent(errMsg) });
                 }
 
                 if (repo.Add(item) < 0)
                 {
                     errMsg = GlobalInstance.Instance.SBOErrorMessage;
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "SBO Error";
-                    var err = ErrorLogger.Log(new ErrorLog
-                    {
-                        ErrorCode = (int)HttpStatusCode.Conflict,
-                        Message = errMsg,
-                        StackTrace = Environment.StackTrace
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
 
-                    });
+                    var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogItemTransaction(item, false, "A", this.Request.Headers.Host, err);
-                    throw new HttpResponseException(resp);
+                    transactionLogger.LogItemTransaction(item, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                    throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.Conflict, Content = new StringContent(errMsg) });
                 }
 
-                transactionLogger.LogItemTransaction(item, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Item {0} - {2} successfully added.", item.ItemCode, item.Description));
+                transactionLogger.LogItemTransaction(item, true, "A", HttpContext.Current.Request.UserHostAddress);
+                var _itm = await repo.GetByRDItemCode(item.RDItemCode);
+
+                return new { SAPItemCode = _itm.ItemCode, ReturnMessage = $"Item {item.RDItemCode} - {item.Description} successfully added." };
+
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
             }
         }
 
@@ -261,7 +255,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>If successful, returns status code 200 and item entry return message</returns>
         [Route("update-item")]
         [HttpPut]
-        public async Task<IHttpActionResult> UpdateItem(oItem item)
+        public async Task<object> UpdateItem(oItem item)
         {
             try
             {
@@ -290,7 +284,7 @@ namespace SBOClient.Controllers.SboControllers
 
                 if (itm == null)
                 {
-                    errMsg = string.Format("Item {0} - {2} does not exist.", item.ItemCode, item.Description);
+                    errMsg = string.Format("Item {0} - {1} does not exist.", item.ItemCode, item.Description);
                     var resp = new HttpResponseMessage(HttpStatusCode.NotFound);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object not found.";
@@ -325,11 +319,11 @@ namespace SBOClient.Controllers.SboControllers
                 }
 
                 transactionLogger.LogItemTransaction(item, true, "U", this.Request.Headers.Host);
-                return Ok(string.Format("Item {0} - {2} successfully updated.", item.ItemCode, item.Description));
+                return new { SAPItemCode = item.ItemCode, ReturnMessage = $"Item {item.ItemCode} - {item.Description} successfully added." };
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
             }
         }
 

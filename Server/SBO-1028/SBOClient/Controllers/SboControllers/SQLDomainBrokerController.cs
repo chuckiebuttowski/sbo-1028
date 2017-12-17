@@ -15,6 +15,7 @@ using static SBOClient.Core.DAL.Entities.ClientAPI;
 using SBOClient.Helpers;
 using sbo.fx.Models;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace SBOClient.Controllers.SboControllers
 {
@@ -79,30 +80,30 @@ namespace SBOClient.Controllers.SboControllers
                 {
                     case "JE"://JE
                         response = await client.PostAsJsonAsync(uri, (oJournal)paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogJournalTransaction((oJournal)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         else throw new HttpResponseException(response);
                         break;
                     case "AP INV"://AP
                     case "AR INV"://AR
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogInvoiceTransaction((oInvoice)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         break;
                     case "GI"://GI
                     case "GR"://GR
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogInventoryTransaction((oInventoryTransaction)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogInventoryTransaction((oInventoryTransaction)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         break;
                     case "ITM"://ITM
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogItemTransaction((oItem)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogItemTransaction((oItem)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         break;
                     case "BP"://BP
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogBPTransaction((oBusinessPartner)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogBPTransaction((oBusinessPartner)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         break;
                     case "GL"://GL
                         response = await client.PostAsJsonAsync(uri, paramObj);
-                        if (response.IsSuccessStatusCode) logger.LogGlTransaction((oGlAccount)paramObj, true, "A", this.Request.Headers.Host);
+                        if (response.IsSuccessStatusCode) logger.LogGlTransaction((oGlAccount)paramObj, true, "A", HttpContext.Current.Request.UserHostAddress);
                         break;
                 }
             }
@@ -121,7 +122,7 @@ namespace SBOClient.Controllers.SboControllers
 
                         errLog = ErrorLogger.Log(err);
 
-                        logger.LogJournalTransaction((oJournal)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogJournalTransaction((oJournal)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                     case "AR INV":
                     case "AP INV":
@@ -134,7 +135,7 @@ namespace SBOClient.Controllers.SboControllers
 
                         errLog = ErrorLogger.Log(err);
 
-                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogInvoiceTransaction((oInvoice)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                     case "GI"://GI
                     case "GR"://GR
@@ -146,7 +147,7 @@ namespace SBOClient.Controllers.SboControllers
                         };
 
                         errLog = ErrorLogger.Log(err);
-                        logger.LogInventoryTransaction((oInventoryTransaction)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogInventoryTransaction((oInventoryTransaction)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                     case "ITM"://ITM
                         err = new ErrorLog
@@ -157,7 +158,7 @@ namespace SBOClient.Controllers.SboControllers
                         };
 
                         errLog = ErrorLogger.Log(err);
-                        logger.LogItemTransaction((oItem)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogItemTransaction((oItem)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                     case "BP"://BP
                         err = new ErrorLog
@@ -168,7 +169,7 @@ namespace SBOClient.Controllers.SboControllers
                         };
 
                         errLog = ErrorLogger.Log(err);
-                        logger.LogBPTransaction((oBusinessPartner)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogBPTransaction((oBusinessPartner)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                     case "GL"://GL
                         err = new ErrorLog
@@ -179,7 +180,7 @@ namespace SBOClient.Controllers.SboControllers
                         };
 
                         errLog = ErrorLogger.Log(err);
-                        logger.LogGlTransaction((oGlAccount)paramObj, false, "A", this.Request.Headers.Host, errLog);
+                        logger.LogGlTransaction((oGlAccount)paramObj, false, "A", HttpContext.Current.Request.UserHostAddress, errLog);
                         break;
                 }
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -201,7 +202,7 @@ namespace SBOClient.Controllers.SboControllers
                             if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
                             if (GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State != System.Data.ConnectionState.Closed)
                             {
-                                obj = await journalRepo.GetByTransId(int.Parse(callSig.CallKey));
+                                obj = await journalRepo.GetByTransIdForRDPosting(int.Parse(callSig.CallKey));
                             }
                             break;
                         case "GI":

@@ -63,13 +63,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets all journal entries filtered by project code.
+        /// Gets all journal entries filtered by branch code.
         /// </summary>
-        /// <param name="projectCode"></param>
+        /// <param name="branchCode"></param>
         /// <returns>List of journal entries</returns>
-        [Route("get-journals-by-projectcode")]
+        [Route("get-journals-by-branchcode")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournasByProjectCode(string projectCode)
+        public async Task<IList<oJournal>> GetJournasByBranchCode(string branchCode)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByProject(projectCode);
+                return await repo.GetByBranch(branchCode);
             }
             catch (HttpResponseException ex)
             {
@@ -100,7 +100,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>List of journal entries</returns>
         [Route("get-journals-by-date-range")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournasByProjectCode(DateTime from, DateTime to)
+        public async Task<IList<oJournal>> GetJournasByDateRange(DateTime from, DateTime to)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>Status code 200, and journal entry return message</returns>
         [Route("add-journal")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddJournal(oJournal jrnal)
+        public async Task<object> AddJournal(oJournal jrnal)
         {
 
             HttpResponseMessage _resp = new HttpResponseMessage();
@@ -166,7 +166,7 @@ namespace SBOClient.Controllers.SboControllers
             try
             {
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                var j = await repo.GetByTransId(jrnal.TransId);
+                var j = await repo.GetByRDTransId(jrnal.TransactionId);
 
                 string validationStr = ModelValidator.ValidateModel(jrnal);
 
@@ -184,14 +184,14 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     _resp = resp;
                     throw new HttpResponseException(resp);
                 }
 
                 if (j != null)
                 {
-                    errMsg = string.Format("Journal {0} already exist.", jrnal.TransId);
+                    errMsg = string.Format("Journal {0} already exist.", jrnal.TransactionId);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
@@ -203,7 +203,7 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     _resp = resp;
                     throw new HttpResponseException(resp);
                 }
@@ -221,17 +221,18 @@ namespace SBOClient.Controllers.SboControllers
 
                     var err = ErrorLogger.Log(_err);
 
-                    transactionLogger.LogJournalTransaction(jrnal, false, "A", this.Request.Headers.Host, _err);
+                    transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
                     _resp = resp;
                     throw new HttpResponseException(resp);
                 }
 
-                transactionLogger.LogJournalTransaction(jrnal, true, "A", this.Request.Headers.Host);
-                return Ok(string.Format("Journal {0} succesfully added.", jrnal.TransId));
+                transactionLogger.LogJournalTransaction(jrnal, true, "A", HttpContext.Current.Request.UserHostAddress);
+                var _j = await repo.GetByRDTransId(jrnal.TransactionId);
+                return new { SAPTransactionId = _j.TransId, ReturnMessage = $"Journal {jrnal.TransactionId} successfully added." };
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(_resp);
+                throw new HttpResponseException(ex.Response);
             }
         }
     }
