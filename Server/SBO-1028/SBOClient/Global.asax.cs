@@ -39,6 +39,9 @@ namespace SBOClient
                 GlobalInstance.Instance.DBPword = serverConfig.Password;
                 GlobalInstance.Instance.UName = ConfigurationManager.AppSettings["uid"];
                 GlobalInstance.Instance.Pword = ConfigurationManager.AppSettings["pword"];
+                GlobalInstance.Instance.DefaultWarehouse = ConfigurationManager.AppSettings["DefaultWarehouse"];
+                GlobalInstance.Instance.DefaultBinLocation = Int32.Parse(ConfigurationManager.AppSettings["DefaultBin"]);
+                GlobalInstance.Instance.DefaultBranch = ConfigurationManager.AppSettings["DefaultBranch"];
 
                 GlobalInstance.Instance.InitializeSboComObject();
                 GlobalInstance.Instance.InitializeSqlObject();
