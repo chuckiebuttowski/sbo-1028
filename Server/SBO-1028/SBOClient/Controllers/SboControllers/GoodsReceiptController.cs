@@ -119,13 +119,13 @@ namespace SBOClient.Controllers.SboControllers
         }
 
         /// <summary>
-        /// Gets Goods Receipt filtered by reference no
+        /// Gets Goods Receipt filtered by batch no
         /// </summary>
-        /// <param name="refNo"></param>
+        /// <param name="batchNo"></param>
         /// <returns>Goods Receipt document</returns>
-        [Route("get-by-ref-num")]
+        [Route("get-by-batch-no")]
         [HttpGet]
-        public async Task<oGoodsReceipt> GetByReferenceNumber(string refNo)
+        public async Task<oGoodsReceipt> GetByBatchNumber(string batchNo)
         {
             try
             {
@@ -139,7 +139,36 @@ namespace SBOClient.Controllers.SboControllers
                     throw new HttpResponseException(resp);
                 }
 
-                return await repo.GetByReferenceNo(refNo);
+                return await repo.GetByBatchNo(batchNo);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        /// <summary>
+        /// Gets Goods Receipts filtered by PO No.
+        /// </summary>
+        /// <param name="poNo"></param>
+        /// <returns>List of Goods Receipts</returns>
+        [Route("get-by-po-no")]
+        [HttpGet]
+        public async Task<List<oGoodsReceipt>> GetByPONumber(string poNo)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetByPONumber(poNo);
             }
             catch (HttpResponseException ex)
             {
@@ -151,7 +180,7 @@ namespace SBOClient.Controllers.SboControllers
         /// Adds new Goods Receipt to SAP database
         /// </summary>
         /// <param name="goodsReceipt"></param>
-        /// <returns>Status code 200, and Goods Receipt entry return message</returns>
+        /// <returns>Status code 200, and Goods Receipt entry return object</returns>
         [Route("add-goods-receipt")]
         [HttpPost]
         public async Task<object> AddGR(oGoodsReceipt goodsReceipt)
@@ -160,7 +189,7 @@ namespace SBOClient.Controllers.SboControllers
             {
                 oGoodsReceipt _grpo = null;
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
-                if (goodsReceipt.ReferenceNo != null) _grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
+                if (goodsReceipt.BatchNumber != null) _grpo = await repo.GetByBatchNo(goodsReceipt.BatchNumber);
 
                 string validationStr = ModelValidator.ValidateModel(goodsReceipt);
 
@@ -183,7 +212,7 @@ namespace SBOClient.Controllers.SboControllers
 
                 if (_grpo != null)
                 {
-                    errMsg = string.Format("Goods Receipt {0} already exist.", goodsReceipt.ReferenceNo);
+                    errMsg = string.Format("Goods Receipt {0} already exist.", goodsReceipt.BatchNumber);
                     var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
                     resp.Content = new StringContent(errMsg);
                     resp.ReasonPhrase = "Object already exist.";
@@ -216,8 +245,8 @@ namespace SBOClient.Controllers.SboControllers
                 }
 
                 transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, true, "A", HttpContext.Current.Request.UserHostAddress);
-                var grpo = await repo.GetByReferenceNo(goodsReceipt.ReferenceNo);
-                return new { SAPGRDocumentNumber = grpo.DocNo, ReturnMessage = $"Goods receipt {goodsReceipt.ReferenceNo} successfully added." };
+                var grpo = await repo.GetByBatchNo(goodsReceipt.BatchNumber);
+                return new { SAPGRDocumentNumber = grpo.DocNo, ReturnMessage = $"Goods receipt {goodsReceipt.BatchNumber} successfully added." };
             }
             catch (HttpResponseException ex)
             {
