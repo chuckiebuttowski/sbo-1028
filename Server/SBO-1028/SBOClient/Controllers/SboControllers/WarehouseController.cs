@@ -18,7 +18,7 @@ namespace SBOClient.Controllers.SboControllers
     [RoutePrefix("api/warehouses")]
     public class WarehouseController : ApiController
     {
-        IRepository<oWarehouse> repo = new RepositoryFactory().WarehouseRepository();
+        IWarehouseRepository repo = new RepositoryFactory().WarehouseRepository();
         string errMsg = "";
 
         public WarehouseController()
@@ -81,7 +81,64 @@ namespace SBOClient.Controllers.SboControllers
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
+            }
+        }
+
+        /// <summary>
+        /// Gets a bin location filtered by bin code
+        /// </summary>
+        /// <param name="binCode"></param>
+        /// <returns>Bin Location</returns>
+        [Route("get-bin-location")]
+        [HttpGet]
+        public async Task<oBin> GetBinLocation(int binCode)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetBinLocation(binCode);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
+
+        /// <summary>
+        /// Gets list of bin locations
+        /// </summary>
+        /// <returns>List of Bin Locations</returns>
+        [Route("get-bin-locations")]
+        [HttpGet]
+        public async Task<List<oBin>> GetBinLocations()
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetBinLocations(null);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
             }
         }
     }

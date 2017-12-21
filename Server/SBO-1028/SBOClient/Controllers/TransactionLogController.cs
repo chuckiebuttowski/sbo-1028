@@ -99,7 +99,7 @@ namespace SBOClient.Controllers
         {
             var repo = new RepositoryFactory().CreateTransactionLogRepository();
 
-            return repo.GetAll();
+            return repo.GetAll().OrderByDescending(x=> x.ID);
         }
     }
 }

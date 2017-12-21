@@ -47,4 +47,3 @@ G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOC
 G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csproj.CoreCompileInputs.cache
 G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.dll
 G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.pdb
-G:\Applications\RD\forked\sbo-1028\Server\SBO-1028\SBOClient.Core\obj\Debug\SBOClient.Core.csprojResolveAssemblyReference.cache
