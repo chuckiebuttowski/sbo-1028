@@ -188,6 +188,28 @@ namespace SBOClient.Controllers.SboControllers
             try
             {
                 oGoodsReceipt _grpo = null;
+
+                string isOldItem = goodsReceipt.GoodsReceiptLines.Select(x => x.IsOldItem).First();
+                if (isOldItem == null)
+                {
+                    errMsg = string.Format("Item classification cannot be null. (Is Old Item)", goodsReceipt.BatchNumber);
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "Field cannot be null";
+                    ErrorLog _err = new ErrorLog();
+                    _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                    _err.Message = errMsg;
+                    _err.StackTrace = Environment.StackTrace;
+
+                    var err = ErrorLogger.Log(_err);
+
+                    transactionLogger.LogGoodsReceiptTransaction(goodsReceipt, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                    throw new HttpResponseException(resp);
+                }
+
+
+                goodsReceipt.BatchNumber = isOldItem.ToUpper() == "Y" ? $"R-{goodsReceipt.BatchNumber}" : $"N-{goodsReceipt.BatchNumber}";
+
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
                 if (goodsReceipt.BatchNumber != null) _grpo = await repo.GetByBatchNo(goodsReceipt.BatchNumber);
 

@@ -4,6 +4,7 @@ using SBOClient.Core.DAL.Entities;
 using SBOClient.Core.Factories;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Web;
@@ -42,6 +43,18 @@ namespace SBOClient
                 GlobalInstance.Instance.DefaultWarehouse = ConfigurationManager.AppSettings["DefaultWarehouse"];
                 GlobalInstance.Instance.DefaultBinLocation = Int32.Parse(ConfigurationManager.AppSettings["DefaultBin"]);
                 GlobalInstance.Instance.DefaultBranch = ConfigurationManager.AppSettings["DefaultBranch"];
+                GlobalInstance.Instance.DefaultItemSeries = int.Parse(ConfigurationManager.AppSettings["DefaultItemSeries"]);
+                GlobalInstance.Instance.ItemGroups = new Dictionary<string, int>();
+                NameValueCollection grps = new NameValueCollection();
+                grps = (NameValueCollection)ConfigurationManager.GetSection("ItemGroups");
+
+                foreach(string key in grps.AllKeys)
+                {
+                    string val = grps[key];
+                    GlobalInstance.Instance.ItemGroups.Add(key, int.Parse(val));
+                }
+                
+
 
                 GlobalInstance.Instance.InitializeSboComObject();
                 GlobalInstance.Instance.InitializeSqlObject();
