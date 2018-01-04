@@ -188,6 +188,8 @@ namespace SBOClient.Controllers.SboControllers
         {
             try
             {
+                if (goodsReceipt == null) return new { SAPGRDocumentNumber = -1, ReturnMessage = $"Object cannot be null!!" }; ;
+
                 oGoodsReceipt _grpo = null;
 
                 string isOldItem = goodsReceipt.GoodsReceiptLines.Select(x => x.IsOldItem).First();

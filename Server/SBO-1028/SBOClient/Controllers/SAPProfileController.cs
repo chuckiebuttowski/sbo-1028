@@ -46,7 +46,7 @@ namespace SBOClient.Controllers
         {
             try
             {
-                string returnStr = "Success";
+                 string returnStr = "Success";
 
                 //var repo = new RepositoryFactory().CreateConfigurationRepository();
                 //ServerConfig serverConfig = repo.Get(x => x.IsActive == true).FirstOrDefault();
