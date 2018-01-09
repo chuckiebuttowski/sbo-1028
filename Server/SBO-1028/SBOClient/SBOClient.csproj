@@ -135,6 +135,7 @@
     <Compile Include="Controllers\SboControllers\SeriesController.cs" />
     <Compile Include="Controllers\SboControllers\SQLDomainBrokerController.cs" />
     <Compile Include="Controllers\SboControllers\TaxController.cs" />
+    <Compile Include="Controllers\SboControllers\TransactionController.cs" />
     <Compile Include="Controllers\SboControllers\WarehouseController.cs" />
     <Compile Include="Controllers\TransactionLogController.cs" />
     <Compile Include="Global.asax.cs">

@@ -6,6 +6,7 @@ using SBOClient.Core.DAL.Entities;
 using SBOClient.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -209,6 +210,18 @@ namespace SBOClient.Controllers.SboControllers
 
 
                 goodsReceipt.BatchNumber = isOldItem.ToUpper() == "Y" ? $"R-{goodsReceipt.BatchNumber}" : $"N-{goodsReceipt.BatchNumber}";
+
+                if (goodsReceipt.GoodsReceiptLines.Count > 0)
+                {
+                    foreach (var l in goodsReceipt.GoodsReceiptLines)
+                    {
+                        if (l.IsOldItem.ToLower() == "y")
+                        {
+                            l.WarehouseCode = ConfigurationManager.AppSettings["DefaultRemaWarehouse"];
+                            l.BinCode = Int32.Parse(ConfigurationManager.AppSettings["DefaultRemaBin"]); ;
+                        }
+                    }
+                }
 
                 if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
                 if (goodsReceipt.BatchNumber != null) _grpo = await repo.GetByBatchNo(goodsReceipt.BatchNumber);

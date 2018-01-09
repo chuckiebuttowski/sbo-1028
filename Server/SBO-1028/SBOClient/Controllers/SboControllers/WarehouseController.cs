@@ -141,5 +141,34 @@ namespace SBOClient.Controllers.SboControllers
                 throw new HttpResponseException(ex.Response);
             }
         }
+
+        /// <summary>
+        /// Gets list of bin locations per warehouse
+        /// </summary>
+        /// <param name="warehouseCode"></param>
+        /// <returns>List of Bin Locations</returns>
+        [Route("get-bin-locations-per-warehouse")]
+        [HttpGet]
+        public async Task<List<oBin>> GetBinLocationsPerWarehouse(string warehouseCode)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetBinLocations(x=> x.WarehouseCode == warehouseCode);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
     }
 }

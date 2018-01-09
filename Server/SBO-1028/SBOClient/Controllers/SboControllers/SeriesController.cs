@@ -50,7 +50,7 @@ namespace SBOClient.Controllers.SboControllers
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
             }
         }
 

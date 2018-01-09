@@ -176,6 +176,35 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
+        /// <summary>
+        /// Get items filtered by bin location
+        /// </summary>
+        /// <param name="binCode"></param>
+        /// <returns>List of items</returns>
+        [Route("get-items-by-bin")]
+        [HttpGet]
+        public async Task<List<oItemInventory>> GetItemsByBin(int binCode)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetByBinLocation(binCode);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
 
         /// <summary>
         /// Adds new item to SAP database
