@@ -183,7 +183,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>List of items</returns>
         [Route("get-items-by-bin")]
         [HttpGet]
-        public async Task<List<oItemInventory>> GetItemsByBin(int binCode)
+        public async Task<List<oItemInventory>> GetItemsByBin(string binCode)
         {
             try
             {
@@ -201,10 +201,87 @@ namespace SBOClient.Controllers.SboControllers
             }
             catch (HttpResponseException ex)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(ex.Response);
             }
         }
 
+        /// <summary>
+        /// Get item serials filtered by date posted
+        /// </summary>
+        /// <param name="admissionDate">yyyy-mm-dd</param>
+        /// <returns>List of item serials with updated price</returns>
+        [Route("get-item-serials-with-updated-price")]
+        [HttpGet]
+        public async Task<List<oItemSerial>> GetItemSerialsWithUpdatedHOPrice(DateTime admissionDate)
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetItemSerialsWithUpdatedHOPrice(admissionDate);
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
+
+        /// <summary>
+        /// Get item serials filtered by date posted
+        /// </summary>
+        /// <returns>List of item serials</returns>
+        [Route("get-item-serials")]
+        [HttpGet]
+        public async Task<List<oItemSerial>> GetItemSerials()
+        {
+            try
+            {
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
+                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
+                {
+                    errMsg = "Unable to connect to server.";
+                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                    resp.Content = new StringContent(errMsg);
+                    resp.ReasonPhrase = "No Server Connection";
+                    throw new HttpResponseException(resp);
+                }
+
+                return await repo.GetItemSerials();
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
+
+        /// <summary>
+        /// Updates item price per serial number
+        /// </summary>
+        /// <param name="serials"></param>
+        /// <returns>Updated item serial</returns>
+        [Route("update-serial")]
+        [HttpPut]
+        public async Task<oItemSerial> UpdateSerial(oItemSerial serial)
+        {
+            try
+            {
+                if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
+                var s = repo.UpdateSerialPrice(serial);
+                return s;
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
 
         /// <summary>
         /// Adds new item to SAP database

@@ -60,7 +60,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>Branch</returns>
         [Route("get-branch")]
         [HttpGet]
-        public async Task<oBranch> GetBranch(int branchCode)
+        public async Task<oBranch> GetBranch(string branchCode)
         {
             try
             {

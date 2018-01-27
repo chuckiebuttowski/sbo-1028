@@ -201,7 +201,7 @@ namespace SBOClient.Helpers
             }
         }
 
-        public void LogDisbursementTransaction(oPayment obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
+        public void LogDisbursementTransaction(oDisbursement obj, bool isPosted, string action, string origin, ErrorLog errLog = null)
         {
             try
             {

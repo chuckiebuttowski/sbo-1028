@@ -92,7 +92,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>Bin Location</returns>
         [Route("get-bin-location")]
         [HttpGet]
-        public async Task<oBin> GetBinLocation(int binCode)
+        public async Task<oBin> GetBinLocation(string binCode)
         {
             try
             {
