@@ -127,8 +127,7 @@ namespace SBOClient.Controllers.SboControllers
             transTypes.Add(new { ID = 3, TransType = "SALES ON ACCOUNT DEBIT/CREDIT CARD" });
             transTypes.Add(new { ID = 4, TransType = "LAP COLLECTION" });
             transTypes.Add(new { ID = 5, TransType = "SALES RETURN" });
-            transTypes.Add(new { ID = 6, TransType = "TRANSMITTAL-IN" });
-            transTypes.Add(new { ID = 7, TransType = "TRANSMITTAL-OUT" });
+            transTypes.Add(new { ID = 6, TransType = "TRANSMITTAL-[Branch_Code]" });
 
             return transTypes;
         }

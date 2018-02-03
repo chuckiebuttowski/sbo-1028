@@ -217,8 +217,12 @@ namespace SBOClient.Controllers.SboControllers
                     {
                         if (l.IsOldItem.ToLower() == "y")
                         {
-                            l.WarehouseCode = ConfigurationManager.AppSettings["DefaultRemaWarehouse"];
-                            l.BinCode = Int32.Parse(ConfigurationManager.AppSettings["DefaultRemaBin"]); ;
+                            //changed for warehouse and bin selection
+                            if (l.WarehouseCode == "" || string.IsNullOrEmpty(l.WarehouseCode))
+                            {
+                                l.WarehouseCode = ConfigurationManager.AppSettings["DefaultRemaWarehouse"];
+                                l.BinCode = Int32.Parse(ConfigurationManager.AppSettings["DefaultRemaBin"]); ;
+                            }
                         }
                     }
                 }
