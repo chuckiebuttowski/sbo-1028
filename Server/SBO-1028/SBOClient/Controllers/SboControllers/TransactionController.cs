@@ -4,6 +4,8 @@ using sbo.fx.Interfaces;
 using sbo.fx.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -122,13 +124,21 @@ namespace SBOClient.Controllers.SboControllers
         {
             List<object> transTypes = new List<object>();
 
-            transTypes.Add(new { ID = 1, TransType = "CASH TRANSACTION"});
-            transTypes.Add(new { ID = 2, TransType = "SALES ON ACCOUNT LAP" });
-            transTypes.Add(new { ID = 3, TransType = "SALES ON ACCOUNT DEBIT/CREDIT CARD" });
-            transTypes.Add(new { ID = 4, TransType = "LAP COLLECTION" });
-            transTypes.Add(new { ID = 5, TransType = "SALES RETURN" });
-            transTypes.Add(new { ID = 6, TransType = "TRANSMITTAL-IN" });
-            transTypes.Add(new { ID = 7, TransType = "TRANSMITTAL-OUT" });
+            NameValueCollection tTypes = new NameValueCollection();
+            tTypes = (NameValueCollection)ConfigurationManager.GetSection("TransactionTypes");
+            foreach(string key in tTypes.AllKeys)
+            {
+                string val = tTypes[key];
+                transTypes.Add(new { ID = key, TransType = val });
+            }
+
+            //transTypes.Add(new { ID = 1, TransType = "CASH TRANSACTION"});
+            //transTypes.Add(new { ID = 2, TransType = "SALES ON ACCOUNT LAP" });
+            //transTypes.Add(new { ID = 3, TransType = "SALES ON ACCOUNT DEBIT/CREDIT CARD" });
+            //transTypes.Add(new { ID = 4, TransType = "LAP COLLECTION" });
+            //transTypes.Add(new { ID = 5, TransType = "SALES RETURN" });
+            //transTypes.Add(new { ID = 6, TransType = "TRANSMITTAL-[Branch_Code]" });//TRANSMITTAL-991
+            //transTypes.Add(new { ID = 7, TransType = "DEPOSIT" });
 
             return transTypes;
         }
