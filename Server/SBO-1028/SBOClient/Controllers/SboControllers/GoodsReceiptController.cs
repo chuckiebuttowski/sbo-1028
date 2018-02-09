@@ -38,7 +38,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>List of Goods Receipts</returns>
         [Route("get-goods-receipts")]
         [HttpGet]
-        public async Task<IList<oGoodsReceipt>> GetGRPOS()
+        public async Task<IList<oGoodsReceipt>> GetGoodsReceipt()
         {
             try
             {
@@ -217,11 +217,10 @@ namespace SBOClient.Controllers.SboControllers
                     {
                         if (l.IsOldItem.ToLower() == "y")
                         {
-                            //changed for warehouse and bin selection
                             if (l.WarehouseCode == "" || string.IsNullOrEmpty(l.WarehouseCode))
                             {
                                 l.WarehouseCode = ConfigurationManager.AppSettings["DefaultRemaWarehouse"];
-                                l.BinCode = Int32.Parse(ConfigurationManager.AppSettings["DefaultRemaBin"]); ;
+                                l.BinCode = Int32.Parse(ConfigurationManager.AppSettings["DefaultRemaBin"]);
                             }
                         }
                     }
