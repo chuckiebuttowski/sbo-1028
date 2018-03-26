@@ -62,32 +62,6 @@ namespace SBOClient.Controllers.SboControllers
             }
         }
 
-        [Route("get-journals-by-date-by-branch")]
-        [HttpGet]
-        public async Task<IList<oJournal>> GetJournalsByDateRangeAndBranch(DateTime from, DateTime to, string branchCode)
-        {
-            try
-            {
-                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed) GlobalInstance.Instance.SqlObject.Open();
-                if (GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Broken || GlobalInstance.Instance.SqlObject.State == System.Data.ConnectionState.Closed)
-                {
-                    errMsg = "Unable to connect to server.";
-                    var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
-                    resp.Content = new StringContent(errMsg);
-                    resp.ReasonPhrase = "No Server Connection";
-                    throw new HttpResponseException(resp);
-                }
-
-                return await repo.GetList(x => x.DocDate >= from && x.DocDate <= to && x.BranchCode == branchCode);
-            }
-            catch (HttpResponseException ex)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-            }
-        }
-
-
-
         /// <summary>
         /// Gets all journal entries filtered by branch code.
         /// </summary>
@@ -95,7 +69,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>List of journal entries</returns>
         [Route("get-journals-by-branchcode")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournalsByBranchCode(string branchCode)
+        public async Task<IList<oJournal>> GetJournasByBranchCode(string branchCode)
         {
             try
             {
@@ -126,7 +100,7 @@ namespace SBOClient.Controllers.SboControllers
         /// <returns>List of journal entries</returns>
         [Route("get-journals-by-date-range")]
         [HttpGet]
-        public async Task<IList<oJournal>> GetJournalsByDateRange(DateTime from, DateTime to)
+        public async Task<IList<oJournal>> GetJournasByDateRange(DateTime from, DateTime to)
         {
             try
             {
