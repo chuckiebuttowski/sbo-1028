@@ -261,5 +261,92 @@ namespace SBOClient.Controllers.SboControllers
                 throw new HttpResponseException(ex.Response);
             }
         }
+
+        public async Task<List<object>> AddMultipleJournals(List<oJournal> jrnals)
+        {
+            HttpResponseMessage _resp = new HttpResponseMessage();
+            List<object> retList = new List<object>();
+
+
+            try
+            {
+                if (!GlobalInstance.Instance.IsConnected) GlobalInstance.Instance.InitializeSboComObject();
+                oJournal j = null;
+                foreach (oJournal jrnal in jrnals)
+                {
+
+
+                    j = await repo.GetByRDTransId(jrnal.TransactionId);
+
+                    string validationStr = ModelValidator.ValidateModel(jrnal);
+
+                    if (!string.IsNullOrEmpty(validationStr))
+                    {
+                        errMsg = string.Format(validationStr);
+                        var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        resp.Content = new StringContent(errMsg);
+                        resp.ReasonPhrase = "Object property validation error";
+
+                        ErrorLog _err = new ErrorLog();
+                        _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                        _err.Message = errMsg;
+                        _err.StackTrace = Environment.StackTrace;
+
+                        var err = ErrorLogger.Log(_err);
+
+                        transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                        _resp = resp;
+                        throw new HttpResponseException(resp);
+                    }
+
+                    if (j != null)
+                    {
+                        errMsg = string.Format("Journal {0} already exist.", jrnal.TransactionId);
+                        var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        resp.Content = new StringContent(errMsg);
+                        resp.ReasonPhrase = "Object already exist.";
+
+                        ErrorLog _err = new ErrorLog();
+                        _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                        _err.Message = errMsg;
+                        _err.StackTrace = Environment.StackTrace;
+
+                        var err = ErrorLogger.Log(_err);
+
+                        transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                        _resp = resp;
+                        throw new HttpResponseException(resp);
+                    }
+
+                    if (repo.Add(jrnal) != 0)
+                    {
+                        errMsg = GlobalInstance.Instance.SBOErrorMessage;
+                        var resp = new HttpResponseMessage(HttpStatusCode.Conflict);
+                        resp.Content = new StringContent(errMsg);
+                        resp.ReasonPhrase = "SBO Error";
+                        ErrorLog _err = new ErrorLog();
+                        _err.ErrorCode = (int)HttpStatusCode.Conflict;
+                        _err.Message = errMsg;
+                        _err.StackTrace = Environment.StackTrace;
+
+                        var err = ErrorLogger.Log(_err);
+
+                        transactionLogger.LogJournalTransaction(jrnal, false, "A", HttpContext.Current.Request.UserHostAddress, _err);
+                        _resp = resp;
+                        throw new HttpResponseException(resp);
+                    }
+
+                    transactionLogger.LogJournalTransaction(jrnal, true, "A", HttpContext.Current.Request.UserHostAddress);
+                    var _j = await repo.GetByRDTransId(jrnal.TransactionId);
+                    retList.Add(new { SAPTransactionId = _j.TransId, ReturnMessage = $"Journal {jrnal.TransactionId} successfully added." });
+                }
+
+                return retList;
+            }
+            catch (HttpResponseException ex)
+            {
+                throw new HttpResponseException(ex.Response);
+            }
+        }
     }
 }

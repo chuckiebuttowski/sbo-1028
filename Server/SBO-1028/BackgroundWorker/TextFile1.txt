@@ -1,0 +1,133 @@
+﻿Console.Title = "HMS SYNC v2.0";
+
+            string fileName = string.Format("{0}Logs\\{1}-{2}.txt", AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.Ticks);
+            if(!Directory.Exists(Path.GetDirectoryName(fileName)))
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+            if (DateTime.Now.Hour < 14)
+            {
+                string msg = string.Format("{0}: TIME IS NOT YET 2PM or BEYOND.", DateTime.Now);
+                Logger.Log(fileName, msg,true);
+                Console.WriteLine(msg);
+                return;
+            }
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var log = string.Format("**Start {0}", DateTime.Now);
+            Console.WriteLine(log);
+            Logger.Log(fileName, log, true);
+            //Logger.Log(log);
+
+            var date = DateTime.Now.Date.AddHours(14);
+
+            var itemNo = SystemInfo.SYSTEM_ITEMS.ROOM_ACCOMMODATION;
+
+            using (var context = new HMSDataContext())
+            {
+                using (var beginTrans = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        int added=0;
+
+                        var admissions = context.Admissions.Where(x => x.IsDischarged == false).ToList();
+                        foreach (var admission in admissions)
+                        {
+                            if (DateTime.Now.Date < admission.AdmissionDate.Date)
+                            {
+                                continue;
+                            }
+                            log = string.Format("{0} |{1} |", admission.AdmissionID, admission.Patient.FullName);
+                            Console.Write(log);
+                            Logger.Log(fileName, log, false);
+
+                            /* VALIDATE */
+                            var sql =
+                            @"SELECT COUNT(*) from Admissions A
+                            INNER JOIN ChargeHeaders CH on CH.BillingID =  A.BillingID
+                            INNER JOIN ChargeDetails CD on CH.ChargeID= CD.ChargeID
+                            WHERE CD.ItemNo = 'RA' AND CD.Status=0 
+                            AND  CAST(ch.ChargeDate  AS DATE) = CAST(GETDATE() AS DATE)
+                            AND A.AdmissionID = @AdmissionID";
+
+                            int count = context.Database.SqlQuery<int>(sql, new SqlParameter("@AdmissionID", admission.AdmissionID)).Single();
+                            
+                            //var table = context.Database.SqlQuery<DataTable>(sql, new SqlParameter("@AdmissionID", admission.AdmissionID)).ToList().Cast<DataTable>();
+
+                            //var checkCharges = (from c in context.ChargeHeaders
+                            //                   join d in context.ChargeDetails on c.ChargeID equals d.ChargeID
+                            //                    //where DbFunctions.TruncateTime(c.ChargeDate) == DbFunctions.TruncateTime(DateTime.Now)
+                            //                    where c.ChargeDate.Day == DateTime.Now.Day && c.ChargeDate.Year== DateTime.Now.Year && c.ChargeDate.Month == DateTime.Now.Month
+                            //                    && d.ItemNo == itemNo && c.AdmissionID == admission.AdmissionID
+                            //                   //where (c.AdmissionID == a.AdmissionID) &&
+                            //                   //      (d.ItemNo == itemNo) && 
+                            //                   //      (c.ChargeDate == DateTime.Now.Date)
+
+                                               
+                            //                   select c).ToList();
+                            /* END VALIDATE */
+                            if (count > 0) //ROOM CHARGE ALREADY EXIST, 
+                            {
+                                Console.WriteLine("{0}", false);
+                                Logger.Log(fileName, false.ToString(), true);
+                                continue; //NEXT ADMISSIOn
+                            }
+                            added += 1;
+
+                            string referenceNo = "SYS-GEN";
+                            //try
+                            //{
+                                //referenceNo = "SYSTEM-GEN"; //context.ChargeHeaders.Where(x => x.DepartmentID == 1).Max(x => x.ReferenceNo).ToString();
+                                //int num = int.Parse(referenceNo) + 1;
+                                //referenceNo = num.ToString().PadLeft(6, '0');
+                            //}
+                            //catch
+                            //{
+                            //    referenceNo = "1".PadLeft(6, '0');
+                            //}
+
+                            var item = context.Items.Where(o => o.ItemNo == itemNo).FirstOrDefault();
+                            var room = context.Rooms.Where(o => o.RoomID == admission.Bed.Room.RoomID).FirstOrDefault();
+                            item.UnitPrice = room.RoomRate.Rate;
+
+                            IChargeBuilder<ChargeHeader> chargeBuilder = new BuilderFactory("SYSTEM").CreateChargeBuilder();
+                            chargeBuilder.AddItem(item, 1);
+
+                            var chargeH = chargeBuilder.GetChargeHeader();
+                            chargeH.BillingID = admission.BillingID;
+                            chargeH.ChargeDate = date; //modify
+                            chargeH.ReferenceNo = referenceNo;
+                            chargeH.DepartmentID = 12; //SYSTEM DEPARTMENT 1
+                            chargeH.Remarks = String.Format("ROOM NAME: {0}, ROOM RATE NAME: {1}, RATE: {2}", room.Name, room.RoomRate.Name, room.RoomRate.Rate);
+                            chargeBuilder.SaveChanges();
+
+                            Console.Write("{0} | ", true);
+                            Logger.Log(fileName, true.ToString(), false);
+                            Console.WriteLine("{0}", room.RoomRate.Rate);
+                            Logger.Log(fileName, room.RoomRate.Rate.ToString(), true);
+                        }
+                        stopWatch.Stop();
+                        TimeSpan ts = stopWatch.Elapsed;
+                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                                               ts.Hours, ts.Minutes, ts.Seconds,
+                                               ts.Milliseconds / 10);
+                        log = String.Format("Success! Added: {0} |Time Elapsed: {1}", added,  elapsedTime);
+                        Console.WriteLine(log);
+                        Logger.Log(fileName, log, true);
+
+                        log = String.Format("**End {0}", DateTime.Now);
+                        Console.WriteLine(log);
+                        Logger.Log(fileName, log, true);
+
+                        beginTrans.Commit();
+                        Thread.Sleep(1000 * 10);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("ERROR!");
+                        beginTrans.Rollback();
+                        ErrorLogController.Log("ROLLBACK HMS.SYNC", ex.Message + Environment.NewLine + ex.ToString());
+                        log = String.Format("ERROR: {0}", ex.Message + Environment.NewLine + ex.ToString());
+                    }
+                }
+            }
