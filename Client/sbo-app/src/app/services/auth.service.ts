@@ -44,6 +44,10 @@ export class AuthService {
     return JSON.parse(sessionStorage.getItem('User')).DisplayName;
   }
 
+  getBuildNo():string{
+    return JSON.parse(sessionStorage.getItem('BuildNo'));
+  }
+
   logout () {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("User");
